@@ -3,48 +3,269 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TO-DO LIST WALA · daily clipboard</title>
-  <!-- FAVICON: mini clipboard with checkmark – matches the UI perfectly -->
+  <title>TO-DO LIST WALA · celebration on 100%</title>
+  <!-- FAVICON unchanged -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='10' y='20' width='80' height='65' rx='12' fill='%23fff9f0' stroke='%232c3e4f' stroke-width='6'/%3E%3Crect x='25' y='5' width='50' height='20' rx='8' fill='%23c0c7d0' stroke='%232c3e4f' stroke-width='4'/%3E%3Ccircle cx='35' cy='15' r='5' fill='%239aa3af'/%3E%3Ccircle cx='65' cy='15' r='5' fill='%239aa3af'/%3E%3Cpolyline points='25,55 45,75 75,40' stroke='%232c6e5c' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <!-- canvas for confetti (hidden by default, fullscreen) -->
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      transition: background-color 0.2s ease, color 0.1s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
+
+    /* ========== LIGHT MODE (default) ========== */
+    :root {
+      --bg-body: #e2d9cc;
+      --navbar-bg: #2c3e4f;
+      --logo-text: #f0e8dc;
+      --logo-span: #ffd966;
+      --nav-link: #f0e8dc;
+      --nav-hover-bg: #ffd966;
+      --nav-hover-text: #2c3e4f;
+      --yt-bg: #c4302b;
+      --yt-hover: #ff0000;
+      --card-bg: white;
+      --card-border: #d4c9b8;
+      --card-shadow: #b8aa98;
+      --clipboard-bg: #fff9f0;
+      --clipboard-inset: #f0e8dc;
+      --clipboard-shadow: #b8aa98;
+      --clip-metal: linear-gradient(145deg, #c0c7d0, #9aa3af);
+      --clip-metal-shadow: #6b747e;
+      --date-badge-bg: #e8e0d2;
+      --date-badge-border: #b8aa98;
+      --save-indicator-bg: #7a8b9b;
+      --save-indicator-saved: #2c6e5c;
+      --tasks-area-bg: repeating-linear-gradient(#fff9f0, #fff9f0 79px, #e0d8cc 80px, #e0d8cc 81px);
+      --scrollbar-track: #e8e0d2;
+      --scrollbar-thumb: #b0a392;
+      --task-border-bottom: #d0c6b8;
+      --task-number: #7a8b9b;
+      --task-text: #2c3e4f;
+      --percent-container-bg: #f0e8dc;
+      --percent-container-border: #b8aa98;
+      --percent-slider-bg: #d0c6b8;
+      --percent-slider-thumb: #2c6e5c;
+      --percent-value-bg: white;
+      --percent-value-border: #7a8b9b;
+      --percent-value-high-bg: #2c6e5c;
+      --percent-value-high-text: white;
+      --remove-btn-color: #b07a6e;
+      --remove-btn-hover-bg: #ffe1d9;
+      --add-section-bg: #e8e0d2;
+      --add-section-shadow: #b8aa98;
+      --add-input-border: #b8aa98;
+      --add-input-focus-border: #7a8b9b;
+      --add-btn-bg: #7a8b9b;
+      --add-btn-shadow: #4a5a68;
+      --save-btn-bg: #2c6e5c;
+      --save-btn-shadow: #1d4a3e;
+      --history-list-bg: white;
+      --history-list-shadow: #b8aa98;
+      --history-item-border: #d0c6b8;
+      --history-date: #2c3e4f;
+      --history-preview: #5a6b7a;
+      --load-history-btn: #7a8b9b;
+      --remove-history-btn: #b07a6e;
+      --clear-history-btn: #b07a6e;
+      --about-card-bg: white;
+      --about-card-shadow: #b8aa98;
+      --youtube-card-bg: white;
+      --youtube-card-border: #c4302b;
+      --youtube-btn-bg: #c4302b;
+      --youtube-btn-shadow: #8b1e1a;
+      --text-primary: #2c3e4f;
+      --text-secondary: #5a6b7a;
+    }
+
+    /* ========== DARK MODE ========== */
+    body.dark {
+      --bg-body: #1e262e;
+      --navbar-bg: #10171f;
+      --logo-text: #e0d6c8;
+      --logo-span: #f0b34b;
+      --nav-link: #cbd5e0;
+      --nav-hover-bg: #f0b34b;
+      --nav-hover-text: #10171f;
+      --yt-bg: #a33c39;
+      --yt-hover: #cc4c47;
+      --card-bg: #2d3748;
+      --card-border: #4a5568;
+      --card-shadow: #1f2a33;
+      --clipboard-bg: #28323f;
+      --clipboard-inset: #3a4555;
+      --clipboard-shadow: #1b232d;
+      --clip-metal: linear-gradient(145deg, #4f5a68, #333e4c);
+      --clip-metal-shadow: #202a36;
+      --date-badge-bg: #374151;
+      --date-badge-border: #5f6b7a;
+      --save-indicator-bg: #5f6b7a;
+      --save-indicator-saved: #2f855a;
+      --tasks-area-bg: repeating-linear-gradient(#2d3748, #2d3748 79px, #3f4a5a 80px, #3f4a5a 81px);
+      --scrollbar-track: #374151;
+      --scrollbar-thumb: #5f6b7a;
+      --task-border-bottom: #4a5568;
+      --task-number: #a0aec0;
+      --task-text: #e2e8f0;
+      --percent-container-bg: #374151;
+      --percent-container-border: #5f6b7a;
+      --percent-slider-bg: #4a5568;
+      --percent-slider-thumb: #68d391;
+      --percent-value-bg: #2d3748;
+      --percent-value-border: #718096;
+      --percent-value-high-bg: #2f855a;
+      --percent-value-high-text: #ffffff;
+      --remove-btn-color: #f28b82;
+      --remove-btn-hover-bg: #442f2d;
+      --add-section-bg: #374151;
+      --add-section-shadow: #1f2937;
+      --add-input-border: #5f6b7a;
+      --add-input-focus-border: #9bb0cc;
+      --add-btn-bg: #5f6b7a;
+      --add-btn-shadow: #35414f;
+      --save-btn-bg: #2f855a;
+      --save-btn-shadow: #1e4a38;
+      --history-list-bg: #2d3748;
+      --history-list-shadow: #1f2937;
+      --history-item-border: #4a5568;
+      --history-date: #e2e8f0;
+      --history-preview: #a0aec0;
+      --load-history-btn: #5f6b7a;
+      --remove-history-btn: #b16f66;
+      --clear-history-btn: #b16f66;
+      --about-card-bg: #2d3748;
+      --about-card-shadow: #1f2937;
+      --youtube-card-bg: #2d3748;
+      --youtube-card-border: #a33c39;
+      --youtube-btn-bg: #a33c39;
+      --youtube-btn-shadow: #64221f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a0aec0;
+    }
+
+    /* ========== NEON MODE ========== */
+    body.neon {
+      --bg-body: #0b0f1a;
+      --navbar-bg: #141b2b;
+      --logo-text: #f0f0ff;
+      --logo-span: #f2f23d;
+      --nav-link: #b0d0ff;
+      --nav-hover-bg: #ff44e6;
+      --nav-hover-text: #0b0f1a;
+      --yt-bg: #aa00ff;
+      --yt-hover: #ff44e6;
+      --card-bg: #1e1a3a;
+      --card-border: #8a2be2;
+      --card-shadow: #4b0082;
+      --clipboard-bg: #1a1230;
+      --clipboard-inset: #2d1b4a;
+      --clipboard-shadow: #7a2ac0;
+      --clip-metal: linear-gradient(145deg, #a355e0, #5d27a0);
+      --clip-metal-shadow: #371e63;
+      --date-badge-bg: #2e1c50;
+      --date-badge-border: #ff66ff;
+      --save-indicator-bg: #9932cc;
+      --save-indicator-saved: #39ff14;
+      --tasks-area-bg: repeating-linear-gradient(#1a1230, #1a1230 79px, #2e1c50 80px, #2e1c50 81px);
+      --scrollbar-track: #2e1c50;
+      --scrollbar-thumb: #ff00ff;
+      --task-border-bottom: #9932cc;
+      --task-number: #bb99ff;
+      --task-text: #e6ccff;
+      --percent-container-bg: #23163f;
+      --percent-container-border: #ff44e6;
+      --percent-slider-bg: #4a2c7a;
+      --percent-slider-thumb: #39ff14;
+      --percent-value-bg: #1e1a3a;
+      --percent-value-border: #ff00ff;
+      --percent-value-high-bg: #ff00d4;
+      --percent-value-high-text: #000000;
+      --remove-btn-color: #ff69b4;
+      --remove-btn-hover-bg: #551a8b;
+      --add-section-bg: #23163f;
+      --add-section-shadow: #9400d3;
+      --add-input-border: #bf5fff;
+      --add-input-focus-border: #00ffff;
+      --add-btn-bg: #8a2be2;
+      --add-btn-shadow: #4b0082;
+      --save-btn-bg: #ff00c8;
+      --save-btn-shadow: #9d0080;
+      --history-list-bg: #1a1230;
+      --history-list-shadow: #7d26cd;
+      --history-item-border: #aa4aff;
+      --history-date: #ffb6ff;
+      --history-preview: #c0a0ff;
+      --load-history-btn: #8a2be2;
+      --remove-history-btn: #ff44e6;
+      --clear-history-btn: #ff44e6;
+      --about-card-bg: #1e1a3a;
+      --about-card-shadow: #7d26cd;
+      --youtube-card-bg: #1e1a3a;
+      --youtube-card-border: #ff00ff;
+      --youtube-btn-bg: #aa00ff;
+      --youtube-btn-shadow: #51007a;
+      --text-primary: #f0e6ff;
+      --text-secondary: #c0a0ff;
+    }
+
     body {
       min-height: 100vh;
-      background: #e2d9cc;
+      background: var(--bg-body);
     }
+
+    /* confetti canvas – full screen, pointer‑events none so it doesn't block clicks */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+    }
+
     .navbar {
-      background: #2c3e4f;
+      background: var(--navbar-bg);
       padding: 15px 30px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: nowrap;
-      gap: 20px;
+      flex-wrap: wrap;
+      gap: 15px 20px;
     }
     .logo {
       font-size: 1.8rem;
       font-weight: 600;
-      color: #f0e8dc;
+      color: var(--logo-text);
       letter-spacing: 2px;
       white-space: nowrap;
     }
     .logo span {
-      color: #ffd966;
+      color: var(--logo-span);
     }
+
+    .nav-group {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
     .nav-links {
       display: flex;
       gap: 15px;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       align-items: center;
     }
+
     .nav-link {
-      color: #f0e8dc;
+      color: var(--nav-link);
       text-decoration: none;
       font-size: 1.1rem;
       padding: 8px 12px;
@@ -54,20 +275,54 @@
       white-space: nowrap;
     }
     .nav-link:hover, .nav-link.active {
-      background: #ffd966;
-      color: #2c3e4f;
+      background: var(--nav-hover-bg);
+      color: var(--nav-hover-text);
     }
     .nav-link.yt-link {
-      background: #c4302b;
+      background: var(--yt-bg);
       color: white;
       display: inline-flex;
       align-items: center;
       gap: 4px;
     }
     .nav-link.yt-link:hover {
-      background: #ff0000;
+      background: var(--yt-hover);
       transform: scale(1.02);
     }
+
+    /* theme toggle switch – three icons */
+    .theme-toggle {
+      background: #2b2b45;
+      border-radius: 40px;
+      padding: 4px;
+      width: 100px;
+      display: flex;
+      cursor: pointer;
+      border: 1px solid #5f6b7a;
+      flex-shrink: 0;
+    }
+    .theme-icon {
+      font-size: 1.2rem;
+      padding: 4px 0;
+      border-radius: 30px;
+      background: transparent;
+      color: #ddd;
+      transition: 0.1s;
+      text-align: center;
+      flex: 1;
+    }
+    .theme-icon.active-light, .theme-icon.active-dark, .theme-icon.active-neon {
+      background: #ffd966;
+      color: #2c3e4f;
+      font-weight: bold;
+    }
+    body.dark .theme-icon.active-dark {
+      background: #ffd966; color: #2c3e4f;
+    }
+    body.neon .theme-icon.active-neon {
+      background: #ff44e6; color: #0b0f1a;
+    }
+
     .container {
       max-width: 1000px;
       margin: 30px auto;
@@ -84,6 +339,7 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
     .home-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -91,20 +347,23 @@
       margin-top: 30px;
     }
     .tool-card {
-      background: white;
+      background: var(--card-bg);
       border-radius: 30px;
       padding: 30px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 0 #b8aa98;
-      border: 2px solid #d4c9b8;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 0 var(--card-shadow);
+      border: 2px solid var(--card-border);
       transition: 0.2s;
+      color: var(--text-primary);
     }
     .tool-card:hover {
       transform: translateY(-5px);
     }
+    .tool-icon { font-size: 2.5rem; margin-bottom: 10px; }
+
     .clipboard {
-      background: #fff9f0;
+      background: var(--clipboard-bg);
       border-radius: 30px 30px 15px 15px;
-      box-shadow: 0 20px 30px rgba(0,0,0,0.2), 0 0 0 2px #d4c9b8 inset, 0 0 0 6px #f0e8dc inset, 0 8px 0 0 #b8aa98;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.2), 0 0 0 2px var(--card-border) inset, 0 0 0 6px var(--clipboard-inset) inset, 0 8px 0 0 var(--clipboard-shadow);
       padding: 40px 30px 30px;
       margin-top: 20px;
       position: relative;
@@ -116,9 +375,9 @@
       transform: translateX(-50%);
       width: 140px;
       height: 40px;
-      background: linear-gradient(145deg, #c0c7d0, #9aa3af);
+      background: var(--clip-metal);
       border-radius: 30px 30px 8px 8px;
-      box-shadow: 0 8px 0 #6b747e, 0 12px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 0 var(--clip-metal-shadow), 0 12px 12px rgba(0,0,0,0.3);
       z-index: 10;
     }
     .clip::after {
@@ -142,6 +401,7 @@
     }
     .rivet.left { left: 30px; }
     .rivet.right { right: 30px; }
+
     .list-info {
       display: flex;
       justify-content: space-between;
@@ -151,17 +411,17 @@
       gap: 15px;
     }
     .date-badge {
-      background: #e8e0d2;
+      background: var(--date-badge-bg);
       padding: 10px 25px;
       border-radius: 40px;
       font-size: 1.1rem;
       font-weight: 500;
-      color: #2c3e4f;
-      border: 1px solid #b8aa98;
+      color: var(--text-primary);
+      border: 1px solid var(--date-badge-border);
       white-space: nowrap;
     }
     .save-indicator {
-      background: #7a8b9b;
+      background: var(--save-indicator-bg);
       color: white;
       padding: 8px 20px;
       border-radius: 40px;
@@ -172,10 +432,11 @@
       white-space: nowrap;
     }
     .save-indicator.saved {
-      background: #2c6e5c;
+      background: var(--save-indicator-saved);
     }
+
     .tasks-area {
-      background: repeating-linear-gradient(#fff9f0, #fff9f0 79px, #e0d8cc 80px, #e0d8cc 81px);
+      background: var(--tasks-area-bg);
       min-height: 400px;
       max-height: 500px;
       overflow-y: auto;
@@ -187,19 +448,20 @@
       width: 8px;
     }
     .tasks-area::-webkit-scrollbar-track {
-      background: #e8e0d2;
+      background: var(--scrollbar-track);
       border-radius: 10px;
     }
     .tasks-area::-webkit-scrollbar-thumb {
-      background: #b0a392;
+      background: var(--scrollbar-thumb);
       border-radius: 10px;
     }
+
     .task {
       display: flex;
       align-items: center;
       gap: 15px;
       padding: 15px 10px 15px 5px;
-      border-bottom: 1px dashed #d0c6b8;
+      border-bottom: 1px dashed var(--task-border-bottom);
     }
     .task:last-child {
       border-bottom: none;
@@ -207,7 +469,7 @@
     .task-number {
       font-size: 1.4rem;
       font-weight: 600;
-      color: #7a8b9b;
+      color: var(--task-number);
       min-width: 40px;
       text-align: right;
       font-family: 'Courier New', monospace;
@@ -222,24 +484,23 @@
     .task-text {
       font-size: 1.3rem;
       font-weight: 500;
-      color: #2c3e4f;
+      color: var(--task-text);
       min-width: 150px;
     }
-    /* Percentage slider and display */
     .percent-container {
       display: flex;
       align-items: center;
       gap: 10px;
-      background: #f0e8dc;
+      background: var(--percent-container-bg);
       padding: 5px 15px;
       border-radius: 30px;
-      border: 1px solid #b8aa98;
+      border: 1px solid var(--percent-container-border);
     }
     .percent-slider {
       width: 120px;
       height: 6px;
       -webkit-appearance: none;
-      background: #d0c6b8;
+      background: var(--percent-slider-bg);
       border-radius: 10px;
       outline: none;
     }
@@ -247,26 +508,26 @@
       -webkit-appearance: none;
       width: 18px;
       height: 18px;
-      background: #2c6e5c;
+      background: var(--percent-slider-thumb);
       border-radius: 50%;
       cursor: pointer;
-      border: 2px solid #ffd966;
+      border: 2px solid var(--nav-hover-bg);
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .percent-value {
       font-size: 1.2rem;
       font-weight: 600;
-      color: #2c3e4f;
+      color: var(--text-primary);
       min-width: 55px;
-      background: white;
+      background: var(--percent-value-bg);
       padding: 3px 8px;
       border-radius: 20px;
       text-align: center;
-      border: 1px solid #7a8b9b;
+      border: 1px solid var(--percent-value-border);
     }
     .percent-value.high {
-      background: #2c6e5c;
-      color: white;
+      background: var(--percent-value-high-bg);
+      color: var(--percent-value-high-text);
     }
     .remove-btn {
       width: 36px;
@@ -275,7 +536,7 @@
       background: transparent;
       border: none;
       font-size: 1.6rem;
-      color: #b07a6e;
+      color: var(--remove-btn-color);
       cursor: pointer;
       opacity: 0.5;
       transition: 0.15s;
@@ -286,14 +547,15 @@
     }
     .remove-btn:hover { 
       opacity: 1; 
-      background: #ffe1d9;
+      background: var(--remove-btn-hover-bg);
       transform: scale(1.1);
     }
+
     .add-section {
-      background: #e8e0d2;
+      background: var(--add-section-bg);
       border-radius: 60px;
       padding: 15px 20px;
-      box-shadow: 0 5px 0 #b8aa98;
+      box-shadow: 0 5px 0 var(--add-section-shadow);
       display: flex;
       gap: 15px;
       flex-wrap: wrap;
@@ -302,17 +564,19 @@
       flex: 1;
       min-width: 200px;
       padding: 16px 25px;
-      border: 2px solid #b8aa98;
+      border: 2px solid var(--add-input-border);
       border-radius: 40px;
       font-size: 1.2rem;
       outline: none;
+      background: var(--clipboard-bg);
+      color: var(--task-text);
     }
     .add-input:focus {
-      border-color: #7a8b9b;
+      border-color: var(--add-input-focus-border);
       box-shadow: 0 0 0 3px rgba(122, 139, 155, 0.2);
     }
     .add-btn {
-      background: #7a8b9b;
+      background: var(--add-btn-bg);
       border: none;
       border-radius: 40px;
       padding: 16px 35px;
@@ -323,11 +587,12 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 5px 0 #4a5a68;
+      box-shadow: 0 5px 0 var(--add-btn-shadow);
     }
-    .add-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #4a5a68; }
+    .add-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--add-btn-shadow); }
+
     .save-btn {
-      background: #2c6e5c;
+      background: var(--save-btn-bg);
       color: white;
       border: none;
       border-radius: 40px;
@@ -339,88 +604,44 @@
       align-items: center;
       gap: 12px;
       margin-top: 25px;
-      box-shadow: 0 6px 0 #1d4a3e;
+      box-shadow: 0 6px 0 var(--save-btn-shadow);
       width: fit-content;
     }
-    .save-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #1d4a3e; }
+    .save-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--save-btn-shadow); }
+
     .history-list {
-      background: white;
+      background: var(--history-list-bg);
       border-radius: 30px;
       padding: 30px;
-      box-shadow: 0 8px 0 #b8aa98;
-      border: 2px solid #d4c9b8;
+      box-shadow: 0 8px 0 var(--history-list-shadow);
+      border: 2px solid var(--card-border);
+      color: var(--text-primary);
     }
     .history-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 20px;
-      border-bottom: 2px dashed #d0c6b8;
+      border-bottom: 2px dashed var(--history-item-border);
     }
-    .history-item:last-child { border-bottom: none; }
-    .history-date {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: #2c3e4f;
-    }
-    .history-preview {
-      color: #5a6b7a;
-      font-size: 1.1rem;
-      margin-top: 5px;
-    }
-    .history-actions {
-      display: flex;
-      gap: 12px;
-    }
-    .load-history {
-      background: #7a8b9b;
-      color: white;
-      border: none;
-      padding: 10px 25px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-size: 1.1rem;
-    }
-    .remove-history {
-      background: #b07a6e;
-      color: white;
-      border: none;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      font-size: 1.4rem;
-      cursor: pointer;
-    }
-    .clear-history {
-      background: #b07a6e;
-      color: white;
-      border: none;
-      border-radius: 30px;
-      padding: 12px 25px;
-      margin-top: 20px;
-      cursor: pointer;
-      font-size: 1.1rem;
-    }
-    .about-card {
-      background: white;
+    .history-date { font-size: 1.4rem; font-weight: 600; color: var(--history-date); }
+    .history-preview { color: var(--history-preview); font-size: 1.1rem; margin-top: 5px; }
+    .load-history { background: var(--load-history-btn); color: white; border: none; padding: 10px 25px; border-radius: 30px; cursor: pointer; }
+    .remove-history { background: var(--remove-history-btn); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; }
+    .clear-history { background: var(--clear-history-btn); color: white; border: none; border-radius: 30px; padding: 12px 25px; margin-top: 20px; cursor: pointer; }
+
+    .about-card, .youtube-card {
+      background: var(--about-card-bg);
       border-radius: 30px;
       padding: 40px;
-      box-shadow: 0 8px 0 #b8aa98;
-      border: 2px solid #d4c9b8;
+      box-shadow: 0 8px 0 var(--about-card-shadow);
+      border: 2px solid var(--card-border);
       text-align: center;
+      color: var(--text-primary);
     }
-    .youtube-card {
-      background: white;
-      border-radius: 30px;
-      padding: 50px;
-      box-shadow: 0 8px 0 #b8aa98, 0 0 0 2px #c4302b inset;
-      border: 2px solid #d4c9b8;
-      text-align: center;
-      max-width: 600px;
-      margin: 40px auto;
-    }
+    .youtube-card { border: 2px solid var(--youtube-card-border); }
     .youtube-btn {
-      background: #c4302b;
+      background: var(--youtube-btn-bg);
       color: white;
       border: none;
       border-radius: 50px;
@@ -431,48 +652,45 @@
       display: inline-flex;
       align-items: center;
       gap: 15px;
-      box-shadow: 0 8px 0 #8b1e1a;
+      box-shadow: 0 8px 0 var(--youtube-btn-shadow);
       text-decoration: none;
     }
-    .youtube-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #8b1e1a; }
-    .youtube-btn:hover { background: #ff0000; }
-    
-    /* Responsive for very small screens */
-    @media (max-width: 700px) {
-      .list-info {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-    }
+    .youtube-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 var(--youtube-btn-shadow); }
+    .youtube-btn:hover { background: var(--yt-hover); }
+
+    @media (max-width: 700px) { .list-info { flex-wrap: wrap; justify-content: center; } }
   </style>
 </head>
 <body>
+  <!-- Confetti canvas (hidden by default) -->
+  <canvas id="confetti-canvas"></canvas>
+
   <nav class="navbar">
     <div class="logo">TO-DO LIST <span>WALA</span></div>
-    <div class="nav-links">
-      <span class="nav-link active" data-section="home">HOME</span>
-      <span class="nav-link" data-section="todo">TO-DO LIST</span>
-      <span class="nav-link" data-section="history">DATE/HISTORY</span>
-      <span class="nav-link" data-section="about">ABOUT</span>
-      <span class="nav-link yt-link" data-section="youtube" id="ytChannelLink">▶️ @zlxlegendry</span>
+    <div class="nav-group">
+      <div class="nav-links">
+        <span class="nav-link active" data-section="home">HOME</span>
+        <span class="nav-link" data-section="todo">TO-DO LIST</span>
+        <span class="nav-link" data-section="history">DATE/HISTORY</span>
+        <span class="nav-link" data-section="about">ABOUT</span>
+        <span class="nav-link yt-link" data-section="youtube" id="ytChannelLink">▶️ @zlxlegendry</span>
+      </div>
+      <!-- three‑way theme toggle -->
+      <div class="theme-toggle" id="themeToggle">
+        <span class="theme-icon light-mode active-light" id="lightModeIcon">☀️</span>
+        <span class="theme-icon dark-mode" id="darkModeIcon">🌙</span>
+        <span class="theme-icon neon-mode" id="neonModeIcon">💡</span>
+      </div>
     </div>
   </nav>
 
   <div class="container">
-    <!-- HOME -->
-    <div id="home" class="section active">
-      <div class="home-grid">
-        <div class="tool-card"><div class="tool-icon">📋</div><h3>TO-DO LIST</h3><p>Each task has its own percentage slider. Set how much you've done (0-100%)</p></div>
-        <div class="tool-card"><div class="tool-icon">📅</div><h3>DATE/HISTORY</h3><p>View saved lists by date with completion percentages.</p></div>
-        <div class="tool-card"><div class="tool-icon">💾</div><h3>AUTO SAVE</h3><p>Each change is saved. Manual save with date stamp.</p></div>
-      </div>
-    </div>
-
-    <!-- TO-DO LIST section with per-task percentage -->
+    <!-- HOME (injected) -->
+    <div id="home" class="section active"></div>
+    <!-- TO-DO LIST -->
     <div id="todo" class="section">
       <div class="clipboard">
-        <div class="clip"></div>
-        <div class="rivet left"></div><div class="rivet right"></div>
+        <div class="clip"></div><div class="rivet left"></div><div class="rivet right"></div>
         <div class="list-info">
           <div class="date-badge" id="currentDate">Monday, March 1, 2026</div>
           <div class="save-indicator" id="saveIndicator">💾 AUTO SAVED</div>
@@ -485,24 +703,63 @@
         <button class="save-btn" id="saveListBtn"><span>💾</span> SAVE THIS LIST</button>
       </div>
     </div>
-
-    <!-- HISTORY, ABOUT, YOUTUBE -->
-    <div id="history" class="section">
-      <div class="history-list" id="historyList"></div>
-      <button class="clear-history" id="clearAllHistory" style="display: none;">🗑️ Clear All History</button>
-    </div>
-    <div id="about" class="section"><div class="about-card"><h2>ABOUT TO-DO LIST WALA</h2><p>✅ Per-task percentage completion<br>✅ Slide to set progress (0-100%)<br>✅ Save/load by date<br>Created with ❤️</p></div></div>
-    <div id="youtube" class="section">
-      <div class="youtube-card">
-        <div class="youtube-icon">📺</div><h2>@zlxlegendry</h2><p>Subscribe for more!</p>
-        <a href="https://www.youtube.com/@zlxlegendry" target="_blank" class="youtube-btn">▶️ VISIT CHANNEL</a>
-      </div>
-    </div>
+    <!-- HISTORY -->
+    <div id="history" class="section"><div class="history-list" id="historyList"></div><button class="clear-history" id="clearAllHistory" style="display: none;">🗑️ Clear All History</button></div>
+    <!-- ABOUT -->
+    <div id="about" class="section"><div class="about-card"><h2>ABOUT TO-DO LIST WALA</h2><p>✅ Per-task percentage<br>✅ Slide progress (0-100%)<br>✅ Save/load by date<br>✅ Light / Dark / Neon<br>✅ Celebration on 100% 🎉<br>Created with ❤️</p></div></div>
+    <!-- YOUTUBE (injected) -->
+    <div id="youtube" class="section"></div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
   <script>
     (function() {
-      // --- navigation ---
+      // ---- three‑way theme management (same) ----
+      const body = document.body;
+      const lightIcon = document.getElementById('lightModeIcon');
+      const darkIcon = document.getElementById('darkModeIcon');
+      const neonIcon = document.getElementById('neonModeIcon');
+      const themeToggle = document.getElementById('themeToggle');
+
+      function setTheme(theme) {
+        body.classList.remove('light', 'dark', 'neon');
+        lightIcon.classList.remove('active-light');
+        darkIcon.classList.remove('active-dark');
+        neonIcon.classList.remove('active-neon');
+        if (theme === 'dark') {
+          body.classList.add('dark');
+          darkIcon.classList.add('active-dark');
+        } else if (theme === 'neon') {
+          body.classList.add('neon');
+          neonIcon.classList.add('active-neon');
+        } else {
+          body.classList.add('light');
+          lightIcon.classList.add('active-light');
+        }
+        localStorage.setItem('walaTheme', theme);
+      }
+      const savedTheme = localStorage.getItem('walaTheme') || 'light';
+      setTheme(savedTheme);
+      themeToggle.addEventListener('click', (e) => {
+        if (body.classList.contains('light')) setTheme('dark');
+        else if (body.classList.contains('dark')) setTheme('neon');
+        else setTheme('light');
+      });
+
+      // ---- confetti celebration function ----
+      function celebrate() {
+        // basic burst
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        // add a few more for fun
+        setTimeout(() => {
+          confetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.2 }, colors: ['#26ccff', '#a25afd', '#ff5e7d'] });
+        }, 150);
+        setTimeout(() => {
+          confetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.8 }, colors: ['#f0f', '#0ff', '#ff0'] });
+        }, 300);
+      }
+
+      // ---- navigation ----
       const navLinks = document.querySelectorAll('.nav-link');
       const sections = document.querySelectorAll('.section');
       navLinks.forEach(link => {
@@ -527,7 +784,7 @@
       }
       document.getElementById('currentDate').innerText = getCurrentDate();
 
-      // --- task data with percentage (0-100) ---
+      // --- task data ---
       let tasks = JSON.parse(localStorage.getItem('walaTasks')) || [
         { id: Date.now() - 30000, text: 'Read 20 pages', percent: 20 },
         { id: Date.now() - 20000, text: 'Write report', percent: 80 },
@@ -540,7 +797,6 @@
       const saveIndicator = document.getElementById('saveIndicator');
       const clearAllBtn = document.getElementById('clearAllHistory');
 
-      // --- save helper ---
       function saveCurrentTasks() {
         localStorage.setItem('walaTasks', JSON.stringify(tasks));
         saveIndicator.innerText = '💾 AUTO SAVED';
@@ -548,22 +804,13 @@
         setTimeout(() => saveIndicator.classList.remove('saved'), 500);
       }
 
-      // --- render tasks with per-task percentage slider ---
       function renderTasks() {
         tasksArea.innerHTML = '';
-        
-        // Sort by id
         const sorted = [...tasks].sort((a, b) => a.id - b.id);
-
         sorted.forEach((task, index) => {
-          const taskEl = document.createElement('div');
-          taskEl.className = 'task';
-          taskEl.dataset.id = task.id;
+          const taskEl = document.createElement('div'); taskEl.className = 'task'; taskEl.dataset.id = task.id;
           const serial = index + 1;
-          
-          // Determine color class for percent value
           const percentClass = task.percent >= 80 ? 'high' : '';
-          
           taskEl.innerHTML = `
             <span class="task-number">${serial}.</span>
             <div class="task-content">
@@ -575,103 +822,75 @@
             </div>
             <button class="remove-btn">✕</button>
           `;
-
-          // Percentage slider event
           const slider = taskEl.querySelector('.percent-slider');
           const percentSpan = taskEl.querySelector('.percent-value');
-          
+          let previousPercent = task.percent; // track changes
+
           slider.addEventListener('input', (e) => {
             const newPercent = parseInt(e.target.value);
             percentSpan.textContent = newPercent + '%';
-            
-            // Update color class
-            if (newPercent >= 80) {
-              percentSpan.classList.add('high');
-            } else {
-              percentSpan.classList.remove('high');
-            }
-            
-            // Update task data
+            if (newPercent >= 80) percentSpan.classList.add('high');
+            else percentSpan.classList.remove('high');
             const taskId = Number(taskEl.dataset.id);
             const targetTask = tasks.find(t => t.id === taskId);
-            if (targetTask) {
-              targetTask.percent = newPercent;
-            }
+            if (targetTask) targetTask.percent = newPercent;
           });
-          
-          slider.addEventListener('change', () => {
+
+          slider.addEventListener('change', (e) => {
+            const newPercent = parseInt(e.target.value);
+            const taskId = Number(taskEl.dataset.id);
+            const targetTask = tasks.find(t => t.id === taskId);
+            // if it just reached 100% and wasn't 100% before → celebrate
+            if (targetTask && targetTask.percent === 100 && previousPercent !== 100) {
+              celebrate();
+            }
+            previousPercent = targetTask ? targetTask.percent : 0;
             saveCurrentTasks();
           });
 
-          // Remove task
+          // initialise previousPercent
+          previousPercent = task.percent;
+
           taskEl.querySelector('.remove-btn').addEventListener('click', () => {
             const taskId = Number(taskEl.dataset.id);
             tasks = tasks.filter(t => t.id !== taskId);
-            renderTasks();
-            saveCurrentTasks();
+            renderTasks(); saveCurrentTasks();
           });
-
           tasksArea.appendChild(taskEl);
         });
 
-        // Simple task count at the bottom (no avg button)
         if (tasks.length > 0) {
-          const total = tasks.length;
-          const fullyDone = tasks.filter(t => t.percent === 100).length;
-          
+          const total = tasks.length, fullyDone = tasks.filter(t => t.percent === 100).length;
           const summary = document.createElement('div');
-          summary.style.padding = '15px 10px'; 
-          summary.style.borderTop = '2px solid #d0c6b8';
-          summary.style.marginTop = '10px'; 
-          summary.style.color = '#5a6b7a'; 
-          summary.style.fontSize = '1.1rem';
-          summary.style.textAlign = 'center';
-          
+          summary.style.padding = '15px 10px'; summary.style.borderTop = '2px solid var(--task-border-bottom)'; summary.style.marginTop = '10px'; summary.style.color = 'var(--history-preview)'; summary.style.fontSize = '1.1rem'; summary.style.textAlign = 'center';
           summary.innerHTML = `📋 ${total} tasks (${fullyDone} fully complete)`;
           tasksArea.appendChild(summary);
         } else {
           const emptyMsg = document.createElement('div');
-          emptyMsg.style.padding = '30px';
-          emptyMsg.style.textAlign = 'center';
-          emptyMsg.style.color = '#7a8b9b';
-          emptyMsg.style.fontSize = '1.3rem';
+          emptyMsg.style.padding = '30px'; emptyMsg.style.textAlign = 'center'; emptyMsg.style.color = 'var(--task-number)'; emptyMsg.style.fontSize = '1.3rem';
           emptyMsg.innerText = '➕ Add your first task';
           tasksArea.appendChild(emptyMsg);
         }
       }
 
-      // --- add new task with default 0% ---
       function addNewTask() {
         const text = taskInput.value.trim();
         if (!text) return;
-        tasks.push({ 
-          id: Date.now(), 
-          text: text, 
-          percent: 0 
-        });
-        renderTasks(); 
-        saveCurrentTasks(); 
-        taskInput.value = '';
+        tasks.push({ id: Date.now(), text, percent: 0 });
+        renderTasks(); saveCurrentTasks(); taskInput.value = '';
       }
       addBtn.addEventListener('click', addNewTask);
       taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addNewTask(); });
 
-      // --- save list ---
       document.getElementById('saveListBtn').addEventListener('click', () => {
         const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
-        savedLists.push({ 
-          date: getCurrentDate(), 
-          timestamp: Date.now(), 
-          tasks: JSON.parse(JSON.stringify(tasks)) 
-        });
+        savedLists.push({ date: getCurrentDate(), timestamp: Date.now(), tasks: JSON.parse(JSON.stringify(tasks)) });
         localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
-        saveIndicator.innerText = '✅ LIST SAVED!'; 
-        saveIndicator.classList.add('saved');
+        saveIndicator.innerText = '✅ LIST SAVED!'; saveIndicator.classList.add('saved');
         renderHistory();
         setTimeout(() => saveIndicator.innerText = '💾 AUTO SAVED', 2000);
       });
 
-      // --- history management with percentage display ---
       function removeDateFromHistory(indexToRemove) {
         if (confirm('Remove this saved date?')) {
           let savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
@@ -685,17 +904,12 @@
         const historyList = document.getElementById('historyList');
         const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
         clearAllBtn.style.display = savedLists.length > 0 ? 'block' : 'none';
-        if (savedLists.length === 0) {
-          historyList.innerHTML = '<p style="text-align:center; padding:40px;">No saved lists yet.</p>';
-          return;
-        }
+        if (savedLists.length === 0) { historyList.innerHTML = '<p style="text-align:center; padding:40px; color: var(--text-secondary);">No saved lists yet.</p>'; return; }
         historyList.innerHTML = '';
-        const dateCounts = {};
-        savedLists.forEach(l => dateCounts[l.date] = (dateCounts[l.date] || 0) + 1);
+        const dateCounts = {}; savedLists.forEach(l => dateCounts[l.date] = (dateCounts[l.date] || 0) + 1);
         savedLists.slice().reverse().forEach((list, revIdx) => {
           const origIdx = savedLists.length - 1 - revIdx;
-          const total = list.tasks.length;
-          const avg = total === 0 ? 0 : Math.round(list.tasks.reduce((sum, t) => sum + (t.percent || 0), 0) / total);
+          const total = list.tasks.length, avg = total === 0 ? 0 : Math.round(list.tasks.reduce((sum, t) => sum + (t.percent || 0), 0) / total);
           const fullyDone = list.tasks.filter(t => t.percent === 100).length;
           const dup = dateCounts[list.date] > 1;
           const item = document.createElement('div'); item.className = 'history-item';
@@ -711,17 +925,14 @@
           `;
           historyList.appendChild(item);
         });
-
         document.querySelectorAll('.load-history').forEach(btn => {
           btn.addEventListener('click', (e) => {
             const idx = e.target.dataset.index;
             const lists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
             if (lists[idx]) {
               tasks = JSON.parse(JSON.stringify(lists[idx].tasks));
-              renderTasks(); 
-              saveCurrentTasks();
+              renderTasks(); saveCurrentTasks();
               document.getElementById('currentDate').innerText = lists[idx].date;
-              // switch to todo
               navLinks.forEach(l => l.classList.remove('active'));
               sections.forEach(s => s.classList.remove('active'));
               document.querySelector('[data-section="todo"]').classList.add('active');
@@ -730,22 +941,16 @@
           });
         });
         document.querySelectorAll('.remove-history').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const idx = e.target.dataset.index;
-            removeDateFromHistory(parseInt(idx));
-          });
+          btn.addEventListener('click', (e) => { e.stopPropagation(); const idx = e.target.dataset.index; removeDateFromHistory(parseInt(idx)); });
         });
       }
 
-      clearAllBtn.addEventListener('click', () => {
-        if (confirm('Clear ALL history?')) {
-          localStorage.setItem('walaSavedLists', JSON.stringify([]));
-          renderHistory();
-        }
-      });
+      clearAllBtn.addEventListener('click', () => { if (confirm('Clear ALL history?')) { localStorage.setItem('walaSavedLists', JSON.stringify([])); renderHistory(); } });
 
-      // initial renders
+      // fill home and youtube
+      document.getElementById('home').innerHTML = `<div class="home-grid">${['📋 TO-DO LIST', '📅 DATE/HISTORY', '💾 AUTO SAVE'].map((t,i)=>`<div class="tool-card"><div class="tool-icon">${['📋','📅','💾'][i]}</div><h3>${t.split(' ')[1]}</h3><p>${['Each task with % slider.','View saved lists by date.','Auto & manual save.'][i]}</p></div>`).join('')}</div>`;
+      document.getElementById('youtube').innerHTML = `<div class="youtube-card"><div class="youtube-icon">📺</div><h2>@zlxlegendry</h2><p>Subscribe for more!</p><a href="https://www.youtube.com/@zlxlegendry" target="_blank" class="youtube-btn">▶️ VISIT CHANNEL</a></div>`;
+
       renderTasks();
       renderHistory();
     })();
