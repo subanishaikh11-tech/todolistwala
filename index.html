@@ -707,7 +707,7 @@
     <!-- HISTORY -->
     <div id="history" class="section"><div class="history-list" id="historyList"></div><button class="clear-history" id="clearAllHistory" style="display: none;">🗑️ Clear All History</button></div>
     <!-- ABOUT -->
-    <div id="about" class="section"><div class="about-card"><h2>ABOUT TO-DO LIST WALA</h2><p>✅ Per-task percentage<br>✅ Slide progress (0-100%)<br>✅ Save/load by date<br>✅ Light / Dark / Neon<br>✅ Celebration on 100% 🎉<br>✅ Fresh list every day!<br>Created with ❤️</p></div></div>
+    <div id="about" class="section"><div class="about-card"><h2>ABOUT TO-DO LIST WALA</h2><p>✅ Per-task percentage<br>✅ Slide progress (0-100%)<br>✅ Save/load by date<br>✅ Light / Dark / Neon<br>✅ Celebration on 100% 🎉<br>✅ Fresh EMPTY list every day!<br>Created with ❤️</p></div></div>
     <!-- YOUTUBE (injected) -->
     <div id="youtube" class="section"></div>
   </div>
@@ -786,14 +786,14 @@
         return new Date().toDateString(); // Returns something like "Fri Mar 06 2026"
       }
 
-      // --- task data with daily reset ---
+      // --- FIXED: task data with daily reset - NO DEFAULT TASKS! ---
       let tasks = [];
       const todayKey = getTodayKey();
       const lastVisitKey = localStorage.getItem('walaLastVisit') || '';
       
       // Check if it's a new day
       if (todayKey !== lastVisitKey) {
-        // New day - start with empty list
+        // New day - start with EMPTY list (no default tasks!)
         tasks = [];
         // Save the new date
         localStorage.setItem('walaLastVisit', todayKey);
@@ -879,7 +879,7 @@
         } else {
           const emptyMsg = document.createElement('div');
           emptyMsg.style.padding = '30px'; emptyMsg.style.textAlign = 'center'; emptyMsg.style.color = 'var(--task-number)'; emptyMsg.style.fontSize = '1.3rem';
-          emptyMsg.innerText = '➕ Add your first task of the day!';
+          emptyMsg.innerText = '✨ New day! Add your first task ✨';
           tasksArea.appendChild(emptyMsg);
         }
       }
