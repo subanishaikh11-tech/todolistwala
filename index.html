@@ -6,7 +6,6 @@
   <title>TO-DO LIST WALA · celebration on 100%</title>
   <!-- FAVICON unchanged -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='10' y='20' width='80' height='65' rx='12' fill='%23fff9f0' stroke='%232c3e4f' stroke-width='6'/%3E%3Crect x='25' y='5' width='50' height='20' rx='8' fill='%23c0c7d0' stroke='%232c3e4f' stroke-width='4'/%3E%3Ccircle cx='35' cy='15' r='5' fill='%239aa3af'/%3E%3Ccircle cx='65' cy='15' r='5' fill='%239aa3af'/%3E%3Cpolyline points='25,55 45,75 75,40' stroke='%232c6e5c' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-  <!-- canvas for confetti (hidden by default, fullscreen) -->
   <style>
     /* [ALL YOUR EXISTING STYLES REMAIN EXACTLY THE SAME] */
     * {
@@ -80,6 +79,11 @@
       --youtube-btn-shadow: #8b1e1a;
       --text-primary: #2c3e4f;
       --text-secondary: #5a6b7a;
+      
+      /* NEW: Today button style */
+      --today-btn-bg: #ffd966;
+      --today-btn-text: #2c3e4f;
+      --today-btn-shadow: #b8aa98;
     }
 
     /* ========== DARK MODE ========== */
@@ -145,6 +149,11 @@
       --youtube-btn-shadow: #64221f;
       --text-primary: #e2e8f0;
       --text-secondary: #a0aec0;
+      
+      /* NEW: Today button style for dark mode */
+      --today-btn-bg: #f0b34b;
+      --today-btn-text: #10171f;
+      --today-btn-shadow: #1f2937;
     }
 
     /* ========== NEON MODE ========== */
@@ -210,6 +219,11 @@
       --youtube-btn-shadow: #51007a;
       --text-primary: #f0e6ff;
       --text-secondary: #c0a0ff;
+      
+      /* NEW: Today button style for neon mode */
+      --today-btn-bg: #ff44e6;
+      --today-btn-text: #0b0f1a;
+      --today-btn-shadow: #7d26cd;
     }
 
     body {
@@ -217,7 +231,6 @@
       background: var(--bg-body);
     }
 
-    /* confetti canvas – full screen, pointer‑events none so it doesn't block clicks */
     #confetti-canvas {
       position: fixed;
       top: 0;
@@ -291,7 +304,6 @@
       transform: scale(1.02);
     }
 
-    /* theme toggle switch – three icons */
     .theme-toggle {
       background: #2b2b45;
       border-radius: 40px;
@@ -434,6 +446,38 @@
     }
     .save-indicator.saved {
       background: var(--save-indicator-saved);
+    }
+
+    /* NEW: Today button style */
+    .today-btn-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    
+    .today-btn {
+      background: var(--today-btn-bg);
+      color: var(--today-btn-text);
+      border: none;
+      border-radius: 40px;
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 0 var(--today-btn-shadow);
+      transition: 0.1s;
+    }
+    
+    .today-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 0px 0 var(--today-btn-shadow);
+    }
+    
+    .today-btn.hidden {
+      display: none;
     }
 
     .tasks-area {
@@ -663,7 +707,6 @@
   </style>
 </head>
 <body>
-  <!-- Confetti canvas (hidden by default) -->
   <canvas id="confetti-canvas"></canvas>
 
   <nav class="navbar">
@@ -676,7 +719,6 @@
         <span class="nav-link" data-section="about">ABOUT</span>
         <span class="nav-link yt-link" data-section="youtube" id="ytChannelLink">▶️ @zlxlegendry</span>
       </div>
-      <!-- three‑way theme toggle -->
       <div class="theme-toggle" id="themeToggle">
         <span class="theme-icon light-mode active-light" id="lightModeIcon">☀️</span>
         <span class="theme-icon dark-mode" id="darkModeIcon">🌙</span>
@@ -686,9 +728,7 @@
   </nav>
 
   <div class="container">
-    <!-- HOME (injected) -->
     <div id="home" class="section active"></div>
-    <!-- TO-DO LIST -->
     <div id="todo" class="section">
       <div class="clipboard">
         <div class="clip"></div><div class="rivet left"></div><div class="rivet right"></div>
@@ -696,6 +736,14 @@
           <div class="date-badge" id="currentDate">Monday, March 1, 2026</div>
           <div class="save-indicator" id="saveIndicator">💾 AUTO SAVED</div>
         </div>
+        
+        <!-- NEW: Today button (hidden by default) -->
+        <div class="today-btn-container">
+          <button class="today-btn hidden" id="backToTodayBtn">
+            <span>📅</span> BACK TO TODAY
+          </button>
+        </div>
+        
         <div class="tasks-area" id="tasksArea"></div>
         <div class="add-section">
           <input type="text" class="add-input" id="taskInput" placeholder="Write a new task...">
@@ -704,11 +752,8 @@
         <button class="save-btn" id="saveListBtn"><span>💾</span> SAVE THIS LIST</button>
       </div>
     </div>
-    <!-- HISTORY -->
     <div id="history" class="section"><div class="history-list" id="historyList"></div><button class="clear-history" id="clearAllHistory" style="display: none;">🗑️ Clear All History</button></div>
-    <!-- ABOUT -->
     <div id="about" class="section"><div class="about-card"><h2>ABOUT TO-DO LIST WALA</h2><p>✅ Per-task percentage<br>✅ Slide progress (0-100%)<br>✅ Save/load by date<br>✅ Light / Dark / Neon<br>✅ Celebration on 100% 🎉<br>✅ Fresh EMPTY list every day!<br>Created with ❤️</p></div></div>
-    <!-- YOUTUBE (injected) -->
     <div id="youtube" class="section"></div>
   </div>
 
@@ -761,6 +806,8 @@
       // ---- navigation ----
       const navLinks = document.querySelectorAll('.nav-link');
       const sections = document.querySelectorAll('.section');
+      const backToTodayBtn = document.getElementById('backToTodayBtn');
+      
       navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
           const sectionId = link.dataset.section;
@@ -768,40 +815,96 @@
             window.open('https://www.youtube.com/@zlxlegendry', '_blank');
             return;
           }
+          
           navLinks.forEach(l => l.classList.remove('active'));
           link.classList.add('active');
           sections.forEach(s => s.classList.remove('active'));
           document.getElementById(sectionId).classList.add('active');
-          if (sectionId === 'history') renderHistory();
+          
+          if (sectionId === 'history') {
+            renderHistory();
+          } else if (sectionId === 'todo') {
+            // When navigating to todo via nav, always show today's tasks
+            loadTodayTasks();
+          }
         });
       });
 
-      // --- date functions ---
+      // --- FIXED: Date functions ---
       function getCurrentDate() {
         const d = new Date();
         return d.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
       }
       
       function getTodayKey() {
-        return new Date().toDateString(); // Returns something like "Fri Mar 06 2026"
+        return new Date().toDateString(); // Returns "Fri Mar 06 2026"
       }
 
-      // --- FIXED: task data with daily reset - NO DEFAULT TASKS! ---
+      // --- FIXED: Task management with proper date separation ---
       let tasks = [];
-      const todayKey = getTodayKey();
-      const lastVisitKey = localStorage.getItem('walaLastVisit') || '';
+      let currentViewDate = getTodayKey(); // Track which date we're viewing
       
-      // Check if it's a new day
+      // Load today's tasks
+      function loadTodayTasks() {
+        currentViewDate = getTodayKey();
+        const savedTasks = localStorage.getItem(`walaTasks_${currentViewDate}`);
+        tasks = savedTasks ? JSON.parse(savedTasks) : [];
+        document.getElementById('currentDate').innerText = getCurrentDate();
+        
+        // Hide the "Back to Today" button
+        backToTodayBtn.classList.add('hidden');
+        
+        // Reset save indicator
+        saveIndicator.innerText = '💾 AUTO SAVED';
+        saveIndicator.classList.remove('saved');
+        
+        renderTasks();
+      }
+      
+      // Load tasks for a specific date (for history viewing)
+      function loadTasksForDate(dateKey, displayDate) {
+        currentViewDate = dateKey;
+        const savedTasks = localStorage.getItem(`walaTasks_${dateKey}`);
+        tasks = savedTasks ? JSON.parse(savedTasks) : [];
+        document.getElementById('currentDate').innerText = displayDate;
+        
+        // Show the "Back to Today" button
+        backToTodayBtn.classList.remove('hidden');
+        
+        // Show history indicator
+        saveIndicator.innerText = '📜 VIEWING HISTORY';
+        saveIndicator.classList.remove('saved');
+        
+        renderTasks();
+      }
+      
+      // Save tasks for current view date
+      function saveTasksForCurrentDate() {
+        localStorage.setItem(`walaTasks_${currentViewDate}`, JSON.stringify(tasks));
+        
+        // Update last visit if this is today
+        if (currentViewDate === getTodayKey()) {
+          localStorage.setItem('walaLastVisit', getTodayKey());
+        }
+        
+        // Auto-save to history if this is today
+        if (currentViewDate === getTodayKey() && tasks.length > 0) {
+          autoSaveToHistory();
+        }
+      }
+
+      // Check for new day
+      const lastVisitKey = localStorage.getItem('walaLastVisit') || '';
+      const todayKey = getTodayKey();
+      
       if (todayKey !== lastVisitKey) {
-        // New day - start with EMPTY list (no default tasks!)
+        // New day - load today's tasks (which will be empty for new day)
         tasks = [];
-        // Save the new date
+        localStorage.setItem(`walaTasks_${todayKey}`, JSON.stringify([]));
         localStorage.setItem('walaLastVisit', todayKey);
-        // Save empty tasks for today
-        localStorage.setItem('walaTasks', JSON.stringify(tasks));
       } else {
-        // Same day - load existing tasks
-        tasks = JSON.parse(localStorage.getItem('walaTasks')) || [];
+        // Same day - load today's tasks
+        tasks = JSON.parse(localStorage.getItem(`walaTasks_${todayKey}`)) || [];
       }
 
       const tasksArea = document.getElementById('tasksArea');
@@ -810,34 +913,30 @@
       const saveIndicator = document.getElementById('saveIndicator');
       const clearAllBtn = document.getElementById('clearAllHistory');
 
-      // FIXED: Auto-save function that also saves to history
+      // Save current tasks and update indicator
       function saveCurrentTasks() {
-        localStorage.setItem('walaTasks', JSON.stringify(tasks));
-        saveIndicator.innerText = '💾 AUTO SAVED';
-        saveIndicator.classList.add('saved');
+        saveTasksForCurrentDate();
         
-        // FIXED: Also auto-save to history when tasks change
-        autoSaveToHistory();
-        
+        // Only show auto saved if we're on today
+        if (currentViewDate === getTodayKey()) {
+          saveIndicator.innerText = '💾 AUTO SAVED';
+          saveIndicator.classList.add('saved');
+        }
         setTimeout(() => saveIndicator.classList.remove('saved'), 500);
       }
 
-      // FIXED: New function to auto-save to history
+      // Auto-save to history (only for today's tasks)
       function autoSaveToHistory() {
-        // Only save if there are tasks
-        if (tasks.length > 0) {
+        if (tasks.length > 0 && currentViewDate === getTodayKey()) {
           const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
           const today = getCurrentDate();
           
-          // Check if we already have a saved list for today
           const todayListIndex = savedLists.findIndex(list => list.date === today);
           
           if (todayListIndex !== -1) {
-            // Update existing today's list
             savedLists[todayListIndex].tasks = JSON.parse(JSON.stringify(tasks));
             savedLists[todayListIndex].timestamp = Date.now();
           } else {
-            // Create new entry for today
             savedLists.push({ 
               date: today, 
               timestamp: Date.now(), 
@@ -849,13 +948,35 @@
         }
       }
 
+      // Render tasks
       function renderTasks() {
         tasksArea.innerHTML = '';
+        
+        if (tasks.length === 0) {
+          const emptyMsg = document.createElement('div');
+          emptyMsg.style.padding = '30px'; 
+          emptyMsg.style.textAlign = 'center'; 
+          emptyMsg.style.color = 'var(--task-number)'; 
+          emptyMsg.style.fontSize = '1.3rem';
+          
+          if (currentViewDate === getTodayKey()) {
+            emptyMsg.innerText = '✨ New day! Add your first task ✨';
+          } else {
+            emptyMsg.innerText = '📅 No tasks saved for this date';
+          }
+          
+          tasksArea.appendChild(emptyMsg);
+          return;
+        }
+        
         const sorted = [...tasks].sort((a, b) => a.id - b.id);
         sorted.forEach((task, index) => {
-          const taskEl = document.createElement('div'); taskEl.className = 'task'; taskEl.dataset.id = task.id;
+          const taskEl = document.createElement('div'); 
+          taskEl.className = 'task'; 
+          taskEl.dataset.id = task.id;
           const serial = index + 1;
           const percentClass = task.percent >= 80 ? 'high' : '';
+          
           taskEl.innerHTML = `
             <span class="task-number">${serial}.</span>
             <div class="task-content">
@@ -867,6 +988,7 @@
             </div>
             <button class="remove-btn">✕</button>
           `;
+          
           const slider = taskEl.querySelector('.percent-slider');
           const percentSpan = taskEl.querySelector('.percent-value');
           let previousPercent = task.percent;
@@ -897,74 +1019,112 @@
           taskEl.querySelector('.remove-btn').addEventListener('click', () => {
             const taskId = Number(taskEl.dataset.id);
             tasks = tasks.filter(t => t.id !== taskId);
-            renderTasks(); saveCurrentTasks();
+            renderTasks(); 
+            saveCurrentTasks();
           });
+          
           tasksArea.appendChild(taskEl);
         });
 
         if (tasks.length > 0) {
           const total = tasks.length, fullyDone = tasks.filter(t => t.percent === 100).length;
           const summary = document.createElement('div');
-          summary.style.padding = '15px 10px'; summary.style.borderTop = '2px solid var(--task-border-bottom)'; summary.style.marginTop = '10px'; summary.style.color = 'var(--history-preview)'; summary.style.fontSize = '1.1rem'; summary.style.textAlign = 'center';
+          summary.style.padding = '15px 10px'; 
+          summary.style.borderTop = '2px solid var(--task-border-bottom)'; 
+          summary.style.marginTop = '10px'; 
+          summary.style.color = 'var(--history-preview)'; 
+          summary.style.fontSize = '1.1rem'; 
+          summary.style.textAlign = 'center';
           summary.innerHTML = `📋 ${total} tasks (${fullyDone} fully complete)`;
           tasksArea.appendChild(summary);
-        } else {
-          const emptyMsg = document.createElement('div');
-          emptyMsg.style.padding = '30px'; emptyMsg.style.textAlign = 'center'; emptyMsg.style.color = 'var(--task-number)'; emptyMsg.style.fontSize = '1.3rem';
-          emptyMsg.innerText = '✨ New day! Add your first task ✨';
-          tasksArea.appendChild(emptyMsg);
         }
       }
 
+      // Add new task
       function addNewTask() {
         const text = taskInput.value.trim();
         if (!text) return;
         tasks.push({ id: Date.now(), text, percent: 0 });
-        renderTasks(); saveCurrentTasks(); taskInput.value = '';
+        renderTasks(); 
+        saveCurrentTasks(); 
+        taskInput.value = '';
       }
+      
       addBtn.addEventListener('click', addNewTask);
       taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addNewTask(); });
 
+      // Save button - saves to history
       document.getElementById('saveListBtn').addEventListener('click', () => {
-        const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
-        savedLists.push({ date: getCurrentDate(), timestamp: Date.now(), tasks: JSON.parse(JSON.stringify(tasks)) });
-        localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
-        saveIndicator.innerText = '✅ LIST SAVED!'; saveIndicator.classList.add('saved');
-        renderHistory();
-        setTimeout(() => saveIndicator.innerText = '💾 AUTO SAVED', 2000);
+        if (currentViewDate === getTodayKey()) {
+          const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
+          const today = getCurrentDate();
+          
+          const existingIndex = savedLists.findIndex(list => list.date === today);
+          
+          if (existingIndex !== -1) {
+            savedLists[existingIndex].tasks = JSON.parse(JSON.stringify(tasks));
+            savedLists[existingIndex].timestamp = Date.now();
+          } else {
+            savedLists.push({ 
+              date: today, 
+              timestamp: Date.now(), 
+              tasks: JSON.parse(JSON.stringify(tasks)) 
+            });
+          }
+          
+          localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
+          saveIndicator.innerText = '✅ LIST SAVED!'; 
+          saveIndicator.classList.add('saved');
+          setTimeout(() => {
+            saveIndicator.innerText = '💾 AUTO SAVED';
+            saveIndicator.classList.remove('saved');
+          }, 2000);
+        } else {
+          alert('You can only save today\'s list to history!');
+        }
       });
 
-      function removeDateFromHistory(indexToRemove) {
-        if (confirm('Remove this saved date?')) {
-          let savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
-          savedLists.splice(indexToRemove, 1);
-          localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
-          renderHistory();
-        }
-      }
+      // NEW: Back to Today button functionality
+      backToTodayBtn.addEventListener('click', () => {
+        loadTodayTasks();
+        
+        // Stay on todo section
+        navLinks.forEach(l => l.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+        document.querySelector('[data-section="todo"]').classList.add('active');
+        document.getElementById('todo').classList.add('active');
+      });
 
+      // Render history
       function renderHistory() {
         const historyList = document.getElementById('historyList');
         const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
         clearAllBtn.style.display = savedLists.length > 0 ? 'block' : 'none';
-        if (savedLists.length === 0) { historyList.innerHTML = '<p style="text-align:center; padding:40px; color: var(--text-secondary);">No saved lists yet.</p>'; return; }
+        
+        if (savedLists.length === 0) { 
+          historyList.innerHTML = '<p style="text-align:center; padding:40px; color: var(--text-secondary);">No saved lists yet.</p>'; 
+          return; 
+        }
+        
         historyList.innerHTML = '';
         
         // Sort by timestamp (newest first)
         const sortedLists = [...savedLists].sort((a, b) => b.timestamp - a.timestamp);
         
         sortedLists.forEach((list, index) => {
-          const total = list.tasks.length, avg = total === 0 ? 0 : Math.round(list.tasks.reduce((sum, t) => sum + (t.percent || 0), 0) / total);
+          const total = list.tasks.length, 
+                avg = total === 0 ? 0 : Math.round(list.tasks.reduce((sum, t) => sum + (t.percent || 0), 0) / total);
           const fullyDone = list.tasks.filter(t => t.percent === 100).length;
           
-          const item = document.createElement('div'); item.className = 'history-item';
+          const item = document.createElement('div'); 
+          item.className = 'history-item';
           item.innerHTML = `
             <div style="flex:1;">
               <div class="history-date">${list.date}</div>
               <div class="history-preview">${fullyDone}/${total} fully done · <strong>Avg ${avg}%</strong></div>
             </div>
             <div class="history-actions">
-              <button class="load-history" data-date="${list.date}" data-index="${index}">LOAD</button>
+              <button class="load-history" data-date="${list.date}" data-index="${index}">VIEW</button>
               <button class="remove-history" data-index="${index}" title="Remove">✕</button>
             </div>
           `;
@@ -978,11 +1138,20 @@
             const listToLoad = savedLists.find(list => list.date === date);
             
             if (listToLoad) {
+              // Load the historical tasks
               tasks = JSON.parse(JSON.stringify(listToLoad.tasks));
-              renderTasks(); saveCurrentTasks();
-              document.getElementById('currentDate').innerText = date;
+              document.getElementById('currentDate').innerText = listToLoad.date;
               
-              // Navigate to todo section
+              // Show the "Back to Today" button
+              backToTodayBtn.classList.remove('hidden');
+              
+              // Show history indicator
+              saveIndicator.innerText = '📜 VIEWING HISTORY';
+              saveIndicator.classList.remove('saved');
+              
+              renderTasks();
+              
+              // Navigate to todo section to show the historical list
               navLinks.forEach(l => l.classList.remove('active'));
               sections.forEach(s => s.classList.remove('active'));
               document.querySelector('[data-section="todo"]').classList.add('active');
@@ -997,11 +1166,9 @@
             const index = parseInt(e.target.dataset.index);
             let savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
             
-            // Sort to match the displayed order
             const sortedLists = [...savedLists].sort((a, b) => b.timestamp - a.timestamp);
             const listToRemove = sortedLists[index];
             
-            // Find and remove the actual item from original array
             const originalIndex = savedLists.findIndex(list => list.date === listToRemove.date && list.timestamp === listToRemove.timestamp);
             if (originalIndex !== -1) {
               savedLists.splice(originalIndex, 1);
@@ -1023,12 +1190,12 @@
       document.getElementById('home').innerHTML = `<div class="home-grid">${['📋 TO-DO LIST', '📅 DATE/HISTORY', '💾 AUTO SAVE'].map((t,i)=>`<div class="tool-card"><div class="tool-icon">${['📋','📅','💾'][i]}</div><h3>${t.split(' ')[1]}</h3><p>${['Each task with % slider.','View saved lists by date.','Auto & manual save.'][i]}</p></div>`).join('')}</div>`;
       document.getElementById('youtube').innerHTML = `<div class="youtube-card"><div class="youtube-icon">📺</div><h2>@zlxlegendry</h2><p>Subscribe for more!</p><a href="https://www.youtube.com/@zlxlegendry" target="_blank" class="youtube-btn">▶️ VISIT CHANNEL</a></div>`;
 
-      // Update the date display
+      // Initial load
       document.getElementById('currentDate').innerText = getCurrentDate();
       renderTasks();
       renderHistory();
       
-      // FIXED: Initial auto-save to history if there are tasks
+      // Auto-save to history if there are tasks for today
       if (tasks.length > 0) {
         autoSaveToHistory();
       }
