@@ -810,11 +810,43 @@
       const saveIndicator = document.getElementById('saveIndicator');
       const clearAllBtn = document.getElementById('clearAllHistory');
 
+      // FIXED: Auto-save function that also saves to history
       function saveCurrentTasks() {
         localStorage.setItem('walaTasks', JSON.stringify(tasks));
         saveIndicator.innerText = '💾 AUTO SAVED';
         saveIndicator.classList.add('saved');
+        
+        // FIXED: Also auto-save to history when tasks change
+        autoSaveToHistory();
+        
         setTimeout(() => saveIndicator.classList.remove('saved'), 500);
+      }
+
+      // FIXED: New function to auto-save to history
+      function autoSaveToHistory() {
+        // Only save if there are tasks
+        if (tasks.length > 0) {
+          const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
+          const today = getCurrentDate();
+          
+          // Check if we already have a saved list for today
+          const todayListIndex = savedLists.findIndex(list => list.date === today);
+          
+          if (todayListIndex !== -1) {
+            // Update existing today's list
+            savedLists[todayListIndex].tasks = JSON.parse(JSON.stringify(tasks));
+            savedLists[todayListIndex].timestamp = Date.now();
+          } else {
+            // Create new entry for today
+            savedLists.push({ 
+              date: today, 
+              timestamp: Date.now(), 
+              tasks: JSON.parse(JSON.stringify(tasks)) 
+            });
+          }
+          
+          localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
+        }
       }
 
       function renderTasks() {
@@ -917,33 +949,40 @@
         clearAllBtn.style.display = savedLists.length > 0 ? 'block' : 'none';
         if (savedLists.length === 0) { historyList.innerHTML = '<p style="text-align:center; padding:40px; color: var(--text-secondary);">No saved lists yet.</p>'; return; }
         historyList.innerHTML = '';
-        const dateCounts = {}; savedLists.forEach(l => dateCounts[l.date] = (dateCounts[l.date] || 0) + 1);
-        savedLists.slice().reverse().forEach((list, revIdx) => {
-          const origIdx = savedLists.length - 1 - revIdx;
+        
+        // Sort by timestamp (newest first)
+        const sortedLists = [...savedLists].sort((a, b) => b.timestamp - a.timestamp);
+        
+        sortedLists.forEach((list, index) => {
           const total = list.tasks.length, avg = total === 0 ? 0 : Math.round(list.tasks.reduce((sum, t) => sum + (t.percent || 0), 0) / total);
           const fullyDone = list.tasks.filter(t => t.percent === 100).length;
-          const dup = dateCounts[list.date] > 1;
+          
           const item = document.createElement('div'); item.className = 'history-item';
           item.innerHTML = `
             <div style="flex:1;">
-              <div class="history-date" style="${dup ? 'color:#b07a6e;' : ''}">${list.date} ${dup ? '<span style="font-size:0.9rem; background:#ffe1d9; padding:3px 10px; border-radius:20px;">duplicate</span>' : ''}</div>
+              <div class="history-date">${list.date}</div>
               <div class="history-preview">${fullyDone}/${total} fully done · <strong>Avg ${avg}%</strong></div>
             </div>
             <div class="history-actions">
-              <button class="load-history" data-index="${origIdx}">LOAD</button>
-              <button class="remove-history" data-index="${origIdx}" title="Remove">✕</button>
+              <button class="load-history" data-date="${list.date}" data-index="${index}">LOAD</button>
+              <button class="remove-history" data-index="${index}" title="Remove">✕</button>
             </div>
           `;
           historyList.appendChild(item);
         });
+        
         document.querySelectorAll('.load-history').forEach(btn => {
           btn.addEventListener('click', (e) => {
-            const idx = e.target.dataset.index;
-            const lists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
-            if (lists[idx]) {
-              tasks = JSON.parse(JSON.stringify(lists[idx].tasks));
+            const date = e.target.dataset.date;
+            const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
+            const listToLoad = savedLists.find(list => list.date === date);
+            
+            if (listToLoad) {
+              tasks = JSON.parse(JSON.stringify(listToLoad.tasks));
               renderTasks(); saveCurrentTasks();
-              document.getElementById('currentDate').innerText = lists[idx].date;
+              document.getElementById('currentDate').innerText = date;
+              
+              // Navigate to todo section
               navLinks.forEach(l => l.classList.remove('active'));
               sections.forEach(s => s.classList.remove('active'));
               document.querySelector('[data-section="todo"]').classList.add('active');
@@ -951,12 +990,34 @@
             }
           });
         });
+        
         document.querySelectorAll('.remove-history').forEach(btn => {
-          btn.addEventListener('click', (e) => { e.stopPropagation(); const idx = e.target.dataset.index; removeDateFromHistory(parseInt(idx)); });
+          btn.addEventListener('click', (e) => { 
+            e.stopPropagation(); 
+            const index = parseInt(e.target.dataset.index);
+            let savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
+            
+            // Sort to match the displayed order
+            const sortedLists = [...savedLists].sort((a, b) => b.timestamp - a.timestamp);
+            const listToRemove = sortedLists[index];
+            
+            // Find and remove the actual item from original array
+            const originalIndex = savedLists.findIndex(list => list.date === listToRemove.date && list.timestamp === listToRemove.timestamp);
+            if (originalIndex !== -1) {
+              savedLists.splice(originalIndex, 1);
+              localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
+              renderHistory();
+            }
+          });
         });
       }
 
-      clearAllBtn.addEventListener('click', () => { if (confirm('Clear ALL history?')) { localStorage.setItem('walaSavedLists', JSON.stringify([])); renderHistory(); } });
+      clearAllBtn.addEventListener('click', () => { 
+        if (confirm('Clear ALL history?')) { 
+          localStorage.setItem('walaSavedLists', JSON.stringify([])); 
+          renderHistory(); 
+        } 
+      });
 
       // fill home and youtube
       document.getElementById('home').innerHTML = `<div class="home-grid">${['📋 TO-DO LIST', '📅 DATE/HISTORY', '💾 AUTO SAVE'].map((t,i)=>`<div class="tool-card"><div class="tool-icon">${['📋','📅','💾'][i]}</div><h3>${t.split(' ')[1]}</h3><p>${['Each task with % slider.','View saved lists by date.','Auto & manual save.'][i]}</p></div>`).join('')}</div>`;
@@ -966,6 +1027,11 @@
       document.getElementById('currentDate').innerText = getCurrentDate();
       renderTasks();
       renderHistory();
+      
+      // FIXED: Initial auto-save to history if there are tasks
+      if (tasks.length > 0) {
+        autoSaveToHistory();
+      }
     })();
   </script>
 </body>
