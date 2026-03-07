@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TO-DO LIST WALA · celebration on 100%</title>
+  <title>TO-DO LIST WALA · STUDY STOPWATCH</title>
   <!-- FAVICON unchanged -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='10' y='20' width='80' height='65' rx='12' fill='%23fff9f0' stroke='%232c3e4f' stroke-width='6'/%3E%3Crect x='25' y='5' width='50' height='20' rx='8' fill='%23c0c7d0' stroke='%232c3e4f' stroke-width='4'/%3E%3Ccircle cx='35' cy='15' r='5' fill='%239aa3af'/%3E%3Ccircle cx='65' cy='15' r='5' fill='%239aa3af'/%3E%3Cpolyline points='25,55 45,75 75,40' stroke='%232c6e5c' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <style>
-    /* [ALL YOUR EXISTING STYLES REMAIN EXACTLY THE SAME] */
+    /* [ALL EXISTING STYLES REMAIN] */
     * {
       margin: 0;
       padding: 0;
@@ -80,13 +80,26 @@
       --text-primary: #2c3e4f;
       --text-secondary: #5a6b7a;
       
-      /* NEW: Today button style */
+      /* Timer colors */
+      --timer-bg: #fff9f0;
+      --timer-display-bg: linear-gradient(145deg, #f0e8dc, #e2d9cc);
+      --timer-btn-study: #2c6e5c;
+      --timer-btn-break: #7a8b9b;
+      --timer-btn-reset: #b07a6e;
+      --timer-preset-bg: white;
+      --timer-preset-hover: #2c3e4f;
+      --timer-stat-bg: #e8e0d2;
+      --timer-mode-active: #2c6e5c;
+      --timer-glow: rgba(44, 110, 92, 0.3);
+      --timer-shadow: rgba(0,0,0,0.2);
+      --timer-panel-bg: #f5efe4;
+      
       --today-btn-bg: #ffd966;
       --today-btn-text: #2c3e4f;
       --today-btn-shadow: #b8aa98;
     }
 
-    /* ========== DARK MODE ========== */
+    /* DARK MODE */
     body.dark {
       --bg-body: #1e262e;
       --navbar-bg: #10171f;
@@ -150,13 +163,26 @@
       --text-primary: #e2e8f0;
       --text-secondary: #a0aec0;
       
-      /* NEW: Today button style for dark mode */
+      /* Timer colors dark */
+      --timer-bg: #28323f;
+      --timer-display-bg: linear-gradient(145deg, #2d3748, #1e262e);
+      --timer-btn-study: #2f855a;
+      --timer-btn-break: #5f6b7a;
+      --timer-btn-reset: #b16f66;
+      --timer-preset-bg: #2d3748;
+      --timer-preset-hover: #f0b34b;
+      --timer-stat-bg: #374151;
+      --timer-mode-active: #2f855a;
+      --timer-glow: rgba(47, 133, 90, 0.3);
+      --timer-shadow: rgba(0,0,0,0.4);
+      --timer-panel-bg: #1f2a36;
+      
       --today-btn-bg: #f0b34b;
       --today-btn-text: #10171f;
       --today-btn-shadow: #1f2937;
     }
 
-    /* ========== NEON MODE ========== */
+    /* NEON MODE */
     body.neon {
       --bg-body: #0b0f1a;
       --navbar-bg: #141b2b;
@@ -220,7 +246,20 @@
       --text-primary: #f0e6ff;
       --text-secondary: #c0a0ff;
       
-      /* NEW: Today button style for neon mode */
+      /* Timer colors neon */
+      --timer-bg: #1a1230;
+      --timer-display-bg: linear-gradient(145deg, #23163f, #1a1230);
+      --timer-btn-study: #39ff14;
+      --timer-btn-break: #ff44e6;
+      --timer-btn-reset: #ff69b4;
+      --timer-preset-bg: #1e1a3a;
+      --timer-preset-hover: #ff00ff;
+      --timer-stat-bg: #2e1c50;
+      --timer-mode-active: #39ff14;
+      --timer-glow: rgba(57, 255, 20, 0.4);
+      --timer-shadow: rgba(255, 0, 255, 0.2);
+      --timer-panel-bg: #221a38;
+      
       --today-btn-bg: #ff44e6;
       --today-btn-text: #0b0f1a;
       --today-btn-shadow: #7d26cd;
@@ -337,7 +376,7 @@
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 30px auto;
       padding: 0 20px;
     }
@@ -448,7 +487,6 @@
       background: var(--save-indicator-saved);
     }
 
-    /* NEW: Today button style */
     .today-btn-container {
       display: flex;
       justify-content: center;
@@ -703,7 +741,432 @@
     .youtube-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 var(--youtube-btn-shadow); }
     .youtube-btn:hover { background: var(--yt-hover); }
 
-    @media (max-width: 700px) { .list-info { flex-wrap: wrap; justify-content: center; } }
+    /* ========== DUAL PANEL STUDY STOPWATCH ========== */
+    .study-stopwatch-container {
+      background: var(--timer-bg);
+      border-radius: 50px;
+      padding: 30px;
+      box-shadow: 0 20px 40px var(--timer-shadow), 0 0 0 2px var(--card-border) inset, 0 0 30px var(--timer-glow);
+      border: 2px solid var(--card-border);
+      color: var(--text-primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Floating particles effect */
+    .study-stopwatch-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, var(--timer-glow) 0%, transparent 70%);
+      opacity: 0.2;
+      animation: rotate 30s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* DUAL PANEL LAYOUT - LEFT STOPWATCH | RIGHT SETTINGS */
+    .dual-panel {
+      display: flex;
+      gap: 25px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* LEFT PANEL - STOPWATCH */
+    .stopwatch-panel {
+      flex: 1.2;
+      background: var(--timer-panel-bg);
+      border-radius: 40px;
+      padding: 25px;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.1), 0 10px 20px var(--timer-shadow);
+      border: 2px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      background: var(--timer-stat-bg);
+      padding: 10px;
+      border-radius: 40px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 3px 0 var(--add-section-shadow);
+    }
+
+    .panel-title span {
+      color: var(--timer-btn-study);
+      font-weight: 800;
+    }
+
+    .mode-indicator {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--percent-container-bg);
+      padding: 15px 20px;
+      border-radius: 60px;
+      border: 1px solid var(--card-border);
+    }
+
+    .current-mode {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mode-badge {
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .mode-badge.study {
+      background: var(--timer-btn-study);
+      color: white;
+    }
+
+    .mode-badge.break {
+      background: var(--timer-btn-break);
+      color: white;
+    }
+
+    .pomodoro-tracker {
+      display: flex;
+      gap: 8px;
+    }
+
+    .pomodoro-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--percent-container-bg);
+      border: 2px solid var(--card-border);
+      transition: all 0.3s;
+    }
+
+    .pomodoro-dot.completed {
+      background: var(--timer-btn-study);
+      border-color: var(--save-btn-shadow);
+      transform: scale(1.1);
+      box-shadow: 0 0 10px var(--timer-glow);
+    }
+
+    .giant-timer {
+      font-size: 6rem;
+      font-weight: 800;
+      text-align: center;
+      color: var(--text-primary);
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 5px 15px var(--timer-shadow), 0 0 30px var(--timer-glow);
+      background: var(--timer-display-bg);
+      padding: 30px 20px;
+      border-radius: 60px;
+      border: 2px solid var(--card-border);
+      box-shadow: inset 0 5px 15px rgba(0,0,0,0.2), 0 10px 20px var(--timer-shadow);
+      letter-spacing: 8px;
+      line-height: 1.2;
+    }
+
+    .giant-timer.running {
+      animation: softPulse 2s infinite;
+    }
+
+    @keyframes softPulse {
+      0% { box-shadow: inset 0 5px 15px rgba(0,0,0,0.2), 0 10px 20px var(--timer-shadow); }
+      50% { box-shadow: inset 0 5px 15px rgba(0,0,0,0.2), 0 10px 30px var(--timer-glow); }
+      100% { box-shadow: inset 0 5px 15px rgba(0,0,0,0.2), 0 10px 20px var(--timer-shadow); }
+    }
+
+    .timer-message {
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--timer-btn-reset);
+      font-weight: 600;
+      padding: 10px;
+      background: var(--percent-container-bg);
+      border-radius: 40px;
+      border: 1px solid var(--card-border);
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .control-btn {
+      flex: 1;
+      padding: 18px 0;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 0 var(--add-section-shadow), 0 10px 20px var(--timer-shadow);
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .control-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .control-btn:hover::before {
+      left: 100%;
+    }
+
+    .control-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 var(--add-section-shadow), 0 5px 10px var(--timer-shadow);
+    }
+
+    .control-btn.start {
+      background: var(--timer-btn-study);
+      color: white;
+    }
+
+    .control-btn.pause {
+      background: var(--timer-btn-break);
+      color: white;
+    }
+
+    .control-btn.reset {
+      background: var(--timer-btn-reset);
+      color: white;
+    }
+
+    /* RIGHT PANEL - TIME SETTINGS */
+    .settings-panel {
+      flex: 0.8;
+      background: var(--timer-panel-bg);
+      border-radius: 40px;
+      padding: 25px;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.1), 0 10px 20px var(--timer-shadow);
+      border: 2px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .settings-section {
+      background: var(--percent-container-bg);
+      border-radius: 30px;
+      padding: 20px;
+      border: 1px solid var(--card-border);
+    }
+
+    .settings-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .settings-title i {
+      color: var(--timer-btn-study);
+    }
+
+    /* Custom time editor */
+    .time-editor {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .time-inputs {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .time-field {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .time-field label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .time-field input {
+      width: 90px;
+      padding: 15px 10px;
+      border: 2px solid var(--card-border);
+      border-radius: 30px;
+      background: var(--timer-preset-bg);
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text-primary);
+      font-family: 'Courier New', monospace;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .time-field input:focus {
+      outline: none;
+      border-color: var(--timer-btn-study);
+      box-shadow: 0 0 0 3px var(--timer-glow);
+    }
+
+    .time-field span {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .set-time-action {
+      background: var(--timer-btn-study);
+      color: white;
+      border: none;
+      border-radius: 40px;
+      padding: 15px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--save-btn-shadow);
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .set-time-action:active {
+      transform: translateY(4px);
+      box-shadow: 0 0px 0 var(--save-btn-shadow);
+    }
+
+    /* Break type buttons */
+    .break-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .break-item {
+      padding: 15px 10px;
+      border: 2px solid var(--card-border);
+      border-radius: 30px;
+      background: var(--timer-preset-bg);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      box-shadow: 0 3px 0 var(--add-section-shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .break-item:hover {
+      background: var(--timer-preset-hover);
+      color: var(--nav-hover-text);
+      transform: translateY(-2px);
+    }
+
+    .break-item.active-break {
+      background: var(--timer-btn-break);
+      color: white;
+      border-color: var(--timer-btn-break);
+      box-shadow: 0 3px 0 var(--save-btn-shadow), 0 0 15px var(--timer-glow);
+    }
+
+    .break-item .time {
+      font-size: 1.3rem;
+      font-weight: 800;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Preset times */
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .preset-item {
+      padding: 12px 5px;
+      border: 2px solid var(--card-border);
+      border-radius: 25px;
+      background: var(--timer-preset-bg);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      box-shadow: 0 3px 0 var(--add-section-shadow);
+      text-align: center;
+    }
+
+    .preset-item:hover {
+      background: var(--timer-preset-hover);
+      color: var(--nav-hover-text);
+      transform: translateY(-2px);
+    }
+
+    /* Stats in right panel */
+    .stats-compact {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+    }
+
+    .stat-compact {
+      flex: 1;
+    }
+
+    .stat-compact .value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-family: 'Courier New', monospace;
+    }
+
+    .stat-compact .label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .dual-panel { flex-direction: column; }
+      .giant-timer { font-size: 4rem; }
+    }
   </style>
 </head>
 <body>
@@ -718,6 +1181,7 @@
         <span class="nav-link" data-section="history">DATE/HISTORY</span>
         <span class="nav-link" data-section="about">ABOUT</span>
         <span class="nav-link yt-link" data-section="youtube" id="ytChannelLink">▶️ @zlxlegendry</span>
+        <span class="nav-link" data-section="stopwatch">⏱️ STUDY STOPWATCH</span>
       </div>
       <div class="theme-toggle" id="themeToggle">
         <span class="theme-icon light-mode active-light" id="lightModeIcon">☀️</span>
@@ -729,6 +1193,7 @@
 
   <div class="container">
     <div id="home" class="section active"></div>
+    
     <div id="todo" class="section">
       <div class="clipboard">
         <div class="clip"></div><div class="rivet left"></div><div class="rivet right"></div>
@@ -737,7 +1202,6 @@
           <div class="save-indicator" id="saveIndicator">💾 AUTO SAVED</div>
         </div>
         
-        <!-- NEW: Today button (hidden by default) -->
         <div class="today-btn-container">
           <button class="today-btn hidden" id="backToTodayBtn">
             <span>📅</span> BACK TO TODAY
@@ -752,15 +1216,139 @@
         <button class="save-btn" id="saveListBtn"><span>💾</span> SAVE THIS LIST</button>
       </div>
     </div>
+    
     <div id="history" class="section"><div class="history-list" id="historyList"></div><button class="clear-history" id="clearAllHistory" style="display: none;">🗑️ Clear All History</button></div>
-    <div id="about" class="section"><div class="about-card"><h2>ABOUT TO-DO LIST WALA</h2><p>✅ Per-task percentage<br>✅ Slide progress (0-100%)<br>✅ Save/load by date<br>✅ Light / Dark / Neon<br>✅ Celebration on 100% 🎉<br>✅ Fresh EMPTY list every day!<br>Created with ❤️</p></div></div>
+    
+    <div id="about" class="section"><div class="about-card"><h2>ABOUT TO-DO LIST WALA</h2><p>✅ Per-task percentage<br>✅ Slide progress (0-100%)<br>✅ Save/load by date<br>✅ Light / Dark / Neon<br>✅ Celebration on 100% 🎉<br>✅ Fresh EMPTY list every day!<br>✅ STUDY STOPWATCH - Dual Panel Design<br>✅ Left: Stopwatch | Right: Time Settings<br>Created with ❤️</p></div></div>
+    
     <div id="youtube" class="section"></div>
+    
+    <!-- DUAL PANEL STUDY STOPWATCH -->
+    <div id="stopwatch" class="section">
+      <div class="study-stopwatch-container">
+        <div class="dual-panel">
+          
+          <!-- LEFT PANEL - STOPWATCH -->
+          <div class="stopwatch-panel">
+            <div class="panel-title">⏱️ <span>STUDY</span> STOPWATCH</div>
+            
+            <div class="mode-indicator">
+              <div class="current-mode">
+                <span>Current Mode:</span>
+                <span class="mode-badge study" id="modeBadge">📚 STUDY</span>
+              </div>
+              <div class="pomodoro-tracker" id="pomodoroTracker">
+                <span class="pomodoro-dot"></span>
+                <span class="pomodoro-dot"></span>
+                <span class="pomodoro-dot"></span>
+                <span class="pomodoro-dot"></span>
+              </div>
+            </div>
+            
+            <div class="giant-timer" id="giantTimer">25:00</div>
+            
+            <div class="timer-message" id="timerMessage">Ready to focus? Set time on right panel</div>
+            
+            <div class="control-buttons">
+              <button class="control-btn start" id="startPauseBtn">▶ START</button>
+              <button class="control-btn reset" id="resetBtn">↺ RESET</button>
+            </div>
+          </div>
+          
+          <!-- RIGHT PANEL - TIME SETTINGS -->
+          <div class="settings-panel">
+            <div class="panel-title">⚙️ <span>TIME</span> SETTINGS</div>
+            
+            <!-- Custom Time Editor -->
+            <div class="settings-section">
+              <div class="settings-title"><i>⏰</i> PERFECT TIME EDITOR</div>
+              <div class="time-editor">
+                <div class="time-inputs">
+                  <div class="time-field">
+                    <label>MINUTES</label>
+                    <input type="number" id="customMinutes" min="0" max="999" value="25" step="1">
+                    <span>min</span>
+                  </div>
+                  <div class="time-field">
+                    <label>SECONDS</label>
+                    <input type="number" id="customSeconds" min="0" max="59" value="0" step="1">
+                    <span>sec</span>
+                  </div>
+                </div>
+                <button class="set-time-action" id="setCustomTimeBtn">SET EXACT TIME</button>
+              </div>
+            </div>
+            
+            <!-- Break Types -->
+            <div class="settings-section">
+              <div class="settings-title"><i>☕</i> BREAK TYPES</div>
+              <div class="break-grid" id="breakTypes">
+                <div class="break-item" data-break="short" data-minutes="5">
+                  <span>☕ Short</span>
+                  <span class="time">5m</span>
+                </div>
+                <div class="break-item" data-break="medium" data-minutes="15">
+                  <span>🥤 Medium</span>
+                  <span class="time">15m</span>
+                </div>
+                <div class="break-item" data-break="long" data-minutes="30">
+                  <span>🍽️ Long</span>
+                  <span class="time">30m</span>
+                </div>
+                <div class="break-item" data-break="nap" data-minutes="45">
+                  <span>😴 Power Nap</span>
+                  <span class="time">45m</span>
+                </div>
+                <div class="break-item" data-break="sleep" data-minutes="90">
+                  <span>💤 Deep Sleep</span>
+                  <span class="time">90m</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Preset Times -->
+            <div class="settings-section">
+              <div class="settings-title"><i>📚</i> PRESET TIMES</div>
+              <div class="preset-grid">
+                <div class="preset-item" data-minutes="25">25min</div>
+                <div class="preset-item" data-minutes="45">45min</div>
+                <div class="preset-item" data-minutes="60">60min</div>
+                <div class="preset-item" data-minutes="90">90min</div>
+                <div class="preset-item" data-minutes="5">5min</div>
+                <div class="preset-item" data-minutes="10">10min</div>
+                <div class="preset-item" data-minutes="15">15min</div>
+                <div class="preset-item" data-minutes="30">30min</div>
+              </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="settings-section">
+              <div class="settings-title"><i>📊</i> TODAY'S STATS</div>
+              <div class="stats-compact">
+                <div class="stat-compact">
+                  <div class="value" id="todayFocusSmall">0</div>
+                  <div class="label">FOCUS</div>
+                </div>
+                <div class="stat-compact">
+                  <div class="value" id="pomodoroSmall">0</div>
+                  <div class="label">POMODOROS</div>
+                </div>
+                <div class="stat-compact">
+                  <div class="value" id="totalTimeSmall">0</div>
+                  <div class="label">TOTAL MIN</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
   <script>
     (function() {
-      // ---- three‑way theme management ----
+      // Theme management
       const body = document.body;
       const lightIcon = document.getElementById('lightModeIcon');
       const darkIcon = document.getElementById('darkModeIcon');
@@ -792,7 +1380,7 @@
         else setTheme('light');
       });
 
-      // ---- confetti celebration function ----
+      // Confetti
       function celebrate() {
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         setTimeout(() => {
@@ -803,7 +1391,7 @@
         }, 300);
       }
 
-      // ---- navigation ----
+      // Navigation
       const navLinks = document.querySelectorAll('.nav-link');
       const sections = document.querySelectorAll('.section');
       const backToTodayBtn = document.getElementById('backToTodayBtn');
@@ -824,70 +1412,52 @@
           if (sectionId === 'history') {
             renderHistory();
           } else if (sectionId === 'todo') {
-            // When navigating to todo via nav, always show today's tasks
             loadTodayTasks();
           }
         });
       });
 
-      // --- FIXED: Date functions ---
+      // Date functions
       function getCurrentDate() {
         const d = new Date();
         return d.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
       }
       
       function getTodayKey() {
-        return new Date().toDateString(); // Returns "Fri Mar 06 2026"
+        return new Date().toDateString();
       }
 
-      // --- FIXED: Task management with proper date separation ---
+      // Task management
       let tasks = [];
-      let currentViewDate = getTodayKey(); // Track which date we're viewing
+      let currentViewDate = getTodayKey();
       
-      // Load today's tasks
       function loadTodayTasks() {
         currentViewDate = getTodayKey();
         const savedTasks = localStorage.getItem(`walaTasks_${currentViewDate}`);
         tasks = savedTasks ? JSON.parse(savedTasks) : [];
         document.getElementById('currentDate').innerText = getCurrentDate();
-        
-        // Hide the "Back to Today" button
         backToTodayBtn.classList.add('hidden');
-        
-        // Reset save indicator
         saveIndicator.innerText = '💾 AUTO SAVED';
         saveIndicator.classList.remove('saved');
-        
         renderTasks();
       }
       
-      // Load tasks for a specific date (for history viewing)
       function loadTasksForDate(dateKey, displayDate) {
         currentViewDate = dateKey;
         const savedTasks = localStorage.getItem(`walaTasks_${dateKey}`);
         tasks = savedTasks ? JSON.parse(savedTasks) : [];
         document.getElementById('currentDate').innerText = displayDate;
-        
-        // Show the "Back to Today" button
         backToTodayBtn.classList.remove('hidden');
-        
-        // Show history indicator
         saveIndicator.innerText = '📜 VIEWING HISTORY';
         saveIndicator.classList.remove('saved');
-        
         renderTasks();
       }
       
-      // Save tasks for current view date
       function saveTasksForCurrentDate() {
         localStorage.setItem(`walaTasks_${currentViewDate}`, JSON.stringify(tasks));
-        
-        // Update last visit if this is today
         if (currentViewDate === getTodayKey()) {
           localStorage.setItem('walaLastVisit', getTodayKey());
         }
-        
-        // Auto-save to history if this is today
         if (currentViewDate === getTodayKey() && tasks.length > 0) {
           autoSaveToHistory();
         }
@@ -898,12 +1468,10 @@
       const todayKey = getTodayKey();
       
       if (todayKey !== lastVisitKey) {
-        // New day - load today's tasks (which will be empty for new day)
         tasks = [];
         localStorage.setItem(`walaTasks_${todayKey}`, JSON.stringify([]));
         localStorage.setItem('walaLastVisit', todayKey);
       } else {
-        // Same day - load today's tasks
         tasks = JSON.parse(localStorage.getItem(`walaTasks_${todayKey}`)) || [];
       }
 
@@ -913,11 +1481,8 @@
       const saveIndicator = document.getElementById('saveIndicator');
       const clearAllBtn = document.getElementById('clearAllHistory');
 
-      // Save current tasks and update indicator
       function saveCurrentTasks() {
         saveTasksForCurrentDate();
-        
-        // Only show auto saved if we're on today
         if (currentViewDate === getTodayKey()) {
           saveIndicator.innerText = '💾 AUTO SAVED';
           saveIndicator.classList.add('saved');
@@ -925,7 +1490,6 @@
         setTimeout(() => saveIndicator.classList.remove('saved'), 500);
       }
 
-      // Auto-save to history (only for today's tasks)
       function autoSaveToHistory() {
         if (tasks.length > 0 && currentViewDate === getTodayKey()) {
           const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
@@ -948,7 +1512,6 @@
         }
       }
 
-      // Render tasks
       function renderTasks() {
         tasksArea.innerHTML = '';
         
@@ -1040,7 +1603,6 @@
         }
       }
 
-      // Add new task
       function addNewTask() {
         const text = taskInput.value.trim();
         if (!text) return;
@@ -1053,7 +1615,6 @@
       addBtn.addEventListener('click', addNewTask);
       taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addNewTask(); });
 
-      // Save button - saves to history
       document.getElementById('saveListBtn').addEventListener('click', () => {
         if (currentViewDate === getTodayKey()) {
           const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
@@ -1084,18 +1645,14 @@
         }
       });
 
-      // NEW: Back to Today button functionality
       backToTodayBtn.addEventListener('click', () => {
         loadTodayTasks();
-        
-        // Stay on todo section
         navLinks.forEach(l => l.classList.remove('active'));
         sections.forEach(s => s.classList.remove('active'));
         document.querySelector('[data-section="todo"]').classList.add('active');
         document.getElementById('todo').classList.add('active');
       });
 
-      // Render history
       function renderHistory() {
         const historyList = document.getElementById('historyList');
         const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
@@ -1108,7 +1665,6 @@
         
         historyList.innerHTML = '';
         
-        // Sort by timestamp (newest first)
         const sortedLists = [...savedLists].sort((a, b) => b.timestamp - a.timestamp);
         
         sortedLists.forEach((list, index) => {
@@ -1138,20 +1694,13 @@
             const listToLoad = savedLists.find(list => list.date === date);
             
             if (listToLoad) {
-              // Load the historical tasks
               tasks = JSON.parse(JSON.stringify(listToLoad.tasks));
               document.getElementById('currentDate').innerText = listToLoad.date;
-              
-              // Show the "Back to Today" button
               backToTodayBtn.classList.remove('hidden');
-              
-              // Show history indicator
               saveIndicator.innerText = '📜 VIEWING HISTORY';
               saveIndicator.classList.remove('saved');
-              
               renderTasks();
               
-              // Navigate to todo section to show the historical list
               navLinks.forEach(l => l.classList.remove('active'));
               sections.forEach(s => s.classList.remove('active'));
               document.querySelector('[data-section="todo"]').classList.add('active');
@@ -1186,16 +1735,349 @@
         } 
       });
 
-      // fill home and youtube
-      document.getElementById('home').innerHTML = `<div class="home-grid">${['📋 TO-DO LIST', '📅 DATE/HISTORY', '💾 AUTO SAVE'].map((t,i)=>`<div class="tool-card"><div class="tool-icon">${['📋','📅','💾'][i]}</div><h3>${t.split(' ')[1]}</h3><p>${['Each task with % slider.','View saved lists by date.','Auto & manual save.'][i]}</p></div>`).join('')}</div>`;
+      // Fill home and youtube
+      document.getElementById('home').innerHTML = `<div class="home-grid">${['📋 TO-DO LIST', '📅 DATE/HISTORY', '💾 AUTO SAVE', '⏱️ STUDY STOPWATCH'].map((t,i)=>`<div class="tool-card"><div class="tool-icon">${['📋','📅','💾','⏱️'][i]}</div><h3>${t.split(' ')[1]}</h3><p>${['Each task with % slider.','View saved lists by date.','Auto & manual save.','Dual Panel: Stopwatch + Settings'][i]}</p></div>`).join('')}</div>`;
       document.getElementById('youtube').innerHTML = `<div class="youtube-card"><div class="youtube-icon">📺</div><h2>@zlxlegendry</h2><p>Subscribe for more!</p><a href="https://www.youtube.com/@zlxlegendry" target="_blank" class="youtube-btn">▶️ VISIT CHANNEL</a></div>`;
 
-      // Initial load
+      // ============ DUAL PANEL STUDY STOPWATCH ============
+      let timerInterval = null;
+      let timeLeft = 25 * 60;
+      let isRunning = false;
+      let currentMode = 'study';
+      let pomodoroCount = 0;
+      let totalStudyMinutes = 0;
+      
+      // Get elements
+      const giantTimer = document.getElementById('giantTimer');
+      const modeBadge = document.getElementById('modeBadge');
+      const timerMessage = document.getElementById('timerMessage');
+      const startPauseBtn = document.getElementById('startPauseBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const pomodoroDots = document.querySelectorAll('.pomodoro-dot');
+      const customMinutes = document.getElementById('customMinutes');
+      const customSeconds = document.getElementById('customSeconds');
+      const setCustomTimeBtn = document.getElementById('setCustomTimeBtn');
+      const breakItems = document.querySelectorAll('.break-item');
+      const presetItems = document.querySelectorAll('.preset-item');
+      
+      // Stats elements
+      const todayFocusSmall = document.getElementById('todayFocusSmall');
+      const pomodoroSmall = document.getElementById('pomodoroSmall');
+      const totalTimeSmall = document.getElementById('totalTimeSmall');
+
+      // Load stats
+      function loadTimerStats() {
+        const stats = JSON.parse(localStorage.getItem('studyStats')) || {
+          pomodoros: 0,
+          totalMinutes: 0,
+          lastDate: getTodayKey()
+        };
+        
+        if (stats.lastDate !== getTodayKey()) {
+          stats.pomodoros = 0;
+          stats.totalMinutes = 0;
+          stats.lastDate = getTodayKey();
+        }
+        
+        pomodoroCount = stats.pomodoros;
+        totalStudyMinutes = stats.totalMinutes;
+        updateTimerStats();
+      }
+
+      function saveTimerStats() {
+        const stats = {
+          pomodoros: pomodoroCount,
+          totalMinutes: totalStudyMinutes,
+          lastDate: getTodayKey()
+        };
+        localStorage.setItem('studyStats', JSON.stringify(stats));
+        updateTimerStats();
+      }
+
+      function updateTimerStats() {
+        if (todayFocusSmall) todayFocusSmall.textContent = pomodoroCount;
+        if (pomodoroSmall) pomodoroSmall.textContent = pomodoroCount;
+        if (totalTimeSmall) totalTimeSmall.textContent = totalStudyMinutes;
+        
+        if (pomodoroDots) {
+          pomodoroDots.forEach((dot, index) => {
+            if (index < pomodoroCount % 4) {
+              dot.classList.add('completed');
+            } else {
+              dot.classList.remove('completed');
+            }
+          });
+        }
+      }
+
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      }
+
+      function updateTimerDisplay() {
+        if (giantTimer) giantTimer.textContent = formatTime(timeLeft);
+      }
+
+      function updateModeBadge() {
+        if (modeBadge) {
+          modeBadge.textContent = currentMode === 'study' ? '📚 STUDY' : '☕ BREAK';
+          modeBadge.className = `mode-badge ${currentMode}`;
+        }
+      }
+
+      function timerComplete() {
+        isRunning = false;
+        clearInterval(timerInterval);
+        if (startPauseBtn) {
+          startPauseBtn.innerHTML = '▶ START';
+          startPauseBtn.className = 'control-btn start';
+        }
+        if (giantTimer) giantTimer.classList.remove('running');
+        
+        if (giantTimer) {
+          giantTimer.style.animation = 'fadeIn 0.5s 3';
+          setTimeout(() => {
+            giantTimer.style.animation = 'none';
+          }, 1500);
+        }
+        
+        if (currentMode === 'study') {
+          pomodoroCount++;
+          const studyMinutes = Math.ceil((25 * 60 - timeLeft) / 60);
+          totalStudyMinutes += studyMinutes;
+          saveTimerStats();
+          
+          if (timerMessage) timerMessage.textContent = '🎉 Study complete! Time for a break!';
+          confetti({ particleCount: 50, spread: 50, origin: { y: 0.5 } });
+          switchTimerMode('break');
+        } else {
+          if (timerMessage) timerMessage.textContent = '☕ Break over! Ready to focus?';
+          switchTimerMode('study');
+        }
+      }
+
+      function tick() {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateTimerDisplay();
+        } else {
+          timerComplete();
+        }
+      }
+
+      function toggleTimer() {
+        if (isRunning) {
+          clearInterval(timerInterval);
+          isRunning = false;
+          if (startPauseBtn) {
+            startPauseBtn.innerHTML = '▶ START';
+            startPauseBtn.className = 'control-btn start';
+          }
+          if (giantTimer) giantTimer.classList.remove('running');
+          if (timerMessage) {
+            timerMessage.textContent = currentMode === 'study' ? 'Paused. Keep going!' : 'Paused. Enjoy your break!';
+          }
+        } else {
+          timerInterval = setInterval(tick, 1000);
+          isRunning = true;
+          if (startPauseBtn) {
+            startPauseBtn.innerHTML = '⏸ PAUSE';
+            startPauseBtn.className = 'control-btn pause';
+          }
+          if (giantTimer) giantTimer.classList.add('running');
+          if (timerMessage) {
+            timerMessage.textContent = currentMode === 'study' ? '📚 Study time - focus!' : '☕ Break time - relax!';
+          }
+        }
+      }
+
+      function resetTimer() {
+        clearInterval(timerInterval);
+        isRunning = false;
+        if (giantTimer) giantTimer.classList.remove('running');
+        if (startPauseBtn) {
+          startPauseBtn.innerHTML = '▶ START';
+          startPauseBtn.className = 'control-btn start';
+        }
+        
+        if (currentMode === 'study') {
+          timeLeft = 25 * 60;
+          if (timerMessage) timerMessage.textContent = 'Ready to focus? Set time on right panel';
+        } else {
+          timeLeft = 5 * 60;
+          if (timerMessage) timerMessage.textContent = 'Take a short break!';
+        }
+        
+        updateTimerDisplay();
+      }
+
+      function switchTimerMode(mode) {
+        currentMode = mode;
+        updateModeBadge();
+        
+        clearInterval(timerInterval);
+        isRunning = false;
+        if (giantTimer) giantTimer.classList.remove('running');
+        if (startPauseBtn) {
+          startPauseBtn.innerHTML = '▶ START';
+          startPauseBtn.className = 'control-btn start';
+        }
+        
+        if (mode === 'study') {
+          timeLeft = 25 * 60;
+          if (timerMessage) timerMessage.textContent = 'Ready to focus? Set time on right panel';
+        } else {
+          timeLeft = 5 * 60;
+          if (timerMessage) timerMessage.textContent = 'Take a short break!';
+        }
+        
+        updateTimerDisplay();
+      }
+
+      function setCustomTime() {
+        const mins = parseInt(customMinutes.value) || 0;
+        const secs = parseInt(customSeconds.value) || 0;
+        
+        if (mins === 0 && secs === 0) {
+          alert('Please set a time greater than 0');
+          return;
+        }
+        
+        if (secs > 59) {
+          alert('Seconds must be between 0 and 59');
+          return;
+        }
+        
+        const totalSeconds = (mins * 60) + secs;
+        
+        clearInterval(timerInterval);
+        isRunning = false;
+        if (giantTimer) giantTimer.classList.remove('running');
+        if (startPauseBtn) {
+          startPauseBtn.innerHTML = '▶ START';
+          startPauseBtn.className = 'control-btn start';
+        }
+        timeLeft = totalSeconds;
+        updateTimerDisplay();
+        
+        if (mins <= 15) {
+          currentMode = 'break';
+          if (timerMessage) timerMessage.textContent = `${mins}m ${secs}s break timer set!`;
+        } else {
+          currentMode = 'study';
+          if (timerMessage) timerMessage.textContent = `${mins}m ${secs}s study timer set!`;
+        }
+        updateModeBadge();
+      }
+
+      function setCustomTimer(minutes) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        if (giantTimer) giantTimer.classList.remove('running');
+        if (startPauseBtn) {
+          startPauseBtn.innerHTML = '▶ START';
+          startPauseBtn.className = 'control-btn start';
+        }
+        timeLeft = minutes * 60;
+        updateTimerDisplay();
+        
+        if (minutes <= 15) {
+          currentMode = 'break';
+          if (timerMessage) timerMessage.textContent = minutes + ' min break timer set!';
+        } else {
+          currentMode = 'study';
+          if (timerMessage) timerMessage.textContent = minutes + ' min study timer set!';
+        }
+        updateModeBadge();
+        
+        if (customMinutes) customMinutes.value = minutes;
+        if (customSeconds) customSeconds.value = 0;
+      }
+
+      // Initialize stopwatch
+      function initStopwatch() {
+        // Control buttons
+        if (startPauseBtn) {
+          startPauseBtn.addEventListener('click', toggleTimer);
+        }
+        
+        if (resetBtn) {
+          resetBtn.addEventListener('click', resetTimer);
+        }
+        
+        // Custom time set
+        if (setCustomTimeBtn) {
+          setCustomTimeBtn.addEventListener('click', setCustomTime);
+        }
+        
+        // Break items
+        if (breakItems) {
+          breakItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+              const minutes = parseInt(e.currentTarget.dataset.minutes);
+              const breakType = e.currentTarget.dataset.break;
+              
+              breakItems.forEach(b => b.classList.remove('active-break'));
+              e.currentTarget.classList.add('active-break');
+              
+              setCustomTimer(minutes);
+              currentMode = 'break';
+              updateModeBadge();
+              
+              const messages = {
+                'short': '☕ Short break - grab a quick refresh!',
+                'medium': '🥤 Medium break - stretch and hydrate!',
+                'long': '🍽️ Long break - time for a proper rest!',
+                'nap': '😴 Power nap - recharge your energy!',
+                'sleep': '💤 Deep sleep - get quality rest!'
+              };
+              if (timerMessage) timerMessage.textContent = messages[breakType] || minutes + ' min break set!';
+            });
+          });
+        }
+        
+        // Preset items
+        if (presetItems) {
+          presetItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+              const minutes = parseInt(e.currentTarget.dataset.minutes);
+              setCustomTimer(minutes);
+            });
+          });
+        }
+
+        loadTimerStats();
+        updateTimerDisplay();
+        updateModeBadge();
+      }
+
+      // Watch for stopwatch section activation
+      const stopwatchSection = document.getElementById('stopwatch');
+      if (stopwatchSection) {
+        const stopwatchObserver = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.target.id === 'stopwatch' && mutation.target.classList.contains('active')) {
+              loadTimerStats();
+              updateTimerDisplay();
+              updateModeBadge();
+            }
+          });
+        });
+
+        stopwatchObserver.observe(stopwatchSection, {
+          attributes: true,
+          attributeFilter: ['class']
+        });
+      }
+
+      // Initial loads
       document.getElementById('currentDate').innerText = getCurrentDate();
       renderTasks();
       renderHistory();
+      initStopwatch();
       
-      // Auto-save to history if there are tasks for today
       if (tasks.length > 0) {
         autoSaveToHistory();
       }
