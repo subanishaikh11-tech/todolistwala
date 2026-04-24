@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TO-DO LIST WALA · ULTIMATE TIMER & STOPWATCH</title>
-  <!-- FAVICON (保持不变) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='10' y='20' width='80' height='65' rx='12' fill='%23fff9f0' stroke='%232c3e4f' stroke-width='6'/%3E%3Crect x='25' y='5' width='50' height='20' rx='8' fill='%23c0c7d0' stroke='%232c3e4f' stroke-width='4'/%3E%3Ccircle cx='35' cy='15' r='5' fill='%239aa3af'/%3E%3Ccircle cx='65' cy='15' r='5' fill='%239aa3af'/%3E%3Cpolyline points='25,55 45,75 75,40' stroke='%232c6e5c' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <style>
-    /* [保留你之前的所有样式] */
     * {
       margin: 0;
       padding: 0;
@@ -16,7 +14,6 @@
       transition: background-color 0.2s ease, color 0.1s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    /* ========== LIGHT MODE (default) ========== */
     :root {
       --bg-body: #e2d9cc;
       --navbar-bg: #2c3e4f;
@@ -79,8 +76,6 @@
       --youtube-btn-shadow: #8b1e1a;
       --text-primary: #2c3e4f;
       --text-secondary: #5a6b7a;
-
-      /* Timer colors */
       --timer-bg: #fff9f0;
       --timer-display-bg: linear-gradient(145deg, #f0e8dc, #e2d9cc);
       --timer-btn-study: #2c6e5c;
@@ -93,18 +88,14 @@
       --timer-glow: rgba(44, 110, 92, 0.3);
       --timer-shadow: rgba(0,0,0,0.2);
       --timer-panel-bg: #f5efe4;
-
       --today-btn-bg: #ffd966;
       --today-btn-text: #2c3e4f;
       --today-btn-shadow: #b8aa98;
-
-      /* Stopwatch colors */
       --lap-bg: #f0e8dc;
       --lap-border: #d4c9b8;
       --lap-header-bg: #7a8b9b;
     }
 
-    /* DARK MODE - 保持与之前相同但添加stopwatch变量 */
     body.dark {
       --bg-body: #1e262e;
       --navbar-bg: #10171f;
@@ -167,8 +158,6 @@
       --youtube-btn-shadow: #64221f;
       --text-primary: #e2e8f0;
       --text-secondary: #a0aec0;
-
-      /* Timer colors dark */
       --timer-bg: #28323f;
       --timer-display-bg: linear-gradient(145deg, #2d3748, #1e262e);
       --timer-btn-study: #2f855a;
@@ -181,17 +170,14 @@
       --timer-glow: rgba(47, 133, 90, 0.3);
       --timer-shadow: rgba(0,0,0,0.4);
       --timer-panel-bg: #1f2a36;
-
       --today-btn-bg: #f0b34b;
       --today-btn-text: #10171f;
       --today-btn-shadow: #1f2937;
-
       --lap-bg: #2d3748;
       --lap-border: #4a5568;
       --lap-header-bg: #4a5568;
     }
 
-    /* NEON MODE - 保持与之前相同但添加stopwatch变量 */
     body.neon {
       --bg-body: #0b0f1a;
       --navbar-bg: #141b2b;
@@ -254,8 +240,6 @@
       --youtube-btn-shadow: #51007a;
       --text-primary: #f0e6ff;
       --text-secondary: #c0a0ff;
-
-      /* Timer colors neon */
       --timer-bg: #1a1230;
       --timer-display-bg: linear-gradient(145deg, #23163f, #1a1230);
       --timer-btn-study: #39ff14;
@@ -268,11 +252,9 @@
       --timer-glow: rgba(57, 255, 20, 0.4);
       --timer-shadow: rgba(255, 0, 255, 0.2);
       --timer-panel-bg: #221a38;
-
       --today-btn-bg: #ff44e6;
       --today-btn-text: #0b0f1a;
       --today-btn-shadow: #7d26cd;
-
       --lap-bg: #23163f;
       --lap-border: #8a2be2;
       --lap-header-bg: #4b0082;
@@ -754,7 +736,6 @@
     .youtube-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 var(--youtube-btn-shadow); }
     .youtube-btn:hover { background: var(--yt-hover); }
 
-    /* ========== DUAL PANEL ULTIMATE TIMER & STOPWATCH ========== */
     .dual-mode-container {
       background: var(--timer-bg);
       border-radius: 50px;
@@ -766,7 +747,6 @@
       overflow: hidden;
     }
 
-    /* Floating particles effect */
     .dual-mode-container::before {
       content: '';
       position: absolute;
@@ -785,7 +765,6 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Mode Switch - Study Timer on Top, Break on Bottom */
     .mode-switch-panel {
       display: flex;
       flex-direction: column;
@@ -862,7 +841,6 @@
       background: var(--timer-btn-break);
     }
 
-    /* Dual Panel Layout */
     .dual-panel {
       display: flex;
       gap: 25px;
@@ -871,7 +849,6 @@
       margin-top: 20px;
     }
 
-    /* LEFT PANEL - STOPWATCH (像 onlinealarmkur.com) */
     .stopwatch-panel {
       flex: 1.2;
       background: var(--timer-panel-bg);
@@ -903,7 +880,6 @@
       font-weight: 800;
     }
 
-    /* 类似 onlinealarmkur.com 的 stopwatch */
     .stopwatch-display {
       font-size: 5rem;
       font-weight: 800;
@@ -971,7 +947,6 @@
       background: var(--timer-btn-break);
     }
 
-    /* Lap Table */
     .lap-table-container {
       max-height: 200px;
       overflow-y: auto;
@@ -1000,7 +975,6 @@
       color: var(--text-primary);
     }
 
-    /* RIGHT PANEL - TIME SETTINGS */
     .settings-panel {
       flex: 0.8;
       background: var(--timer-panel-bg);
@@ -1037,7 +1011,6 @@
       color: var(--timer-btn-study);
     }
 
-    /* 时间网格 - 包含 5,10,15...90 等 */
     .time-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -1072,7 +1045,6 @@
       border-left: 4px solid var(--timer-btn-break);
     }
 
-    /* 自定义时间编辑器 */
     .time-editor {
       display: flex;
       flex-direction: column;
@@ -1137,7 +1109,6 @@
       box-shadow: 0 0px 0 var(--save-btn-shadow);
     }
 
-    /* Break 类型 (5个) */
     .break-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -1180,7 +1151,6 @@
       font-family: 'Courier New', monospace;
     }
 
-    /* 统计数据 */
     .stats-compact {
       display: flex;
       justify-content: space-around;
@@ -1205,7 +1175,6 @@
       letter-spacing: 1px;
     }
 
-    /* Responsive */
     @media (max-width: 1000px) {
       .dual-panel { flex-direction: column; }
       .mode-row { flex-direction: column; text-align: center; }
@@ -1267,10 +1236,8 @@
 
     <div id="youtube" class="section"></div>
 
-    <!-- ULTIMATE TIMER & STOPWATCH SECTION -->
     <div id="timer" class="section">
       <div class="dual-mode-container">
-        <!-- Mode Switch: Study on Top, Break on Bottom -->
         <div class="mode-switch-panel">
           <div class="mode-row study-row">
             <span class="mode-label">📚 STUDY</span>
@@ -1290,43 +1257,26 @@
           </div>
         </div>
 
-        <!-- Dual Panel: Stopwatch (左) | Settings (右) -->
         <div class="dual-panel">
-          <!-- LEFT PANEL - 类似 onlinealarmkur.com 的 Stopwatch -->
           <div class="stopwatch-panel">
             <div class="panel-title">⏱️ <span>LAP</span> STOPWATCH</div>
-
-            <div class="stopwatch-display" id="stopwatchDisplay">00:00:000</div>
+            <div class="stopwatch-display" id="stopwatchDisplay">00:00:00.000</div>
             <div class="stopwatch-sub">Space Start/Pause | L Lap | R Reset</div>
-
             <div class="stopwatch-controls">
               <button class="stopwatch-btn start" id="stopwatchStartPause">▶ START</button>
               <button class="stopwatch-btn lap" id="stopwatchLap">⏱️ LAP</button>
               <button class="stopwatch-btn reset" id="stopwatchReset">↺ RESET</button>
             </div>
-
-            <!-- Lap Table -->
             <div class="lap-table-container">
               <table class="lap-table" id="lapTable">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Lap Time</th>
-                    <th>Total Time</th>
-                  </tr>
-                </thead>
-                <tbody id="lapTableBody">
-                  <tr><td colspan="3" style="text-align:center; padding:20px; color:var(--text-secondary);">No laps yet. Click LAP to record.</td></tr>
-                </tbody>
+                <thead><tr><th>#</th><th>Lap Time</th><th>Total Time</th></tr></thead>
+                <tbody id="lapTableBody"><tr><td colspan="3" style="text-align:center; padding:20px; color:var(--text-secondary);">No laps yet. Click LAP to record.</td></tr></tbody>
               </table>
             </div>
           </div>
 
-          <!-- RIGHT PANEL - TIME SETTINGS (完整的时间网格) -->
           <div class="settings-panel">
             <div class="panel-title">⚙️ <span>TIME</span> SETTINGS</div>
-
-            <!-- 自定义时间编辑器 -->
             <div class="settings-section">
               <div class="settings-title"><i>⏰</i> PERFECT TIME EDITOR</div>
               <div class="time-editor">
@@ -1344,46 +1294,18 @@
                 <button class="set-time-btn" id="setCustomBreakBtn" style="margin-top:10px; background:var(--timer-btn-break);">SET TO BREAK</button>
               </div>
             </div>
-
-            <!-- 完整的时间网格 5-90 -->
             <div class="settings-section">
               <div class="settings-title"><i>📚</i> STUDY TIMES (min)</div>
               <div class="time-grid" id="studyTimeGrid"></div>
             </div>
-
             <div class="settings-section">
               <div class="settings-title"><i>☕</i> BREAK TIMES (min)</div>
               <div class="time-grid" id="breakTimeGrid"></div>
             </div>
-
-            <!-- Break Types (5个) -->
             <div class="settings-section">
               <div class="settings-title"><i>🌙</i> SPECIAL BREAKS</div>
-              <div class="break-grid" id="breakTypes">
-                <div class="break-item" data-break="short" data-minutes="5">
-                  <span>☕ Short</span>
-                  <span class="time">5m</span>
-                </div>
-                <div class="break-item" data-break="medium" data-minutes="15">
-                  <span>🥤 Medium</span>
-                  <span class="time">15m</span>
-                </div>
-                <div class="break-item" data-break="long" data-minutes="30">
-                  <span>🍽️ Long</span>
-                  <span class="time">30m</span>
-                </div>
-                <div class="break-item" data-break="nap" data-minutes="45">
-                  <span>😴 Power Nap</span>
-                  <span class="time">45m</span>
-                </div>
-                <div class="break-item" data-break="sleep" data-minutes="90">
-                  <span>💤 Deep Sleep</span>
-                  <span class="time">90m</span>
-                </div>
-              </div>
+              <div class="break-grid" id="breakTypes"></div>
             </div>
-
-            <!-- Today's Stats -->
             <div class="settings-section">
               <div class="settings-title"><i>📊</i> TODAY'S STATS</div>
               <div class="stats-compact">
@@ -1410,7 +1332,7 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
   <script>
     (function() {
-      // 主题管理 (与之前相同)
+      // Theme management (unchanged)
       const body = document.body;
       const lightIcon = document.getElementById('lightModeIcon');
       const darkIcon = document.getElementById('darkModeIcon');
@@ -1442,7 +1364,6 @@
         else setTheme('light');
       });
 
-      // 庆祝
       function celebrate() {
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         setTimeout(() => {
@@ -1453,7 +1374,7 @@
         }, 300);
       }
 
-      // 导航
+      // Navigation
       const navLinks = document.querySelectorAll('.nav-link');
       const sections = document.querySelectorAll('.section');
       const backToTodayBtn = document.getElementById('backToTodayBtn');
@@ -1465,12 +1386,10 @@
             window.open('https://www.youtube.com/@zlxlegendry', '_blank');
             return;
           }
-
           navLinks.forEach(l => l.classList.remove('active'));
           link.classList.add('active');
           sections.forEach(s => s.classList.remove('active'));
           document.getElementById(sectionId).classList.add('active');
-
           if (sectionId === 'history') {
             renderHistory();
           } else if (sectionId === 'todo') {
@@ -1479,7 +1398,6 @@
         });
       });
 
-      // 日期函数
       function getCurrentDate() {
         const d = new Date();
         return d.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
@@ -1489,7 +1407,6 @@
         return new Date().toDateString();
       }
 
-      // 任务管理 (保持不变)
       let tasks = [];
       let currentViewDate = getTodayKey();
 
@@ -1499,6 +1416,7 @@
         tasks = savedTasks ? JSON.parse(savedTasks) : [];
         document.getElementById('currentDate').innerText = getCurrentDate();
         backToTodayBtn.classList.add('hidden');
+        const saveIndicator = document.getElementById('saveIndicator');
         saveIndicator.innerText = '💾 AUTO SAVED';
         saveIndicator.classList.remove('saved');
         renderTasks();
@@ -1510,6 +1428,7 @@
         tasks = savedTasks ? JSON.parse(savedTasks) : [];
         document.getElementById('currentDate').innerText = displayDate;
         backToTodayBtn.classList.remove('hidden');
+        const saveIndicator = document.getElementById('saveIndicator');
         saveIndicator.innerText = '📜 VIEWING HISTORY';
         saveIndicator.classList.remove('saved');
         renderTasks();
@@ -1527,7 +1446,6 @@
 
       const lastVisitKey = localStorage.getItem('walaLastVisit') || '';
       const todayKey = getTodayKey();
-
       if (todayKey !== lastVisitKey) {
         tasks = [];
         localStorage.setItem(`walaTasks_${todayKey}`, JSON.stringify([]));
@@ -1555,9 +1473,7 @@
         if (tasks.length > 0 && currentViewDate === getTodayKey()) {
           const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
           const today = getCurrentDate();
-
           const todayListIndex = savedLists.findIndex(list => list.date === today);
-
           if (todayListIndex !== -1) {
             savedLists[todayListIndex].tasks = JSON.parse(JSON.stringify(tasks));
             savedLists[todayListIndex].timestamp = Date.now();
@@ -1568,31 +1484,22 @@
               tasks: JSON.parse(JSON.stringify(tasks))
             });
           }
-
           localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
         }
       }
 
       function renderTasks() {
         tasksArea.innerHTML = '';
-
         if (tasks.length === 0) {
           const emptyMsg = document.createElement('div');
           emptyMsg.style.padding = '30px';
           emptyMsg.style.textAlign = 'center';
           emptyMsg.style.color = 'var(--task-number)';
           emptyMsg.style.fontSize = '1.3rem';
-
-          if (currentViewDate === getTodayKey()) {
-            emptyMsg.innerText = '✨ New day! Add your first task ✨';
-          } else {
-            emptyMsg.innerText = '📅 No tasks saved for this date';
-          }
-
+          emptyMsg.innerText = currentViewDate === getTodayKey() ? '✨ New day! Add your first task ✨' : '📅 No tasks saved for this date';
           tasksArea.appendChild(emptyMsg);
           return;
         }
-
         const sorted = [...tasks].sort((a, b) => a.id - b.id);
         sorted.forEach((task, index) => {
           const taskEl = document.createElement('div');
@@ -1600,11 +1507,10 @@
           taskEl.dataset.id = task.id;
           const serial = index + 1;
           const percentClass = task.percent >= 80 ? 'high' : '';
-
           taskEl.innerHTML = `
             <span class="task-number">${serial}.</span>
             <div class="task-content">
-              <span class="task-text">${task.text}</span>
+              <span class="task-text">${escapeHtml(task.text)}</span>
               <div class="percent-container">
                 <input type="range" min="0" max="100" value="${task.percent || 0}" class="percent-slider" data-id="${task.id}">
                 <span class="percent-value ${percentClass}">${task.percent || 0}%</span>
@@ -1612,11 +1518,9 @@
             </div>
             <button class="remove-btn">✕</button>
           `;
-
           const slider = taskEl.querySelector('.percent-slider');
           const percentSpan = taskEl.querySelector('.percent-value');
           let previousPercent = task.percent;
-
           slider.addEventListener('input', (e) => {
             const newPercent = parseInt(e.target.value);
             percentSpan.textContent = newPercent + '%';
@@ -1626,7 +1530,6 @@
             const targetTask = tasks.find(t => t.id === taskId);
             if (targetTask) targetTask.percent = newPercent;
           });
-
           slider.addEventListener('change', (e) => {
             const newPercent = parseInt(e.target.value);
             const taskId = Number(taskEl.dataset.id);
@@ -1637,19 +1540,15 @@
             previousPercent = targetTask ? targetTask.percent : 0;
             saveCurrentTasks();
           });
-
           previousPercent = task.percent;
-
           taskEl.querySelector('.remove-btn').addEventListener('click', () => {
             const taskId = Number(taskEl.dataset.id);
             tasks = tasks.filter(t => t.id !== taskId);
             renderTasks();
             saveCurrentTasks();
           });
-
           tasksArea.appendChild(taskEl);
         });
-
         if (tasks.length > 0) {
           const total = tasks.length, fullyDone = tasks.filter(t => t.percent === 100).length;
           const summary = document.createElement('div');
@@ -1662,6 +1561,12 @@
           summary.innerHTML = `📋 ${total} tasks (${fullyDone} fully complete)`;
           tasksArea.appendChild(summary);
         }
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
       }
 
       function addNewTask() {
@@ -1680,9 +1585,7 @@
         if (currentViewDate === getTodayKey()) {
           const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
           const today = getCurrentDate();
-
           const existingIndex = savedLists.findIndex(list => list.date === today);
-
           if (existingIndex !== -1) {
             savedLists[existingIndex].tasks = JSON.parse(JSON.stringify(tasks));
             savedLists[existingIndex].timestamp = Date.now();
@@ -1693,7 +1596,6 @@
               tasks: JSON.parse(JSON.stringify(tasks))
             });
           }
-
           localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
           saveIndicator.innerText = '✅ LIST SAVED!';
           saveIndicator.classList.add('saved');
@@ -1715,24 +1617,19 @@
       });
 
       function renderHistory() {
-        const historyList = document.getElementById('historyList');
+        const historyListDiv = document.getElementById('historyList');
         const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
         clearAllBtn.style.display = savedLists.length > 0 ? 'block' : 'none';
-
         if (savedLists.length === 0) {
-          historyList.innerHTML = '<p style="text-align:center; padding:40px; color: var(--text-secondary);">No saved lists yet.</p>';
+          historyListDiv.innerHTML = '<p style="text-align:center; padding:40px; color: var(--text-secondary);">No saved lists yet.</p>';
           return;
         }
-
-        historyList.innerHTML = '';
-
+        historyListDiv.innerHTML = '';
         const sortedLists = [...savedLists].sort((a, b) => b.timestamp - a.timestamp);
-
         sortedLists.forEach((list, index) => {
           const total = list.tasks.length,
                 avg = total === 0 ? 0 : Math.round(list.tasks.reduce((sum, t) => sum + (t.percent || 0), 0) / total);
           const fullyDone = list.tasks.filter(t => t.percent === 100).length;
-
           const item = document.createElement('div');
           item.className = 'history-item';
           item.innerHTML = `
@@ -1745,23 +1642,21 @@
               <button class="remove-history" data-index="${index}" title="Remove">✕</button>
             </div>
           `;
-          historyList.appendChild(item);
+          historyListDiv.appendChild(item);
         });
-
         document.querySelectorAll('.load-history').forEach(btn => {
           btn.addEventListener('click', (e) => {
             const date = e.target.dataset.date;
             const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
             const listToLoad = savedLists.find(list => list.date === date);
-
             if (listToLoad) {
               tasks = JSON.parse(JSON.stringify(listToLoad.tasks));
               document.getElementById('currentDate').innerText = listToLoad.date;
               backToTodayBtn.classList.remove('hidden');
+              const saveIndicator = document.getElementById('saveIndicator');
               saveIndicator.innerText = '📜 VIEWING HISTORY';
               saveIndicator.classList.remove('saved');
               renderTasks();
-
               navLinks.forEach(l => l.classList.remove('active'));
               sections.forEach(s => s.classList.remove('active'));
               document.querySelector('[data-section="todo"]').classList.add('active');
@@ -1769,16 +1664,13 @@
             }
           });
         });
-
         document.querySelectorAll('.remove-history').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const index = parseInt(e.target.dataset.index);
             let savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
-
             const sortedLists = [...savedLists].sort((a, b) => b.timestamp - a.timestamp);
             const listToRemove = sortedLists[index];
-
             const originalIndex = savedLists.findIndex(list => list.date === listToRemove.date && list.timestamp === listToRemove.timestamp);
             if (originalIndex !== -1) {
               savedLists.splice(originalIndex, 1);
@@ -1796,30 +1688,25 @@
         }
       });
 
-      // Fill home and youtube
       document.getElementById('home').innerHTML = `<div class="home-grid">${['📋 TO-DO LIST', '📅 DATE/HISTORY', '💾 AUTO SAVE', '⏱️ TIMER & STOPWATCH'].map((t,i)=>`<div class="tool-card"><div class="tool-icon">${['📋','📅','💾','⏱️'][i]}</div><h3>${t.split(' ')[1]}</h3><p>${['Each task with % slider.','View saved lists by date.','Auto & manual save.','Study/Break timers + Lap stopwatch'][i]}</p></div>`).join('')}</div>`;
       document.getElementById('youtube').innerHTML = `<div class="youtube-card"><div class="youtube-icon">📺</div><h2>@zlxlegendry</h2><p>Subscribe for more!</p><a href="https://www.youtube.com/@zlxlegendry" target="_blank" class="youtube-btn">▶️ VISIT CHANNEL</a></div>`;
 
-      // ============ 计时器 & 秒表核心功能 ============
-
-      // 统计变量
+      // ========== FIXED: TIMESTAMP-BASED TIMERS (Works in background tabs) ==========
+      
       let pomodoroCount = 0;
       let totalStudyMinutes = 0;
 
-      // 加载统计
       function loadTimerStats() {
         const stats = JSON.parse(localStorage.getItem('studyStats')) || {
           pomodoros: 0,
           totalMinutes: 0,
           lastDate: getTodayKey()
         };
-
         if (stats.lastDate !== getTodayKey()) {
           stats.pomodoros = 0;
           stats.totalMinutes = 0;
           stats.lastDate = getTodayKey();
         }
-
         pomodoroCount = stats.pomodoros;
         totalStudyMinutes = stats.totalMinutes;
         updateTimerStats();
@@ -1841,14 +1728,12 @@
         document.getElementById('totalTimeSmall').textContent = totalStudyMinutes;
       }
 
-      // 格式化时间 (MM:SS)
       function formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
       }
 
-      // 格式化毫秒 (用于秒表)
       function formatMs(ms) {
         const totalSeconds = Math.floor(ms / 1000);
         const hours = Math.floor(totalSeconds / 3600);
@@ -1858,10 +1743,13 @@
         return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
       }
 
-      // ========== STUDY TIMER ==========
+      // ========== STUDY TIMER (Timestamp-based) ==========
       let studyTimeLeft = 25 * 60;
       let studyIsRunning = false;
-      let studyInterval = null;
+      let studyAnimationFrame = null;
+      let studyLastTimestamp = null;
+      let studyPauseTimeRemaining = studyTimeLeft;
+      
       const studyDisplay = document.getElementById('studyTimerDisplay');
       const studyStartPause = document.getElementById('studyStartPauseBtn');
       const studyReset = document.getElementById('studyResetBtn');
@@ -1870,51 +1758,89 @@
         studyDisplay.textContent = formatTime(studyTimeLeft);
       }
 
-      function studyTick() {
+      function studyTick(currentTime) {
+        if (!studyIsRunning) return;
+        
+        if (studyLastTimestamp === null) {
+          studyLastTimestamp = currentTime;
+          studyAnimationFrame = requestAnimationFrame(studyTick);
+          return;
+        }
+        
+        const deltaSeconds = (currentTime - studyLastTimestamp) / 1000;
+        studyLastTimestamp = currentTime;
+        
         if (studyTimeLeft > 0) {
-          studyTimeLeft--;
+          studyTimeLeft = Math.max(0, studyTimeLeft - deltaSeconds);
           updateStudyDisplay();
-        } else {
-          // 学习完成
-          clearInterval(studyInterval);
-          studyIsRunning = false;
-          studyStartPause.innerHTML = '▶ START';
-          pomodoroCount++;
-          totalStudyMinutes += 25; // 简化为25分钟
-          saveTimerStats();
-          celebrate();
-          alert('🎉 Study session complete! Time for a break!');
-          // 自动切换到 break？手动控制更好
+          
+          if (studyTimeLeft <= 0) {
+            // Study complete
+            studyIsRunning = false;
+            studyStartPause.innerHTML = '▶ START';
+            if (studyAnimationFrame) cancelAnimationFrame(studyAnimationFrame);
+            studyAnimationFrame = null;
+            pomodoroCount++;
+            totalStudyMinutes += Math.round((25 * 60 - studyTimeLeft) / 60);
+            saveTimerStats();
+            celebrate();
+            alert('🎉 Study session complete! Time for a break!');
+          } else {
+            studyAnimationFrame = requestAnimationFrame(studyTick);
+          }
+        }
+      }
+
+      function startStudy() {
+        if (studyIsRunning) return;
+        studyIsRunning = true;
+        studyLastTimestamp = null;
+        studyStartPause.innerHTML = '⏸ PAUSE';
+        studyAnimationFrame = requestAnimationFrame(studyTick);
+      }
+
+      function pauseStudy() {
+        if (!studyIsRunning) return;
+        studyIsRunning = false;
+        studyStartPause.innerHTML = '▶ START';
+        if (studyAnimationFrame) {
+          cancelAnimationFrame(studyAnimationFrame);
+          studyAnimationFrame = null;
         }
       }
 
       function toggleStudy() {
         if (studyIsRunning) {
-          clearInterval(studyInterval);
-          studyIsRunning = false;
-          studyStartPause.innerHTML = '▶ START';
+          pauseStudy();
         } else {
-          studyInterval = setInterval(studyTick, 1000);
-          studyIsRunning = true;
-          studyStartPause.innerHTML = '⏸ PAUSE';
+          startStudy();
         }
       }
 
       function resetStudy() {
-        clearInterval(studyInterval);
-        studyIsRunning = false;
+        pauseStudy();
+        studyTimeLeft = studyPauseTimeRemaining;
+        updateStudyDisplay();
         studyStartPause.innerHTML = '▶ START';
-        studyTimeLeft = 25 * 60;
+      }
+
+      function setStudyTime(seconds) {
+        pauseStudy();
+        studyTimeLeft = seconds;
+        studyPauseTimeRemaining = seconds;
         updateStudyDisplay();
       }
 
       studyStartPause.addEventListener('click', toggleStudy);
       studyReset.addEventListener('click', resetStudy);
 
-      // ========== BREAK TIMER ==========
+      // ========== BREAK TIMER (Timestamp-based) ==========
       let breakTimeLeft = 5 * 60;
       let breakIsRunning = false;
-      let breakInterval = null;
+      let breakAnimationFrame = null;
+      let breakLastTimestamp = null;
+      let breakPauseTimeRemaining = breakTimeLeft;
+      
       const breakDisplay = document.getElementById('breakTimerDisplay');
       const breakStartPause = document.getElementById('breakStartPauseBtn');
       const breakReset = document.getElementById('breakResetBtn');
@@ -1923,46 +1849,84 @@
         breakDisplay.textContent = formatTime(breakTimeLeft);
       }
 
-      function breakTick() {
+      function breakTick(currentTime) {
+        if (!breakIsRunning) return;
+        
+        if (breakLastTimestamp === null) {
+          breakLastTimestamp = currentTime;
+          breakAnimationFrame = requestAnimationFrame(breakTick);
+          return;
+        }
+        
+        const deltaSeconds = (currentTime - breakLastTimestamp) / 1000;
+        breakLastTimestamp = currentTime;
+        
         if (breakTimeLeft > 0) {
-          breakTimeLeft--;
+          breakTimeLeft = Math.max(0, breakTimeLeft - deltaSeconds);
           updateBreakDisplay();
-        } else {
-          clearInterval(breakInterval);
-          breakIsRunning = false;
-          breakStartPause.innerHTML = '▶ START';
-          alert('☕ Break over! Ready to focus again?');
+          
+          if (breakTimeLeft <= 0) {
+            breakIsRunning = false;
+            breakStartPause.innerHTML = '▶ START';
+            if (breakAnimationFrame) cancelAnimationFrame(breakAnimationFrame);
+            breakAnimationFrame = null;
+            alert('☕ Break over! Ready to focus again?');
+          } else {
+            breakAnimationFrame = requestAnimationFrame(breakTick);
+          }
+        }
+      }
+
+      function startBreak() {
+        if (breakIsRunning) return;
+        breakIsRunning = true;
+        breakLastTimestamp = null;
+        breakStartPause.innerHTML = '⏸ PAUSE';
+        breakAnimationFrame = requestAnimationFrame(breakTick);
+      }
+
+      function pauseBreak() {
+        if (!breakIsRunning) return;
+        breakIsRunning = false;
+        breakStartPause.innerHTML = '▶ START';
+        if (breakAnimationFrame) {
+          cancelAnimationFrame(breakAnimationFrame);
+          breakAnimationFrame = null;
         }
       }
 
       function toggleBreak() {
         if (breakIsRunning) {
-          clearInterval(breakInterval);
-          breakIsRunning = false;
-          breakStartPause.innerHTML = '▶ START';
+          pauseBreak();
         } else {
-          breakInterval = setInterval(breakTick, 1000);
-          breakIsRunning = true;
-          breakStartPause.innerHTML = '⏸ PAUSE';
+          startBreak();
         }
       }
 
       function resetBreak() {
-        clearInterval(breakInterval);
-        breakIsRunning = false;
+        pauseBreak();
+        breakTimeLeft = breakPauseTimeRemaining;
+        updateBreakDisplay();
         breakStartPause.innerHTML = '▶ START';
-        breakTimeLeft = 5 * 60;
+      }
+
+      function setBreakTime(seconds) {
+        pauseBreak();
+        breakTimeLeft = seconds;
+        breakPauseTimeRemaining = seconds;
         updateBreakDisplay();
       }
 
       breakStartPause.addEventListener('click', toggleBreak);
       breakReset.addEventListener('click', resetBreak);
 
-      // ========== STOPWATCH (类似 onlinealarmkur.com) ==========
-      let stopwatchTime = 0; // 毫秒
+      // ========== STOPWATCH (Timestamp-based, works in background) ==========
+      let stopwatchTime = 0;
       let stopwatchIsRunning = false;
-      let stopwatchInterval = null;
+      let stopwatchAnimationFrame = null;
+      let stopwatchLastTimestamp = null;
       let laps = [];
+      
       const stopwatchDisplay = document.getElementById('stopwatchDisplay');
       const stopwatchStartPause = document.getElementById('stopwatchStartPause');
       const stopwatchLap = document.getElementById('stopwatchLap');
@@ -1973,47 +1937,68 @@
         stopwatchDisplay.textContent = formatMs(stopwatchTime);
       }
 
-      function stopwatchTick() {
-        stopwatchTime += 10; // 每10ms更新一次
+      function stopwatchTick(currentTime) {
+        if (!stopwatchIsRunning) return;
+        
+        if (stopwatchLastTimestamp === null) {
+          stopwatchLastTimestamp = currentTime;
+          stopwatchAnimationFrame = requestAnimationFrame(stopwatchTick);
+          return;
+        }
+        
+        const deltaMs = currentTime - stopwatchLastTimestamp;
+        stopwatchLastTimestamp = currentTime;
+        stopwatchTime += deltaMs;
         updateStopwatchDisplay();
+        stopwatchAnimationFrame = requestAnimationFrame(stopwatchTick);
+      }
+
+      function startStopwatch() {
+        if (stopwatchIsRunning) return;
+        stopwatchIsRunning = true;
+        stopwatchLastTimestamp = null;
+        stopwatchStartPause.innerHTML = '⏸ PAUSE';
+        stopwatchAnimationFrame = requestAnimationFrame(stopwatchTick);
+      }
+
+      function pauseStopwatch() {
+        if (!stopwatchIsRunning) return;
+        stopwatchIsRunning = false;
+        stopwatchStartPause.innerHTML = '▶ START';
+        if (stopwatchAnimationFrame) {
+          cancelAnimationFrame(stopwatchAnimationFrame);
+          stopwatchAnimationFrame = null;
+        }
       }
 
       function toggleStopwatch() {
         if (stopwatchIsRunning) {
-          clearInterval(stopwatchInterval);
-          stopwatchIsRunning = false;
-          stopwatchStartPause.innerHTML = '▶ START';
+          pauseStopwatch();
         } else {
-          stopwatchInterval = setInterval(stopwatchTick, 10);
-          stopwatchIsRunning = true;
-          stopwatchStartPause.innerHTML = '⏸ PAUSE';
+          startStopwatch();
         }
       }
 
       function addLap() {
         if (!stopwatchIsRunning && stopwatchTime === 0) return;
-        const lapTime = stopwatchTime;
         const lapNumber = laps.length + 1;
         let lastLapTime = laps.length > 0 ? laps[laps.length - 1].totalTime : 0;
-        const lapDuration = lapTime - lastLapTime;
-
+        const lapDuration = stopwatchTime - lastLapTime;
         laps.push({
           number: lapNumber,
           lapTime: lapDuration,
-          totalTime: lapTime
+          totalTime: stopwatchTime
         });
-
         renderLaps();
       }
 
       function resetStopwatch() {
-        clearInterval(stopwatchInterval);
-        stopwatchIsRunning = false;
-        stopwatchStartPause.innerHTML = '▶ START';
+        pauseStopwatch();
         stopwatchTime = 0;
         laps = [];
         updateStopwatchDisplay();
         renderLaps();
+        stopwatchStartPause.innerHTML = '▶ START';
       }
 
       function renderLaps() {
@@ -2021,14 +2006,9 @@
           lapTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:var(--text-secondary);">No laps yet. Click LAP to record.</td></tr>';
           return;
         }
-
         let html = '';
         laps.forEach(lap => {
-          html += `<tr>
-            <td>#${lap.number}</td>
-            <td>${formatMs(lap.lapTime)}</td>
-            <td>${formatMs(lap.totalTime)}</td>
-          </tr>`;
+          html += `<tr><td>#${lap.number}</td><td>${formatMs(lap.lapTime)}</td><td>${formatMs(lap.totalTime)}</td></tr>`;
         });
         lapTableBody.innerHTML = html;
       }
@@ -2037,7 +2017,7 @@
       stopwatchLap.addEventListener('click', addLap);
       stopwatchReset.addEventListener('click', resetStopwatch);
 
-      // 键盘支持 (类似 onlinealarmkur.com)
+      // Keyboard shortcuts
       document.addEventListener('keydown', (e) => {
         if (!document.getElementById('timer').classList.contains('active')) return;
         if (e.code === 'Space') {
@@ -2052,7 +2032,7 @@
         }
       });
 
-      // ========== 时间网格 (5-90) ==========
+      // ========== Time Grids ==========
       const studyTimes = [5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90];
       const breakTimes = [5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90];
 
@@ -2063,11 +2043,9 @@
         const btn = document.createElement('div');
         btn.className = 'time-grid-item study-item';
         btn.textContent = min + 'min';
-        btn.dataset.minutes = min;
         btn.addEventListener('click', () => {
-          studyTimeLeft = min * 60;
-          updateStudyDisplay();
-          resetStudy(); // 停止并重置学习计时器
+          setStudyTime(min * 60);
+          resetStudy();
         });
         studyGrid.appendChild(btn);
       });
@@ -2076,16 +2054,14 @@
         const btn = document.createElement('div');
         btn.className = 'time-grid-item break-item';
         btn.textContent = min + 'min';
-        btn.dataset.minutes = min;
         btn.addEventListener('click', () => {
-          breakTimeLeft = min * 60;
-          updateBreakDisplay();
+          setBreakTime(min * 60);
           resetBreak();
         });
         breakGrid.appendChild(btn);
       });
 
-      // ========== 自定义时间设置 ==========
+      // Custom time settings
       const customMinutes = document.getElementById('customMinutes');
       const customSeconds = document.getElementById('customSeconds');
       const setCustomTimeBtn = document.getElementById('setCustomTimeBtn');
@@ -2096,8 +2072,7 @@
         const secs = parseInt(customSeconds.value) || 0;
         if (mins === 0 && secs === 0) return alert('Please set a time > 0');
         if (secs > 59) return alert('Seconds must be 0-59');
-        studyTimeLeft = (mins * 60) + secs;
-        updateStudyDisplay();
+        setStudyTime((mins * 60) + secs);
         resetStudy();
       });
 
@@ -2106,41 +2081,43 @@
         const secs = parseInt(customSeconds.value) || 0;
         if (mins === 0 && secs === 0) return alert('Please set a time > 0');
         if (secs > 59) return alert('Seconds must be 0-59');
-        breakTimeLeft = (mins * 60) + secs;
-        updateBreakDisplay();
+        setBreakTime((mins * 60) + secs);
         resetBreak();
       });
 
-      // ========== Break Types ==========
-      const breakItems = document.querySelectorAll('.break-item');
-      breakItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-          const minutes = parseInt(e.currentTarget.dataset.minutes);
-          const breakType = e.currentTarget.dataset.break;
-
-          breakItems.forEach(b => b.classList.remove('active-break'));
-          e.currentTarget.classList.add('active-break');
-
-          breakTimeLeft = minutes * 60;
-          updateBreakDisplay();
+      // Break Types
+      const breakTypesContainer = document.getElementById('breakTypes');
+      const breakTypes = [
+        { name: '☕ Short', type: 'short', minutes: 5, message: '☕ Short break - grab a quick refresh!' },
+        { name: '🥤 Medium', type: 'medium', minutes: 15, message: '🥤 Medium break - stretch and hydrate!' },
+        { name: '🍽️ Long', type: 'long', minutes: 30, message: '🍽️ Long break - time for a proper rest!' },
+        { name: '😴 Power Nap', type: 'nap', minutes: 45, message: '😴 Power nap - recharge your energy!' },
+        { name: '💤 Deep Sleep', type: 'sleep', minutes: 90, message: '💤 Deep sleep - get quality rest!' }
+      ];
+      
+      breakTypes.forEach(bt => {
+        const item = document.createElement('div');
+        item.className = 'break-item';
+        item.dataset.break = bt.type;
+        item.dataset.minutes = bt.minutes;
+        item.innerHTML = `<span>${bt.name}</span><span class="time">${bt.minutes}m</span>`;
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.break-item').forEach(b => b.classList.remove('active-break'));
+          item.classList.add('active-break');
+          setBreakTime(bt.minutes * 60);
           resetBreak();
-
-          const messages = {
-            'short': '☕ Short break - grab a quick refresh!',
-            'medium': '🥤 Medium break - stretch and hydrate!',
-            'long': '🍽️ Long break - time for a proper rest!',
-            'nap': '😴 Power nap - recharge your energy!',
-            'sleep': '💤 Deep sleep - get quality rest!'
-          };
-          alert(messages[breakType] || minutes + ' min break set!');
+          alert(bt.message);
         });
+        breakTypesContainer.appendChild(item);
       });
 
-      // 初始化
+      // Initialize all
       loadTimerStats();
       updateStudyDisplay();
       updateBreakDisplay();
       updateStopwatchDisplay();
+      setStudyTime(25 * 60);
+      setBreakTime(5 * 60);
     })();
   </script>
 </body>
