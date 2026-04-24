@@ -11,7 +11,6 @@
       padding: 0;
       box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      transition: background-color 0.2s ease, color 0.1s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     :root {
@@ -265,17 +264,6 @@
       background: var(--bg-body);
     }
 
-    #confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-      display: none;
-    }
-
     .navbar {
       background: var(--navbar-bg);
       padding: 15px 30px;
@@ -285,6 +273,9 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 15px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     .logo {
       font-size: 1.8rem;
@@ -293,9 +284,7 @@
       letter-spacing: 2px;
       white-space: nowrap;
     }
-    .logo span {
-      color: var(--logo-span);
-    }
+    .logo span { color: var(--logo-span); }
 
     .nav-group {
       display: flex;
@@ -333,10 +322,6 @@
       align-items: center;
       gap: 4px;
     }
-    .nav-link.yt-link:hover {
-      background: var(--yt-hover);
-      transform: scale(1.02);
-    }
 
     .theme-toggle {
       background: #2b2b45;
@@ -363,12 +348,6 @@
       color: #2c3e4f;
       font-weight: bold;
     }
-    body.dark .theme-icon.active-dark {
-      background: #ffd966; color: #2c3e4f;
-    }
-    body.neon .theme-icon.active-neon {
-      background: #ff44e6; color: #0b0f1a;
-    }
 
     .container {
       max-width: 1300px;
@@ -379,9 +358,7 @@
       display: none;
       animation: fadeIn 0.3s ease;
     }
-    .section.active {
-      display: block;
-    }
+    .section.active { display: block; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -401,6 +378,7 @@
       border: 2px solid var(--card-border);
       transition: 0.2s;
       color: var(--text-primary);
+      cursor: pointer;
     }
     .tool-card:hover {
       transform: translateY(-5px);
@@ -454,7 +432,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       gap: 15px;
     }
     .date-badge {
@@ -465,7 +443,6 @@
       font-weight: 500;
       color: var(--text-primary);
       border: 1px solid var(--date-badge-border);
-      white-space: nowrap;
     }
     .save-indicator {
       background: var(--save-indicator-bg);
@@ -476,18 +453,14 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      white-space: nowrap;
     }
-    .save-indicator.saved {
-      background: var(--save-indicator-saved);
-    }
+    .save-indicator.saved { background: var(--save-indicator-saved); }
 
     .today-btn-container {
       display: flex;
       justify-content: center;
       margin-bottom: 15px;
     }
-
     .today-btn {
       background: var(--today-btn-bg);
       color: var(--today-btn-text);
@@ -503,15 +476,8 @@
       box-shadow: 0 4px 0 var(--today-btn-shadow);
       transition: 0.1s;
     }
-
-    .today-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 0px 0 var(--today-btn-shadow);
-    }
-
-    .today-btn.hidden {
-      display: none;
-    }
+    .today-btn:active { transform: translateY(4px); box-shadow: none; }
+    .today-btn.hidden { display: none; }
 
     .tasks-area {
       background: var(--tasks-area-bg);
@@ -522,17 +488,9 @@
       margin: 15px 0 25px;
       border-radius: 8px;
     }
-    .tasks-area::-webkit-scrollbar {
-      width: 8px;
-    }
-    .tasks-area::-webkit-scrollbar-track {
-      background: var(--scrollbar-track);
-      border-radius: 10px;
-    }
-    .tasks-area::-webkit-scrollbar-thumb {
-      background: var(--scrollbar-thumb);
-      border-radius: 10px;
-    }
+    .tasks-area::-webkit-scrollbar { width: 8px; }
+    .tasks-area::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
+    .tasks-area::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
 
     .task {
       display: flex;
@@ -541,16 +499,12 @@
       padding: 15px 10px 15px 5px;
       border-bottom: 1px dashed var(--task-border-bottom);
     }
-    .task:last-child {
-      border-bottom: none;
-    }
     .task-number {
       font-size: 1.4rem;
       font-weight: 600;
       color: var(--task-number);
       min-width: 40px;
       text-align: right;
-      font-family: 'Courier New', monospace;
     }
     .task-content {
       flex: 1;
@@ -564,6 +518,7 @@
       font-weight: 500;
       color: var(--task-text);
       min-width: 150px;
+      word-break: break-word;
     }
     .percent-container {
       display: flex;
@@ -590,7 +545,6 @@
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid var(--nav-hover-bg);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .percent-value {
       font-size: 1.2rem;
@@ -603,10 +557,7 @@
       text-align: center;
       border: 1px solid var(--percent-value-border);
     }
-    .percent-value.high {
-      background: var(--percent-value-high-bg);
-      color: var(--percent-value-high-text);
-    }
+    .percent-value.high { background: var(--percent-value-high-bg); color: var(--percent-value-high-text); }
     .remove-btn {
       width: 36px;
       height: 36px;
@@ -621,13 +572,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
     }
-    .remove-btn:hover {
-      opacity: 1;
-      background: var(--remove-btn-hover-bg);
-      transform: scale(1.1);
-    }
+    .remove-btn:hover { opacity: 1; background: var(--remove-btn-hover-bg); transform: scale(1.1); }
 
     .add-section {
       background: var(--add-section-bg);
@@ -649,10 +595,7 @@
       background: var(--clipboard-bg);
       color: var(--task-text);
     }
-    .add-input:focus {
-      border-color: var(--add-input-focus-border);
-      box-shadow: 0 0 0 3px rgba(122, 139, 155, 0.2);
-    }
+    .add-input:focus { border-color: var(--add-input-focus-border); }
     .add-btn {
       background: var(--add-btn-bg);
       border: none;
@@ -667,8 +610,7 @@
       gap: 8px;
       box-shadow: 0 5px 0 var(--add-btn-shadow);
     }
-    .add-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--add-btn-shadow); }
-
+    .add-btn:active { transform: translateY(4px); box-shadow: none; }
     .save-btn {
       background: var(--save-btn-bg);
       color: white;
@@ -685,84 +627,15 @@
       box-shadow: 0 6px 0 var(--save-btn-shadow);
       width: fit-content;
     }
-    .save-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--save-btn-shadow); }
+    .save-btn:active { transform: translateY(4px); box-shadow: none; }
 
-    .history-list {
-      background: var(--history-list-bg);
-      border-radius: 30px;
-      padding: 30px;
-      box-shadow: 0 8px 0 var(--history-list-shadow);
-      border: 2px solid var(--card-border);
-      color: var(--text-primary);
-    }
-    .history-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      border-bottom: 2px dashed var(--history-item-border);
-    }
-    .history-date { font-size: 1.4rem; font-weight: 600; color: var(--history-date); }
-    .history-preview { color: var(--history-preview); font-size: 1.1rem; margin-top: 5px; }
-    .load-history { background: var(--load-history-btn); color: white; border: none; padding: 10px 25px; border-radius: 30px; cursor: pointer; }
-    .remove-history { background: var(--remove-history-btn); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; }
-    .clear-history { background: var(--clear-history-btn); color: white; border: none; border-radius: 30px; padding: 12px 25px; margin-top: 20px; cursor: pointer; }
-
-    .about-card, .youtube-card {
-      background: var(--about-card-bg);
-      border-radius: 30px;
-      padding: 40px;
-      box-shadow: 0 8px 0 var(--about-card-shadow);
-      border: 2px solid var(--card-border);
-      text-align: center;
-      color: var(--text-primary);
-    }
-    .youtube-card { border: 2px solid var(--youtube-card-border); }
-    .youtube-btn {
-      background: var(--youtube-btn-bg);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 20px 50px;
-      font-size: 1.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 15px;
-      box-shadow: 0 8px 0 var(--youtube-btn-shadow);
-      text-decoration: none;
-    }
-    .youtube-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 var(--youtube-btn-shadow); }
-    .youtube-btn:hover { background: var(--yt-hover); }
-
+    /* Timer Styles */
     .dual-mode-container {
       background: var(--timer-bg);
       border-radius: 50px;
       padding: 30px;
-      box-shadow: 0 20px 40px var(--timer-shadow), 0 0 0 2px var(--card-border) inset, 0 0 30px var(--timer-glow);
+      box-shadow: 0 20px 40px var(--timer-shadow), 0 0 0 2px var(--card-border) inset;
       border: 2px solid var(--card-border);
-      color: var(--text-primary);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .dual-mode-container::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, var(--timer-glow) 0%, transparent 70%);
-      opacity: 0.2;
-      animation: rotate 30s linear infinite;
-      pointer-events: none;
-    }
-
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
     }
 
     .mode-switch-panel {
@@ -770,8 +643,6 @@
       flex-direction: column;
       gap: 15px;
       margin-bottom: 25px;
-      position: relative;
-      z-index: 1;
     }
 
     .mode-row {
@@ -782,16 +653,11 @@
       padding: 15px 25px;
       border-radius: 60px;
       border: 2px solid var(--card-border);
-      box-shadow: 0 5px 0 var(--add-section-shadow);
+      flex-wrap: wrap;
     }
 
-    .mode-row.study-row {
-      border-left: 8px solid var(--timer-btn-study);
-    }
-
-    .mode-row.break-row {
-      border-left: 8px solid var(--timer-btn-break);
-    }
+    .mode-row.study-row { border-left: 8px solid var(--timer-btn-study); }
+    .mode-row.break-row { border-left: 8px solid var(--timer-btn-break); }
 
     .mode-label {
       font-size: 1.3rem;
@@ -806,12 +672,12 @@
       font-family: 'Courier New', monospace;
       text-align: center;
       color: var(--text-primary);
-      text-shadow: 0 2px 5px var(--timer-shadow);
     }
 
     .mode-controls {
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     .mode-control-btn {
@@ -827,34 +693,23 @@
       transition: 0.1s;
       min-width: 80px;
     }
-
-    .mode-control-btn:active {
-      transform: translateY(3px);
-      box-shadow: none;
-    }
-
-    .mode-control-btn.start-study {
-      background: var(--timer-btn-study);
-    }
-
-    .mode-control-btn.start-break {
-      background: var(--timer-btn-break);
-    }
+    .mode-control-btn:active { transform: translateY(3px); box-shadow: none; }
+    .mode-control-btn.start-study { background: var(--timer-btn-study); }
+    .mode-control-btn.start-break { background: var(--timer-btn-break); }
 
     .dual-panel {
       display: flex;
       gap: 25px;
-      position: relative;
-      z-index: 1;
       margin-top: 20px;
+      flex-wrap: wrap;
     }
 
     .stopwatch-panel {
       flex: 1.2;
+      min-width: 300px;
       background: var(--timer-panel-bg);
       border-radius: 40px;
       padding: 25px;
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.1), 0 10px 20px var(--timer-shadow);
       border: 2px solid var(--card-border);
       display: flex;
       flex-direction: column;
@@ -864,43 +719,22 @@
     .panel-title {
       font-size: 1.3rem;
       font-weight: 700;
-      color: var(--text-primary);
-      text-transform: uppercase;
-      letter-spacing: 2px;
       text-align: center;
       background: var(--timer-stat-bg);
       padding: 10px;
       border-radius: 40px;
-      border: 1px solid var(--card-border);
-      box-shadow: 0 3px 0 var(--add-section-shadow);
-    }
-
-    .panel-title span {
-      color: var(--timer-btn-study);
-      font-weight: 800;
     }
 
     .stopwatch-display {
-      font-size: 5rem;
+      font-size: 3rem;
       font-weight: 800;
       text-align: center;
-      color: var(--text-primary);
       font-family: 'Courier New', monospace;
-      text-shadow: 0 5px 15px var(--timer-shadow);
       background: var(--timer-display-bg);
-      padding: 30px 20px;
+      padding: 25px 15px;
       border-radius: 40px;
       border: 2px solid var(--card-border);
-      box-shadow: inset 0 5px 15px rgba(0,0,0,0.2);
-      letter-spacing: 5px;
-      line-height: 1.2;
-    }
-
-    .stopwatch-sub {
-      font-size: 1rem;
-      color: var(--text-secondary);
-      text-align: center;
-      margin-top: -10px;
+      word-break: break-word;
     }
 
     .stopwatch-controls {
@@ -911,41 +745,21 @@
     }
 
     .stopwatch-btn {
-      padding: 15px 25px;
+      padding: 12px 20px;
       border: none;
       border-radius: 50px;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 0 var(--add-section-shadow);
-      transition: 0.1s;
       background: var(--add-btn-bg);
       color: white;
+      box-shadow: 0 4px 0 var(--add-section-shadow);
+      transition: 0.1s;
     }
-
-    .stopwatch-btn:active {
-      transform: translateY(4px);
-      box-shadow: none;
-    }
-
-    .stopwatch-btn.start {
-      background: var(--timer-btn-study);
-    }
-
-    .stopwatch-btn.pause {
-      background: var(--timer-btn-break);
-    }
-
-    .stopwatch-btn.reset {
-      background: var(--timer-btn-reset);
-    }
-
-    .stopwatch-btn.lap {
-      background: var(--timer-btn-break);
-    }
+    .stopwatch-btn:active { transform: translateY(4px); box-shadow: none; }
+    .stopwatch-btn.start { background: var(--timer-btn-study); }
+    .stopwatch-btn.lap { background: var(--timer-btn-break); }
+    .stopwatch-btn.reset { background: var(--timer-btn-reset); }
 
     .lap-table-container {
       max-height: 200px;
@@ -953,62 +767,35 @@
       border-radius: 20px;
       border: 2px solid var(--lap-border);
     }
-
-    .lap-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--lap-bg);
-    }
-
-    .lap-table th {
-      background: var(--lap-header-bg);
-      color: white;
-      padding: 10px;
-      position: sticky;
-      top: 0;
-    }
-
-    .lap-table td {
-      padding: 8px;
-      text-align: center;
-      border-bottom: 1px solid var(--lap-border);
-      color: var(--text-primary);
-    }
+    .lap-table { width: 100%; border-collapse: collapse; background: var(--lap-bg); }
+    .lap-table th { background: var(--lap-header-bg); color: white; padding: 10px; position: sticky; top: 0; }
+    .lap-table td { padding: 8px; text-align: center; border-bottom: 1px solid var(--lap-border); color: var(--text-primary); }
 
     .settings-panel {
       flex: 0.8;
+      min-width: 280px;
       background: var(--timer-panel-bg);
       border-radius: 40px;
       padding: 25px;
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.1), 0 10px 20px var(--timer-shadow);
       border: 2px solid var(--card-border);
       display: flex;
       flex-direction: column;
-      gap: 25px;
-      max-height: 700px;
+      gap: 20px;
+      max-height: 600px;
       overflow-y: auto;
     }
 
     .settings-section {
       background: var(--percent-container-bg);
       border-radius: 30px;
-      padding: 20px;
-      border: 1px solid var(--card-border);
+      padding: 15px;
     }
 
     .settings-title {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      justify-content: center;
-    }
-
-    .settings-title i {
-      color: var(--timer-btn-study);
+      margin-bottom: 12px;
+      text-align: center;
     }
 
     .time-grid {
@@ -1016,224 +803,152 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 8px;
     }
-
     .time-grid-item {
-      padding: 12px 5px;
+      padding: 8px 4px;
       border: 2px solid var(--card-border);
-      border-radius: 25px;
+      border-radius: 20px;
       background: var(--timer-preset-bg);
-      color: var(--text-primary);
       cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-      box-shadow: 0 3px 0 var(--add-section-shadow);
       text-align: center;
+      font-size: 0.85rem;
+      transition: 0.2s;
     }
+    .time-grid-item:hover { background: var(--timer-preset-hover); transform: translateY(-2px); }
 
-    .time-grid-item:hover {
-      background: var(--timer-preset-hover);
-      color: var(--nav-hover-text);
-      transform: translateY(-2px);
-    }
-
-    .time-grid-item.study-item {
-      border-left: 4px solid var(--timer-btn-study);
-    }
-
-    .time-grid-item.break-item {
-      border-left: 4px solid var(--timer-btn-break);
-    }
-
-    .time-editor {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .time-inputs {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    .time-field {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .time-field label {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      font-weight: 600;
-    }
-
+    .time-editor { display: flex; flex-direction: column; gap: 12px; }
+    .time-inputs { display: flex; gap: 10px; justify-content: center; }
+    .time-field { display: flex; flex-direction: column; align-items: center; gap: 5px; }
     .time-field input {
-      width: 90px;
-      padding: 15px 10px;
+      width: 80px;
+      padding: 10px;
       border: 2px solid var(--card-border);
-      border-radius: 30px;
+      border-radius: 20px;
       background: var(--timer-preset-bg);
-      font-size: 1.8rem;
-      font-weight: 700;
+      font-size: 1.5rem;
       text-align: center;
       color: var(--text-primary);
-      font-family: 'Courier New', monospace;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
     }
-
-    .time-field input:focus {
-      outline: none;
-      border-color: var(--timer-btn-study);
-      box-shadow: 0 0 0 3px var(--timer-glow);
-    }
-
     .set-time-btn {
       background: var(--timer-btn-study);
       color: white;
       border: none;
       border-radius: 40px;
-      padding: 15px;
-      font-size: 1.2rem;
+      padding: 12px;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 0 var(--save-btn-shadow);
-      transition: all 0.2s;
-      width: 100%;
-    }
-
-    .set-time-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 0px 0 var(--save-btn-shadow);
     }
 
     .break-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
-
     .break-item {
-      padding: 15px 10px;
+      padding: 10px;
       border: 2px solid var(--card-border);
-      border-radius: 30px;
+      border-radius: 25px;
       background: var(--timer-preset-bg);
-      color: var(--text-primary);
       cursor: pointer;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: all 0.2s;
-      box-shadow: 0 3px 0 var(--add-section-shadow);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
+      text-align: center;
+      transition: 0.2s;
     }
-
-    .break-item:hover {
-      background: var(--timer-preset-hover);
-      color: var(--nav-hover-text);
-      transform: translateY(-2px);
-    }
-
-    .break-item.active-break {
-      background: var(--timer-btn-break);
-      color: white;
-      border-color: var(--timer-btn-break);
-      box-shadow: 0 3px 0 var(--save-btn-shadow), 0 0 15px var(--timer-glow);
-    }
-
-    .break-item .time {
-      font-size: 1.3rem;
-      font-weight: 800;
-      font-family: 'Courier New', monospace;
-    }
+    .break-item:hover { background: var(--timer-preset-hover); transform: translateY(-2px); }
 
     .stats-compact {
       display: flex;
       justify-content: space-around;
       text-align: center;
     }
+    .stat-compact .value { font-size: 1.5rem; font-weight: 800; font-family: 'Courier New', monospace; }
+    .stat-compact .label { font-size: 0.7rem; color: var(--text-secondary); }
 
-    .stat-compact {
-      flex: 1;
-    }
-
-    .stat-compact .value {
-      font-size: 1.8rem;
-      font-weight: 800;
+    .history-list {
+      background: var(--history-list-bg);
+      border-radius: 30px;
+      padding: 30px;
+      border: 2px solid var(--card-border);
       color: var(--text-primary);
-      font-family: 'Courier New', monospace;
+    }
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 2px dashed var(--history-item-border);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .history-date { font-size: 1.2rem; font-weight: 600; }
+    .load-history, .remove-history, .clear-history {
+      background: var(--load-history-btn);
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+    .remove-history { background: var(--remove-history-btn); width: 40px; height: 40px; border-radius: 50%; }
+    .clear-history { background: var(--clear-history-btn); margin-top: 20px; }
+
+    .about-card, .youtube-card {
+      background: var(--about-card-bg);
+      border-radius: 30px;
+      padding: 40px;
+      text-align: center;
+      color: var(--text-primary);
     }
 
-    .stat-compact .label {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    @media (max-width: 1000px) {
-      .dual-panel { flex-direction: column; }
+    @media (max-width: 800px) {
       .mode-row { flex-direction: column; text-align: center; }
       .mode-timer { font-size: 2rem; }
+      .stopwatch-display { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
-  <canvas id="confetti-canvas"></canvas>
 
   <nav class="navbar">
     <div class="logo">TO-DO LIST <span>WALA</span></div>
     <div class="nav-group">
       <div class="nav-links">
-        <span class="nav-link active" data-section="home">HOME</span>
-        <span class="nav-link" data-section="todo">TO-DO LIST</span>
-        <span class="nav-link" data-section="history">DATE/HISTORY</span>
-        <span class="nav-link" data-section="about">ABOUT</span>
-        <span class="nav-link yt-link" data-section="youtube" id="ytChannelLink">▶️ @zlxlegendry</span>
-        <span class="nav-link" data-section="timer">⏱️ TIMER & STOPWATCH</span>
+        <span class="nav-link active" data-section="home">🏠 HOME</span>
+        <span class="nav-link" data-section="todo">📋 TO-DO</span>
+        <span class="nav-link" data-section="history">📅 HISTORY</span>
+        <span class="nav-link" data-section="timer">⏱️ TIMER</span>
+        <span class="nav-link" data-section="about">ℹ️ ABOUT</span>
+        <span class="nav-link yt-link" data-section="youtube">▶️ @zlxlegendry</span>
       </div>
       <div class="theme-toggle" id="themeToggle">
-        <span class="theme-icon light-mode active-light" id="lightModeIcon">☀️</span>
-        <span class="theme-icon dark-mode" id="darkModeIcon">🌙</span>
-        <span class="theme-icon neon-mode" id="neonModeIcon">💡</span>
+        <span class="theme-icon" data-theme="light">☀️</span>
+        <span class="theme-icon" data-theme="dark">🌙</span>
+        <span class="theme-icon" data-theme="neon">💡</span>
       </div>
     </div>
   </nav>
 
   <div class="container">
     <div id="home" class="section active"></div>
-
     <div id="todo" class="section">
       <div class="clipboard">
         <div class="clip"></div><div class="rivet left"></div><div class="rivet right"></div>
         <div class="list-info">
-          <div class="date-badge" id="currentDate">Monday, March 1, 2026</div>
+          <div class="date-badge" id="currentDate"></div>
           <div class="save-indicator" id="saveIndicator">💾 AUTO SAVED</div>
         </div>
-
         <div class="today-btn-container">
-          <button class="today-btn hidden" id="backToTodayBtn">
-            <span>📅</span> BACK TO TODAY
-          </button>
+          <button class="today-btn hidden" id="backToTodayBtn">📅 BACK TO TODAY</button>
         </div>
-
         <div class="tasks-area" id="tasksArea"></div>
         <div class="add-section">
           <input type="text" class="add-input" id="taskInput" placeholder="Write a new task...">
-          <button class="add-btn" id="addBtn"><span style="font-size:1.8rem;">+</span> ADD</button>
+          <button class="add-btn" id="addBtn">+ ADD</button>
         </div>
-        <button class="save-btn" id="saveListBtn"><span>💾</span> SAVE THIS LIST</button>
+        <button class="save-btn" id="saveListBtn">💾 SAVE THIS LIST</button>
       </div>
     </div>
-
     <div id="history" class="section"><div class="history-list" id="historyList"></div><button class="clear-history" id="clearAllHistory" style="display: none;">🗑️ Clear All History</button></div>
-
-    <div id="about" class="section"><div class="about-card"><h2>ABOUT TO-DO LIST WALA</h2><p>✅ Per-task percentage<br>✅ Slide progress (0-100%)<br>✅ Save/load by date<br>✅ Light / Dark / Neon<br>✅ Celebration on 100% 🎉<br>✅ Fresh EMPTY list every day!<br>✅ ULTIMATE Timer + Stopwatch<br>✅ Study Timer on Top, Break Below<br>✅ 5-90min time grid + Lap stopwatch<br>Created with ❤️</p></div></div>
-
+    <div id="about" class="section"><div class="about-card"><h2>📌 ABOUT</h2><p>✅ Per-task percentage slider<br>✅ Auto-save to localStorage<br>✅ Light/Dark/Neon themes<br>✅ Study & Break timers (background ready)<br>✅ Lap stopwatch<br>✅ History with date tracking</p></div></div>
     <div id="youtube" class="section"></div>
 
     <div id="timer" class="section">
@@ -1259,68 +974,52 @@
 
         <div class="dual-panel">
           <div class="stopwatch-panel">
-            <div class="panel-title">⏱️ <span>LAP</span> STOPWATCH</div>
+            <div class="panel-title">⏱️ LAP STOPWATCH</div>
             <div class="stopwatch-display" id="stopwatchDisplay">00:00:00.000</div>
-            <div class="stopwatch-sub">Space Start/Pause | L Lap | R Reset</div>
             <div class="stopwatch-controls">
               <button class="stopwatch-btn start" id="stopwatchStartPause">▶ START</button>
               <button class="stopwatch-btn lap" id="stopwatchLap">⏱️ LAP</button>
               <button class="stopwatch-btn reset" id="stopwatchReset">↺ RESET</button>
             </div>
             <div class="lap-table-container">
-              <table class="lap-table" id="lapTable">
-                <thead><tr><th>#</th><th>Lap Time</th><th>Total Time</th></tr></thead>
-                <tbody id="lapTableBody"><tr><td colspan="3" style="text-align:center; padding:20px; color:var(--text-secondary);">No laps yet. Click LAP to record.</td></tr></tbody>
+              <table class="lap-table">
+                <thead><tr><th>#</th><th>Lap Time</th><th>Total</th></tr></thead>
+                <tbody id="lapTableBody"><tr><td colspan="3" style="text-align:center">No laps yet</td></tr></tbody>
               </table>
             </div>
           </div>
 
           <div class="settings-panel">
-            <div class="panel-title">⚙️ <span>TIME</span> SETTINGS</div>
+            <div class="panel-title">⚙️ SETTINGS</div>
             <div class="settings-section">
-              <div class="settings-title"><i>⏰</i> PERFECT TIME EDITOR</div>
+              <div class="settings-title">⏰ CUSTOM TIME</div>
               <div class="time-editor">
                 <div class="time-inputs">
-                  <div class="time-field">
-                    <label>MIN</label>
-                    <input type="number" id="customMinutes" min="0" max="999" value="25" step="1">
-                  </div>
-                  <div class="time-field">
-                    <label>SEC</label>
-                    <input type="number" id="customSeconds" min="0" max="59" value="0" step="1">
-                  </div>
+                  <div class="time-field"><label>MIN</label><input type="number" id="customMinutes" min="0" max="999" value="25"></div>
+                  <div class="time-field"><label>SEC</label><input type="number" id="customSeconds" min="0" max="59" value="0"></div>
                 </div>
-                <button class="set-time-btn" id="setCustomTimeBtn">SET TO STUDY</button>
-                <button class="set-time-btn" id="setCustomBreakBtn" style="margin-top:10px; background:var(--timer-btn-break);">SET TO BREAK</button>
+                <button class="set-time-btn" id="setCustomTimeBtn">SET STUDY</button>
+                <button class="set-time-btn" id="setCustomBreakBtn" style="background:var(--timer-btn-break)">SET BREAK</button>
               </div>
             </div>
             <div class="settings-section">
-              <div class="settings-title"><i>📚</i> STUDY TIMES (min)</div>
+              <div class="settings-title">📚 PRESET STUDY</div>
               <div class="time-grid" id="studyTimeGrid"></div>
             </div>
             <div class="settings-section">
-              <div class="settings-title"><i>☕</i> BREAK TIMES (min)</div>
+              <div class="settings-title">☕ PRESET BREAK</div>
               <div class="time-grid" id="breakTimeGrid"></div>
             </div>
             <div class="settings-section">
-              <div class="settings-title"><i>🌙</i> SPECIAL BREAKS</div>
+              <div class="settings-title">🌙 SPECIAL BREAKS</div>
               <div class="break-grid" id="breakTypes"></div>
             </div>
             <div class="settings-section">
-              <div class="settings-title"><i>📊</i> TODAY'S STATS</div>
+              <div class="settings-title">📊 TODAY'S STATS</div>
               <div class="stats-compact">
-                <div class="stat-compact">
-                  <div class="value" id="todayFocusSmall">0</div>
-                  <div class="label">FOCUS</div>
-                </div>
-                <div class="stat-compact">
-                  <div class="value" id="pomodoroSmall">0</div>
-                  <div class="label">POMODOROS</div>
-                </div>
-                <div class="stat-compact">
-                  <div class="value" id="totalTimeSmall">0</div>
-                  <div class="label">TOTAL MIN</div>
-                </div>
+                <div class="stat-compact"><div class="value" id="todayFocusSmall">0</div><div class="label">FOCUS</div></div>
+                <div class="stat-compact"><div class="value" id="pomodoroSmall">0</div><div class="label">POMODOROS</div></div>
+                <div class="stat-compact"><div class="value" id="totalTimeSmall">0</div><div class="label">TOTAL MIN</div></div>
               </div>
             </div>
           </div>
@@ -1332,53 +1031,33 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
   <script>
     (function() {
-      // Theme management (unchanged)
+      // ========== THEME ==========
       const body = document.body;
-      const lightIcon = document.getElementById('lightModeIcon');
-      const darkIcon = document.getElementById('darkModeIcon');
-      const neonIcon = document.getElementById('neonModeIcon');
-      const themeToggle = document.getElementById('themeToggle');
-
+      const themeIcons = document.querySelectorAll('.theme-icon');
+      const savedTheme = localStorage.getItem('walaTheme') || 'light';
+      
       function setTheme(theme) {
         body.classList.remove('light', 'dark', 'neon');
-        lightIcon.classList.remove('active-light');
-        darkIcon.classList.remove('active-dark');
-        neonIcon.classList.remove('active-neon');
-        if (theme === 'dark') {
-          body.classList.add('dark');
-          darkIcon.classList.add('active-dark');
-        } else if (theme === 'neon') {
-          body.classList.add('neon');
-          neonIcon.classList.add('active-neon');
-        } else {
-          body.classList.add('light');
-          lightIcon.classList.add('active-light');
-        }
+        body.classList.add(theme);
+        themeIcons.forEach(icon => {
+          icon.classList.remove('active-light', 'active-dark', 'active-neon');
+          if (icon.dataset.theme === theme) icon.classList.add(`active-${theme}`);
+        });
         localStorage.setItem('walaTheme', theme);
       }
-      const savedTheme = localStorage.getItem('walaTheme') || 'light';
       setTheme(savedTheme);
-      themeToggle.addEventListener('click', (e) => {
-        if (body.classList.contains('light')) setTheme('dark');
-        else if (body.classList.contains('dark')) setTheme('neon');
-        else setTheme('light');
+      themeIcons.forEach(icon => {
+        icon.addEventListener('click', () => setTheme(icon.dataset.theme));
       });
 
       function celebrate() {
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-        setTimeout(() => {
-          confetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.2 }, colors: ['#26ccff', '#a25afd', '#ff5e7d'] });
-        }, 150);
-        setTimeout(() => {
-          confetti({ particleCount: 100, spread: 100, origin: { y: 0.5, x: 0.8 }, colors: ['#f0f', '#0ff', '#ff0'] });
-        }, 300);
       }
 
-      // Navigation
+      // ========== NAVIGATION ==========
       const navLinks = document.querySelectorAll('.nav-link');
       const sections = document.querySelectorAll('.section');
-      const backToTodayBtn = document.getElementById('backToTodayBtn');
-
+      
       navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
           const sectionId = link.dataset.section;
@@ -1390,734 +1069,415 @@
           link.classList.add('active');
           sections.forEach(s => s.classList.remove('active'));
           document.getElementById(sectionId).classList.add('active');
-          if (sectionId === 'history') {
-            renderHistory();
-          } else if (sectionId === 'todo') {
-            loadTodayTasks();
-          }
+          if (sectionId === 'history') renderHistory();
+          else if (sectionId === 'todo') loadTodayTasks();
         });
       });
 
+      // ========== TODO LIST ==========
       function getCurrentDate() {
-        const d = new Date();
-        return d.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+        return new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
       }
-
-      function getTodayKey() {
-        return new Date().toDateString();
-      }
+      function getTodayKey() { return new Date().toDateString(); }
 
       let tasks = [];
       let currentViewDate = getTodayKey();
 
       function loadTodayTasks() {
         currentViewDate = getTodayKey();
-        const savedTasks = localStorage.getItem(`walaTasks_${currentViewDate}`);
-        tasks = savedTasks ? JSON.parse(savedTasks) : [];
+        const saved = localStorage.getItem(`walaTasks_${currentViewDate}`);
+        tasks = saved ? JSON.parse(saved) : [];
         document.getElementById('currentDate').innerText = getCurrentDate();
-        backToTodayBtn.classList.add('hidden');
-        const saveIndicator = document.getElementById('saveIndicator');
-        saveIndicator.innerText = '💾 AUTO SAVED';
-        saveIndicator.classList.remove('saved');
+        document.getElementById('backToTodayBtn').classList.add('hidden');
         renderTasks();
       }
 
-      function loadTasksForDate(dateKey, displayDate) {
-        currentViewDate = dateKey;
-        const savedTasks = localStorage.getItem(`walaTasks_${dateKey}`);
-        tasks = savedTasks ? JSON.parse(savedTasks) : [];
-        document.getElementById('currentDate').innerText = displayDate;
-        backToTodayBtn.classList.remove('hidden');
-        const saveIndicator = document.getElementById('saveIndicator');
-        saveIndicator.innerText = '📜 VIEWING HISTORY';
-        saveIndicator.classList.remove('saved');
-        renderTasks();
-      }
-
-      function saveTasksForCurrentDate() {
+      function saveTasks() {
         localStorage.setItem(`walaTasks_${currentViewDate}`, JSON.stringify(tasks));
         if (currentViewDate === getTodayKey()) {
-          localStorage.setItem('walaLastVisit', getTodayKey());
-        }
-        if (currentViewDate === getTodayKey() && tasks.length > 0) {
-          autoSaveToHistory();
-        }
-      }
-
-      const lastVisitKey = localStorage.getItem('walaLastVisit') || '';
-      const todayKey = getTodayKey();
-      if (todayKey !== lastVisitKey) {
-        tasks = [];
-        localStorage.setItem(`walaTasks_${todayKey}`, JSON.stringify([]));
-        localStorage.setItem('walaLastVisit', todayKey);
-      } else {
-        tasks = JSON.parse(localStorage.getItem(`walaTasks_${todayKey}`)) || [];
-      }
-
-      const tasksArea = document.getElementById('tasksArea');
-      const taskInput = document.getElementById('taskInput');
-      const addBtn = document.getElementById('addBtn');
-      const saveIndicator = document.getElementById('saveIndicator');
-      const clearAllBtn = document.getElementById('clearAllHistory');
-
-      function saveCurrentTasks() {
-        saveTasksForCurrentDate();
-        if (currentViewDate === getTodayKey()) {
-          saveIndicator.innerText = '💾 AUTO SAVED';
-          saveIndicator.classList.add('saved');
-        }
-        setTimeout(() => saveIndicator.classList.remove('saved'), 500);
-      }
-
-      function autoSaveToHistory() {
-        if (tasks.length > 0 && currentViewDate === getTodayKey()) {
           const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
           const today = getCurrentDate();
-          const todayListIndex = savedLists.findIndex(list => list.date === today);
-          if (todayListIndex !== -1) {
-            savedLists[todayListIndex].tasks = JSON.parse(JSON.stringify(tasks));
-            savedLists[todayListIndex].timestamp = Date.now();
-          } else {
-            savedLists.push({
-              date: today,
-              timestamp: Date.now(),
-              tasks: JSON.parse(JSON.stringify(tasks))
-            });
-          }
+          const idx = savedLists.findIndex(l => l.date === today);
+          if (idx !== -1) savedLists[idx].tasks = JSON.parse(JSON.stringify(tasks));
+          else savedLists.push({ date: today, timestamp: Date.now(), tasks: JSON.parse(JSON.stringify(tasks)) });
           localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
+          const si = document.getElementById('saveIndicator');
+          si.innerText = '✅ SAVED!';
+          si.classList.add('saved');
+          setTimeout(() => { si.innerText = '💾 AUTO SAVED'; si.classList.remove('saved'); }, 1500);
         }
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+          if (m === '&') return '&amp;';
+          if (m === '<') return '&lt;';
+          if (m === '>') return '&gt;';
+          return m;
+        });
       }
 
       function renderTasks() {
-        tasksArea.innerHTML = '';
+        const area = document.getElementById('tasksArea');
+        area.innerHTML = '';
         if (tasks.length === 0) {
-          const emptyMsg = document.createElement('div');
-          emptyMsg.style.padding = '30px';
-          emptyMsg.style.textAlign = 'center';
-          emptyMsg.style.color = 'var(--task-number)';
-          emptyMsg.style.fontSize = '1.3rem';
-          emptyMsg.innerText = currentViewDate === getTodayKey() ? '✨ New day! Add your first task ✨' : '📅 No tasks saved for this date';
-          tasksArea.appendChild(emptyMsg);
+          area.innerHTML = '<div style="padding:30px;text-align:center">✨ Add your first task ✨</div>';
           return;
         }
-        const sorted = [...tasks].sort((a, b) => a.id - b.id);
-        sorted.forEach((task, index) => {
-          const taskEl = document.createElement('div');
-          taskEl.className = 'task';
-          taskEl.dataset.id = task.id;
-          const serial = index + 1;
-          const percentClass = task.percent >= 80 ? 'high' : '';
-          taskEl.innerHTML = `
-            <span class="task-number">${serial}.</span>
+        tasks.sort((a,b) => a.id - b.id).forEach((task, idx) => {
+          const div = document.createElement('div');
+          div.className = 'task';
+          div.innerHTML = `
+            <span class="task-number">${idx+1}.</span>
             <div class="task-content">
               <span class="task-text">${escapeHtml(task.text)}</span>
               <div class="percent-container">
-                <input type="range" min="0" max="100" value="${task.percent || 0}" class="percent-slider" data-id="${task.id}">
-                <span class="percent-value ${percentClass}">${task.percent || 0}%</span>
+                <input type="range" min="0" max="100" value="${task.percent||0}" class="percent-slider" data-id="${task.id}">
+                <span class="percent-value ${(task.percent||0)>=80?'high':''}">${task.percent||0}%</span>
               </div>
             </div>
             <button class="remove-btn">✕</button>
           `;
-          const slider = taskEl.querySelector('.percent-slider');
-          const percentSpan = taskEl.querySelector('.percent-value');
-          let previousPercent = task.percent;
+          const slider = div.querySelector('.percent-slider');
+          const valSpan = div.querySelector('.percent-value');
+          let oldVal = task.percent;
           slider.addEventListener('input', (e) => {
-            const newPercent = parseInt(e.target.value);
-            percentSpan.textContent = newPercent + '%';
-            if (newPercent >= 80) percentSpan.classList.add('high');
-            else percentSpan.classList.remove('high');
-            const taskId = Number(taskEl.dataset.id);
-            const targetTask = tasks.find(t => t.id === taskId);
-            if (targetTask) targetTask.percent = newPercent;
+            const v = parseInt(e.target.value);
+            valSpan.textContent = v+'%';
+            if(v>=80) valSpan.classList.add('high');
+            else valSpan.classList.remove('high');
+            const t = tasks.find(t => t.id === task.id);
+            if(t) t.percent = v;
           });
           slider.addEventListener('change', (e) => {
-            const newPercent = parseInt(e.target.value);
-            const taskId = Number(taskEl.dataset.id);
-            const targetTask = tasks.find(t => t.id === taskId);
-            if (targetTask && targetTask.percent === 100 && previousPercent !== 100) {
-              celebrate();
-            }
-            previousPercent = targetTask ? targetTask.percent : 0;
-            saveCurrentTasks();
+            const v = parseInt(e.target.value);
+            if(v === 100 && oldVal !== 100) celebrate();
+            oldVal = v;
+            saveTasks();
           });
-          previousPercent = task.percent;
-          taskEl.querySelector('.remove-btn').addEventListener('click', () => {
-            const taskId = Number(taskEl.dataset.id);
-            tasks = tasks.filter(t => t.id !== taskId);
+          div.querySelector('.remove-btn').addEventListener('click', () => {
+            tasks = tasks.filter(t => t.id !== task.id);
             renderTasks();
-            saveCurrentTasks();
+            saveTasks();
           });
-          tasksArea.appendChild(taskEl);
+          area.appendChild(div);
         });
-        if (tasks.length > 0) {
-          const total = tasks.length, fullyDone = tasks.filter(t => t.percent === 100).length;
-          const summary = document.createElement('div');
-          summary.style.padding = '15px 10px';
-          summary.style.borderTop = '2px solid var(--task-border-bottom)';
-          summary.style.marginTop = '10px';
-          summary.style.color = 'var(--history-preview)';
-          summary.style.fontSize = '1.1rem';
-          summary.style.textAlign = 'center';
-          summary.innerHTML = `📋 ${total} tasks (${fullyDone} fully complete)`;
-          tasksArea.appendChild(summary);
-        }
       }
 
-      function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-      }
-
-      function addNewTask() {
-        const text = taskInput.value.trim();
-        if (!text) return;
-        tasks.push({ id: Date.now(), text, percent: 0 });
-        renderTasks();
-        saveCurrentTasks();
-        taskInput.value = '';
-      }
-
-      addBtn.addEventListener('click', addNewTask);
-      taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addNewTask(); });
-
-      document.getElementById('saveListBtn').addEventListener('click', () => {
-        if (currentViewDate === getTodayKey()) {
-          const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
-          const today = getCurrentDate();
-          const existingIndex = savedLists.findIndex(list => list.date === today);
-          if (existingIndex !== -1) {
-            savedLists[existingIndex].tasks = JSON.parse(JSON.stringify(tasks));
-            savedLists[existingIndex].timestamp = Date.now();
-          } else {
-            savedLists.push({
-              date: today,
-              timestamp: Date.now(),
-              tasks: JSON.parse(JSON.stringify(tasks))
-            });
-          }
-          localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
-          saveIndicator.innerText = '✅ LIST SAVED!';
-          saveIndicator.classList.add('saved');
-          setTimeout(() => {
-            saveIndicator.innerText = '💾 AUTO SAVED';
-            saveIndicator.classList.remove('saved');
-          }, 2000);
-        } else {
-          alert('You can only save today\'s list to history!');
+      document.getElementById('addBtn').addEventListener('click', () => {
+        const input = document.getElementById('taskInput');
+        const text = input.value.trim();
+        if(text) {
+          tasks.push({ id: Date.now(), text, percent: 0 });
+          renderTasks();
+          saveTasks();
+          input.value = '';
         }
       });
-
-      backToTodayBtn.addEventListener('click', () => {
+      document.getElementById('taskInput').addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') document.getElementById('addBtn').click();
+      });
+      document.getElementById('saveListBtn').addEventListener('click', () => {
+        if(currentViewDate === getTodayKey()) saveTasks();
+        else alert('Only today\'s list can be saved to history');
+      });
+      document.getElementById('backToTodayBtn').addEventListener('click', () => {
         loadTodayTasks();
-        navLinks.forEach(l => l.classList.remove('active'));
-        sections.forEach(s => s.classList.remove('active'));
-        document.querySelector('[data-section="todo"]').classList.add('active');
-        document.getElementById('todo').classList.add('active');
+        document.querySelector('[data-section="todo"]').click();
       });
 
       function renderHistory() {
-        const historyListDiv = document.getElementById('historyList');
-        const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
-        clearAllBtn.style.display = savedLists.length > 0 ? 'block' : 'none';
-        if (savedLists.length === 0) {
-          historyListDiv.innerHTML = '<p style="text-align:center; padding:40px; color: var(--text-secondary);">No saved lists yet.</p>';
-          return;
-        }
-        historyListDiv.innerHTML = '';
-        const sortedLists = [...savedLists].sort((a, b) => b.timestamp - a.timestamp);
-        sortedLists.forEach((list, index) => {
-          const total = list.tasks.length,
-                avg = total === 0 ? 0 : Math.round(list.tasks.reduce((sum, t) => sum + (t.percent || 0), 0) / total);
-          const fullyDone = list.tasks.filter(t => t.percent === 100).length;
-          const item = document.createElement('div');
-          item.className = 'history-item';
-          item.innerHTML = `
-            <div style="flex:1;">
-              <div class="history-date">${list.date}</div>
-              <div class="history-preview">${fullyDone}/${total} fully done · <strong>Avg ${avg}%</strong></div>
-            </div>
-            <div class="history-actions">
-              <button class="load-history" data-date="${list.date}" data-index="${index}">VIEW</button>
-              <button class="remove-history" data-index="${index}" title="Remove">✕</button>
-            </div>
+        const lists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
+        const container = document.getElementById('historyList');
+        const clearBtn = document.getElementById('clearAllHistory');
+        clearBtn.style.display = lists.length ? 'block' : 'none';
+        if(!lists.length) { container.innerHTML = '<p style="text-align:center;padding:40px">No saved lists</p>'; return; }
+        container.innerHTML = '';
+        lists.sort((a,b) => b.timestamp - a.timestamp).forEach((list, i) => {
+          const done = list.tasks.filter(t => t.percent === 100).length;
+          const avg = list.tasks.length ? Math.round(list.tasks.reduce((s,t)=>s+(t.percent||0),0)/list.tasks.length) : 0;
+          const div = document.createElement('div');
+          div.className = 'history-item';
+          div.innerHTML = `
+            <div><div class="history-date">${list.date}</div><div>${done}/${list.tasks.length} done · Avg ${avg}%</div></div>
+            <div><button class="load-history" data-date="${list.date}">VIEW</button><button class="remove-history" data-date="${list.date}">✕</button></div>
           `;
-          historyListDiv.appendChild(item);
+          container.appendChild(div);
         });
         document.querySelectorAll('.load-history').forEach(btn => {
           btn.addEventListener('click', (e) => {
             const date = e.target.dataset.date;
-            const savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
-            const listToLoad = savedLists.find(list => list.date === date);
-            if (listToLoad) {
-              tasks = JSON.parse(JSON.stringify(listToLoad.tasks));
-              document.getElementById('currentDate').innerText = listToLoad.date;
-              backToTodayBtn.classList.remove('hidden');
-              const saveIndicator = document.getElementById('saveIndicator');
-              saveIndicator.innerText = '📜 VIEWING HISTORY';
-              saveIndicator.classList.remove('saved');
+            const lists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
+            const found = lists.find(l => l.date === date);
+            if(found) {
+              tasks = JSON.parse(JSON.stringify(found.tasks));
+              document.getElementById('currentDate').innerText = date;
+              document.getElementById('backToTodayBtn').classList.remove('hidden');
               renderTasks();
-              navLinks.forEach(l => l.classList.remove('active'));
-              sections.forEach(s => s.classList.remove('active'));
-              document.querySelector('[data-section="todo"]').classList.add('active');
-              document.getElementById('todo').classList.add('active');
+              document.querySelector('[data-section="todo"]').click();
             }
           });
         });
         document.querySelectorAll('.remove-history').forEach(btn => {
           btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const index = parseInt(e.target.dataset.index);
-            let savedLists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
-            const sortedLists = [...savedLists].sort((a, b) => b.timestamp - a.timestamp);
-            const listToRemove = sortedLists[index];
-            const originalIndex = savedLists.findIndex(list => list.date === listToRemove.date && list.timestamp === listToRemove.timestamp);
-            if (originalIndex !== -1) {
-              savedLists.splice(originalIndex, 1);
-              localStorage.setItem('walaSavedLists', JSON.stringify(savedLists));
-              renderHistory();
-            }
+            const date = e.target.dataset.date;
+            let lists = JSON.parse(localStorage.getItem('walaSavedLists')) || [];
+            lists = lists.filter(l => l.date !== date);
+            localStorage.setItem('walaSavedLists', JSON.stringify(lists));
+            renderHistory();
           });
         });
       }
-
-      clearAllBtn.addEventListener('click', () => {
-        if (confirm('Clear ALL history?')) {
+      document.getElementById('clearAllHistory').addEventListener('click', () => {
+        if(confirm('Clear all history?')) {
           localStorage.setItem('walaSavedLists', JSON.stringify([]));
           renderHistory();
         }
       });
 
-      document.getElementById('home').innerHTML = `<div class="home-grid">${['📋 TO-DO LIST', '📅 DATE/HISTORY', '💾 AUTO SAVE', '⏱️ TIMER & STOPWATCH'].map((t,i)=>`<div class="tool-card"><div class="tool-icon">${['📋','📅','💾','⏱️'][i]}</div><h3>${t.split(' ')[1]}</h3><p>${['Each task with % slider.','View saved lists by date.','Auto & manual save.','Study/Break timers + Lap stopwatch'][i]}</p></div>`).join('')}</div>`;
-      document.getElementById('youtube').innerHTML = `<div class="youtube-card"><div class="youtube-icon">📺</div><h2>@zlxlegendry</h2><p>Subscribe for more!</p><a href="https://www.youtube.com/@zlxlegendry" target="_blank" class="youtube-btn">▶️ VISIT CHANNEL</a></div>`;
-
-      // ========== FIXED: TIMESTAMP-BASED TIMERS (Works in background tabs) ==========
+      // ========== TIMERS (Background-ready using requestAnimationFrame) ==========
+      let pomodoroCount = 0, totalStudyMinutes = 0;
       
-      let pomodoroCount = 0;
-      let totalStudyMinutes = 0;
-
-      function loadTimerStats() {
-        const stats = JSON.parse(localStorage.getItem('studyStats')) || {
-          pomodoros: 0,
-          totalMinutes: 0,
-          lastDate: getTodayKey()
-        };
-        if (stats.lastDate !== getTodayKey()) {
-          stats.pomodoros = 0;
-          stats.totalMinutes = 0;
-          stats.lastDate = getTodayKey();
-        }
+      function loadStats() {
+        const stats = JSON.parse(localStorage.getItem('studyStats')) || { pomodoros: 0, totalMinutes: 0, lastDate: getTodayKey() };
+        if(stats.lastDate !== getTodayKey()) { stats.pomodoros = 0; stats.totalMinutes = 0; stats.lastDate = getTodayKey(); }
         pomodoroCount = stats.pomodoros;
         totalStudyMinutes = stats.totalMinutes;
-        updateTimerStats();
+        document.getElementById('todayFocusSmall').innerText = pomodoroCount;
+        document.getElementById('pomodoroSmall').innerText = pomodoroCount;
+        document.getElementById('totalTimeSmall').innerText = totalStudyMinutes;
+      }
+      function saveStats() {
+        localStorage.setItem('studyStats', JSON.stringify({ pomodoros: pomodoroCount, totalMinutes: totalStudyMinutes, lastDate: getTodayKey() }));
+        document.getElementById('todayFocusSmall').innerText = pomodoroCount;
+        document.getElementById('pomodoroSmall').innerText = pomodoroCount;
+        document.getElementById('totalTimeSmall').innerText = totalStudyMinutes;
       }
 
-      function saveTimerStats() {
-        const stats = {
-          pomodoros: pomodoroCount,
-          totalMinutes: totalStudyMinutes,
-          lastDate: getTodayKey()
-        };
-        localStorage.setItem('studyStats', JSON.stringify(stats));
-        updateTimerStats();
-      }
-
-      function updateTimerStats() {
-        document.getElementById('todayFocusSmall').textContent = pomodoroCount;
-        document.getElementById('pomodoroSmall').textContent = pomodoroCount;
-        document.getElementById('totalTimeSmall').textContent = totalStudyMinutes;
-      }
-
-      function formatTime(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-      }
-
+      function formatTime(sec) { return `${Math.floor(sec/60)}`.padStart(2,'0')+':'+`${sec%60}`.padStart(2,'0'); }
       function formatMs(ms) {
-        const totalSeconds = Math.floor(ms / 1000);
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-        const milliseconds = ms % 1000;
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+        let total = Math.floor(ms/1000);
+        let hrs = Math.floor(total/3600);
+        let mins = Math.floor((total%3600)/60);
+        let secs = total%60;
+        let millis = ms%1000;
+        return `${hrs}`.padStart(2,'0')+':'+`${mins}`.padStart(2,'0')+':'+`${secs}`.padStart(2,'0')+'.'+`${millis}`.padStart(3,'0');
       }
 
-      // ========== STUDY TIMER (Timestamp-based) ==========
-      let studyTimeLeft = 25 * 60;
-      let studyIsRunning = false;
-      let studyAnimationFrame = null;
-      let studyLastTimestamp = null;
-      let studyPauseTimeRemaining = studyTimeLeft;
-      
+      // STUDY TIMER
+      let studySeconds = 25*60, studyRunning = false, studyAnim = null, studyLastTime = null;
       const studyDisplay = document.getElementById('studyTimerDisplay');
-      const studyStartPause = document.getElementById('studyStartPauseBtn');
+      const studyBtn = document.getElementById('studyStartPauseBtn');
       const studyReset = document.getElementById('studyResetBtn');
 
-      function updateStudyDisplay() {
-        studyDisplay.textContent = formatTime(studyTimeLeft);
-      }
-
-      function studyTick(currentTime) {
-        if (!studyIsRunning) return;
-        
-        if (studyLastTimestamp === null) {
-          studyLastTimestamp = currentTime;
-          studyAnimationFrame = requestAnimationFrame(studyTick);
-          return;
-        }
-        
-        const deltaSeconds = (currentTime - studyLastTimestamp) / 1000;
-        studyLastTimestamp = currentTime;
-        
-        if (studyTimeLeft > 0) {
-          studyTimeLeft = Math.max(0, studyTimeLeft - deltaSeconds);
-          updateStudyDisplay();
-          
-          if (studyTimeLeft <= 0) {
-            // Study complete
-            studyIsRunning = false;
-            studyStartPause.innerHTML = '▶ START';
-            if (studyAnimationFrame) cancelAnimationFrame(studyAnimationFrame);
-            studyAnimationFrame = null;
-            pomodoroCount++;
-            totalStudyMinutes += Math.round((25 * 60 - studyTimeLeft) / 60);
-            saveTimerStats();
-            celebrate();
-            alert('🎉 Study session complete! Time for a break!');
-          } else {
-            studyAnimationFrame = requestAnimationFrame(studyTick);
-          }
-        }
-      }
-
-      function startStudy() {
-        if (studyIsRunning) return;
-        studyIsRunning = true;
-        studyLastTimestamp = null;
-        studyStartPause.innerHTML = '⏸ PAUSE';
-        studyAnimationFrame = requestAnimationFrame(studyTick);
-      }
-
-      function pauseStudy() {
-        if (!studyIsRunning) return;
-        studyIsRunning = false;
-        studyStartPause.innerHTML = '▶ START';
-        if (studyAnimationFrame) {
-          cancelAnimationFrame(studyAnimationFrame);
-          studyAnimationFrame = null;
-        }
-      }
-
-      function toggleStudy() {
-        if (studyIsRunning) {
-          pauseStudy();
+      function updateStudyDisplay() { studyDisplay.innerText = formatTime(studySeconds); }
+      
+      function studyTick(now) {
+        if(!studyRunning) return;
+        if(studyLastTime === null) { studyLastTime = now; requestAnimationFrame(studyTick); return; }
+        let delta = (now - studyLastTime) / 1000;
+        studyLastTime = now;
+        if(delta > 0.1) delta = 0.1;
+        studySeconds = Math.max(0, studySeconds - delta);
+        updateStudyDisplay();
+        if(studySeconds <= 0) {
+          studyRunning = false;
+          studyBtn.innerText = '▶ START';
+          if(studyAnim) cancelAnimationFrame(studyAnim);
+          studyAnim = null;
+          pomodoroCount++;
+          totalStudyMinutes += 25;
+          saveStats();
+          celebrate();
+          alert('🎉 Study complete! Take a break!');
         } else {
-          startStudy();
+          studyAnim = requestAnimationFrame(studyTick);
         }
       }
-
-      function resetStudy() {
-        pauseStudy();
-        studyTimeLeft = studyPauseTimeRemaining;
-        updateStudyDisplay();
-        studyStartPause.innerHTML = '▶ START';
-      }
-
-      function setStudyTime(seconds) {
-        pauseStudy();
-        studyTimeLeft = seconds;
-        studyPauseTimeRemaining = seconds;
-        updateStudyDisplay();
-      }
-
-      studyStartPause.addEventListener('click', toggleStudy);
+      
+      function startStudy() { if(studyRunning) return; studyRunning = true; studyBtn.innerText = '⏸ PAUSE'; studyLastTime = null; studyAnim = requestAnimationFrame(studyTick); }
+      function pauseStudy() { if(!studyRunning) return; studyRunning = false; studyBtn.innerText = '▶ START'; if(studyAnim) cancelAnimationFrame(studyAnim); studyAnim = null; }
+      function toggleStudy() { studyRunning ? pauseStudy() : startStudy(); }
+      function resetStudy() { pauseStudy(); studySeconds = 25*60; updateStudyDisplay(); }
+      function setStudyTime(sec) { pauseStudy(); studySeconds = sec; updateStudyDisplay(); }
+      
+      studyBtn.addEventListener('click', toggleStudy);
       studyReset.addEventListener('click', resetStudy);
 
-      // ========== BREAK TIMER (Timestamp-based) ==========
-      let breakTimeLeft = 5 * 60;
-      let breakIsRunning = false;
-      let breakAnimationFrame = null;
-      let breakLastTimestamp = null;
-      let breakPauseTimeRemaining = breakTimeLeft;
-      
+      // BREAK TIMER
+      let breakSeconds = 5*60, breakRunning = false, breakAnim = null, breakLastTime = null;
       const breakDisplay = document.getElementById('breakTimerDisplay');
-      const breakStartPause = document.getElementById('breakStartPauseBtn');
-      const breakReset = document.getElementById('breakResetBtn');
-
-      function updateBreakDisplay() {
-        breakDisplay.textContent = formatTime(breakTimeLeft);
-      }
-
-      function breakTick(currentTime) {
-        if (!breakIsRunning) return;
-        
-        if (breakLastTimestamp === null) {
-          breakLastTimestamp = currentTime;
-          breakAnimationFrame = requestAnimationFrame(breakTick);
-          return;
-        }
-        
-        const deltaSeconds = (currentTime - breakLastTimestamp) / 1000;
-        breakLastTimestamp = currentTime;
-        
-        if (breakTimeLeft > 0) {
-          breakTimeLeft = Math.max(0, breakTimeLeft - deltaSeconds);
-          updateBreakDisplay();
-          
-          if (breakTimeLeft <= 0) {
-            breakIsRunning = false;
-            breakStartPause.innerHTML = '▶ START';
-            if (breakAnimationFrame) cancelAnimationFrame(breakAnimationFrame);
-            breakAnimationFrame = null;
-            alert('☕ Break over! Ready to focus again?');
-          } else {
-            breakAnimationFrame = requestAnimationFrame(breakTick);
-          }
-        }
-      }
-
-      function startBreak() {
-        if (breakIsRunning) return;
-        breakIsRunning = true;
-        breakLastTimestamp = null;
-        breakStartPause.innerHTML = '⏸ PAUSE';
-        breakAnimationFrame = requestAnimationFrame(breakTick);
-      }
-
-      function pauseBreak() {
-        if (!breakIsRunning) return;
-        breakIsRunning = false;
-        breakStartPause.innerHTML = '▶ START';
-        if (breakAnimationFrame) {
-          cancelAnimationFrame(breakAnimationFrame);
-          breakAnimationFrame = null;
-        }
-      }
-
-      function toggleBreak() {
-        if (breakIsRunning) {
-          pauseBreak();
-        } else {
-          startBreak();
-        }
-      }
-
-      function resetBreak() {
-        pauseBreak();
-        breakTimeLeft = breakPauseTimeRemaining;
-        updateBreakDisplay();
-        breakStartPause.innerHTML = '▶ START';
-      }
-
-      function setBreakTime(seconds) {
-        pauseBreak();
-        breakTimeLeft = seconds;
-        breakPauseTimeRemaining = seconds;
-        updateBreakDisplay();
-      }
-
-      breakStartPause.addEventListener('click', toggleBreak);
-      breakReset.addEventListener('click', resetBreak);
-
-      // ========== STOPWATCH (Timestamp-based, works in background) ==========
-      let stopwatchTime = 0;
-      let stopwatchIsRunning = false;
-      let stopwatchAnimationFrame = null;
-      let stopwatchLastTimestamp = null;
-      let laps = [];
+      const breakBtn = document.getElementById('breakStartPauseBtn');
+      const breakResetBtn = document.getElementById('breakResetBtn');
       
-      const stopwatchDisplay = document.getElementById('stopwatchDisplay');
-      const stopwatchStartPause = document.getElementById('stopwatchStartPause');
-      const stopwatchLap = document.getElementById('stopwatchLap');
-      const stopwatchReset = document.getElementById('stopwatchReset');
-      const lapTableBody = document.getElementById('lapTableBody');
-
-      function updateStopwatchDisplay() {
-        stopwatchDisplay.textContent = formatMs(stopwatchTime);
-      }
-
-      function stopwatchTick(currentTime) {
-        if (!stopwatchIsRunning) return;
-        
-        if (stopwatchLastTimestamp === null) {
-          stopwatchLastTimestamp = currentTime;
-          stopwatchAnimationFrame = requestAnimationFrame(stopwatchTick);
-          return;
-        }
-        
-        const deltaMs = currentTime - stopwatchLastTimestamp;
-        stopwatchLastTimestamp = currentTime;
-        stopwatchTime += deltaMs;
-        updateStopwatchDisplay();
-        stopwatchAnimationFrame = requestAnimationFrame(stopwatchTick);
-      }
-
-      function startStopwatch() {
-        if (stopwatchIsRunning) return;
-        stopwatchIsRunning = true;
-        stopwatchLastTimestamp = null;
-        stopwatchStartPause.innerHTML = '⏸ PAUSE';
-        stopwatchAnimationFrame = requestAnimationFrame(stopwatchTick);
-      }
-
-      function pauseStopwatch() {
-        if (!stopwatchIsRunning) return;
-        stopwatchIsRunning = false;
-        stopwatchStartPause.innerHTML = '▶ START';
-        if (stopwatchAnimationFrame) {
-          cancelAnimationFrame(stopwatchAnimationFrame);
-          stopwatchAnimationFrame = null;
-        }
-      }
-
-      function toggleStopwatch() {
-        if (stopwatchIsRunning) {
-          pauseStopwatch();
+      function updateBreakDisplay() { breakDisplay.innerText = formatTime(breakSeconds); }
+      
+      function breakTick(now) {
+        if(!breakRunning) return;
+        if(breakLastTime === null) { breakLastTime = now; requestAnimationFrame(breakTick); return; }
+        let delta = (now - breakLastTime) / 1000;
+        breakLastTime = now;
+        if(delta > 0.1) delta = 0.1;
+        breakSeconds = Math.max(0, breakSeconds - delta);
+        updateBreakDisplay();
+        if(breakSeconds <= 0) {
+          breakRunning = false;
+          breakBtn.innerText = '▶ START';
+          if(breakAnim) cancelAnimationFrame(breakAnim);
+          breakAnim = null;
+          alert('☕ Break over! Back to work!');
         } else {
-          startStopwatch();
+          breakAnim = requestAnimationFrame(breakTick);
         }
       }
+      
+      function startBreak() { if(breakRunning) return; breakRunning = true; breakBtn.innerText = '⏸ PAUSE'; breakLastTime = null; breakAnim = requestAnimationFrame(breakTick); }
+      function pauseBreak() { if(!breakRunning) return; breakRunning = false; breakBtn.innerText = '▶ START'; if(breakAnim) cancelAnimationFrame(breakAnim); breakAnim = null; }
+      function toggleBreak() { breakRunning ? pauseBreak() : startBreak(); }
+      function resetBreak() { pauseBreak(); breakSeconds = 5*60; updateBreakDisplay(); }
+      function setBreakTime(sec) { pauseBreak(); breakSeconds = sec; updateBreakDisplay(); }
+      
+      breakBtn.addEventListener('click', toggleBreak);
+      breakResetBtn.addEventListener('click', resetBreak);
 
-      function addLap() {
-        if (!stopwatchIsRunning && stopwatchTime === 0) return;
-        const lapNumber = laps.length + 1;
-        let lastLapTime = laps.length > 0 ? laps[laps.length - 1].totalTime : 0;
-        const lapDuration = stopwatchTime - lastLapTime;
-        laps.push({
-          number: lapNumber,
-          lapTime: lapDuration,
-          totalTime: stopwatchTime
-        });
-        renderLaps();
+      // STOPWATCH
+      let stopwatchMs = 0, swRunning = false, swAnim = null, swLastTime = null, laps = [];
+      const swDisplay = document.getElementById('stopwatchDisplay');
+      const swStartPause = document.getElementById('stopwatchStartPause');
+      const swLap = document.getElementById('stopwatchLap');
+      const swReset = document.getElementById('stopwatchReset');
+      const lapBody = document.getElementById('lapTableBody');
+      
+      function updateStopwatch() { swDisplay.innerText = formatMs(stopwatchMs); }
+      
+      function swTick(now) {
+        if(!swRunning) return;
+        if(swLastTime === null) { swLastTime = now; requestAnimationFrame(swTick); return; }
+        let delta = now - swLastTime;
+        swLastTime = now;
+        if(delta > 100) delta = 100;
+        stopwatchMs += delta;
+        updateStopwatch();
+        swAnim = requestAnimationFrame(swTick);
       }
-
-      function resetStopwatch() {
-        pauseStopwatch();
-        stopwatchTime = 0;
-        laps = [];
-        updateStopwatchDisplay();
-        renderLaps();
-        stopwatchStartPause.innerHTML = '▶ START';
-      }
-
+      
+      function startSW() { if(swRunning) return; swRunning = true; swStartPause.innerText = '⏸ PAUSE'; swLastTime = null; swAnim = requestAnimationFrame(swTick); }
+      function pauseSW() { if(!swRunning) return; swRunning = false; swStartPause.innerText = '▶ START'; if(swAnim) cancelAnimationFrame(swAnim); swAnim = null; }
+      function toggleSW() { swRunning ? pauseSW() : startSW(); }
+      function resetSW() { pauseSW(); stopwatchMs = 0; laps = []; updateStopwatch(); renderLaps(); }
+      
       function renderLaps() {
-        if (laps.length === 0) {
-          lapTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:var(--text-secondary);">No laps yet. Click LAP to record.</td></tr>';
-          return;
-        }
-        let html = '';
-        laps.forEach(lap => {
-          html += `<tr><td>#${lap.number}</td><td>${formatMs(lap.lapTime)}</td><td>${formatMs(lap.totalTime)}</td></tr>`;
-        });
-        lapTableBody.innerHTML = html;
+        if(!laps.length) { lapBody.innerHTML = '<tr><td colspan="3" style="text-align:center">No laps yet</td></tr>'; return; }
+        lapBody.innerHTML = laps.map(lap => `<tr><td>#${lap.num}</td><td>${formatMs(lap.lapTime)}</td><td>${formatMs(lap.total)}</td></tr>`).join('');
       }
-
-      stopwatchStartPause.addEventListener('click', toggleStopwatch);
-      stopwatchLap.addEventListener('click', addLap);
-      stopwatchReset.addEventListener('click', resetStopwatch);
-
+      
+      function addLap() {
+        if(stopwatchMs === 0 && !swRunning) return;
+        let lastTotal = laps.length ? laps[laps.length-1].total : 0;
+        laps.push({ num: laps.length+1, lapTime: stopwatchMs - lastTotal, total: stopwatchMs });
+        renderLaps();
+      }
+      
+      swStartPause.addEventListener('click', toggleSW);
+      swLap.addEventListener('click', addLap);
+      swReset.addEventListener('click', resetSW);
+      
       // Keyboard shortcuts
       document.addEventListener('keydown', (e) => {
-        if (!document.getElementById('timer').classList.contains('active')) return;
-        if (e.code === 'Space') {
-          e.preventDefault();
-          toggleStopwatch();
-        } else if (e.code === 'KeyL') {
-          e.preventDefault();
-          addLap();
-        } else if (e.code === 'KeyR') {
-          e.preventDefault();
-          resetStopwatch();
-        }
+        if(!document.getElementById('timer').classList.contains('active')) return;
+        if(e.code === 'Space') { e.preventDefault(); toggleSW(); }
+        else if(e.code === 'KeyL') { e.preventDefault(); addLap(); }
+        else if(e.code === 'KeyR') { e.preventDefault(); resetSW(); }
       });
 
-      // ========== Time Grids ==========
-      const studyTimes = [5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90];
-      const breakTimes = [5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90];
-
+      // Time grids
+      const times = [5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90];
       const studyGrid = document.getElementById('studyTimeGrid');
       const breakGrid = document.getElementById('breakTimeGrid');
-
-      studyTimes.forEach(min => {
-        const btn = document.createElement('div');
-        btn.className = 'time-grid-item study-item';
-        btn.textContent = min + 'min';
-        btn.addEventListener('click', () => {
-          setStudyTime(min * 60);
-          resetStudy();
-        });
+      
+      times.forEach(t => {
+        let btn = document.createElement('div');
+        btn.className = 'time-grid-item';
+        btn.innerText = t+'min';
+        btn.addEventListener('click', () => setStudyTime(t*60));
         studyGrid.appendChild(btn);
       });
-
-      breakTimes.forEach(min => {
-        const btn = document.createElement('div');
-        btn.className = 'time-grid-item break-item';
-        btn.textContent = min + 'min';
-        btn.addEventListener('click', () => {
-          setBreakTime(min * 60);
-          resetBreak();
-        });
+      times.forEach(t => {
+        let btn = document.createElement('div');
+        btn.className = 'time-grid-item';
+        btn.innerText = t+'min';
+        btn.addEventListener('click', () => setBreakTime(t*60));
         breakGrid.appendChild(btn);
       });
-
-      // Custom time settings
-      const customMinutes = document.getElementById('customMinutes');
-      const customSeconds = document.getElementById('customSeconds');
-      const setCustomTimeBtn = document.getElementById('setCustomTimeBtn');
-      const setCustomBreakBtn = document.getElementById('setCustomBreakBtn');
-
-      setCustomTimeBtn.addEventListener('click', () => {
-        const mins = parseInt(customMinutes.value) || 0;
-        const secs = parseInt(customSeconds.value) || 0;
-        if (mins === 0 && secs === 0) return alert('Please set a time > 0');
-        if (secs > 59) return alert('Seconds must be 0-59');
-        setStudyTime((mins * 60) + secs);
-        resetStudy();
-      });
-
-      setCustomBreakBtn.addEventListener('click', () => {
-        const mins = parseInt(customMinutes.value) || 0;
-        const secs = parseInt(customSeconds.value) || 0;
-        if (mins === 0 && secs === 0) return alert('Please set a time > 0');
-        if (secs > 59) return alert('Seconds must be 0-59');
-        setBreakTime((mins * 60) + secs);
-        resetBreak();
-      });
-
-      // Break Types
-      const breakTypesContainer = document.getElementById('breakTypes');
-      const breakTypes = [
-        { name: '☕ Short', type: 'short', minutes: 5, message: '☕ Short break - grab a quick refresh!' },
-        { name: '🥤 Medium', type: 'medium', minutes: 15, message: '🥤 Medium break - stretch and hydrate!' },
-        { name: '🍽️ Long', type: 'long', minutes: 30, message: '🍽️ Long break - time for a proper rest!' },
-        { name: '😴 Power Nap', type: 'nap', minutes: 45, message: '😴 Power nap - recharge your energy!' },
-        { name: '💤 Deep Sleep', type: 'sleep', minutes: 90, message: '💤 Deep sleep - get quality rest!' }
-      ];
       
-      breakTypes.forEach(bt => {
-        const item = document.createElement('div');
-        item.className = 'break-item';
-        item.dataset.break = bt.type;
-        item.dataset.minutes = bt.minutes;
-        item.innerHTML = `<span>${bt.name}</span><span class="time">${bt.minutes}m</span>`;
-        item.addEventListener('click', () => {
-          document.querySelectorAll('.break-item').forEach(b => b.classList.remove('active-break'));
-          item.classList.add('active-break');
-          setBreakTime(bt.minutes * 60);
-          resetBreak();
-          alert(bt.message);
+      // Custom time
+      document.getElementById('setCustomTimeBtn').addEventListener('click', () => {
+        let mins = parseInt(document.getElementById('customMinutes').value) || 0;
+        let secs = parseInt(document.getElementById('customSeconds').value) || 0;
+        if(mins===0 && secs===0) return alert('Enter time > 0');
+        if(secs>59) return alert('Seconds max 59');
+        setStudyTime(mins*60 + secs);
+      });
+      document.getElementById('setCustomBreakBtn').addEventListener('click', () => {
+        let mins = parseInt(document.getElementById('customMinutes').value) || 0;
+        let secs = parseInt(document.getElementById('customSeconds').value) || 0;
+        if(mins===0 && secs===0) return alert('Enter time > 0');
+        if(secs>59) return alert('Seconds max 59');
+        setBreakTime(mins*60 + secs);
+      });
+      
+      // Special breaks
+      const specialBreaks = [
+        { name: '☕ Short', mins: 5, msg: 'Short break!' },
+        { name: '🥤 Medium', mins: 15, msg: 'Medium break - stretch!' },
+        { name: '🍽️ Long', mins: 30, msg: 'Long break - rest well!' },
+        { name: '😴 Power Nap', mins: 45, msg: 'Power nap time!' },
+        { name: '💤 Deep Sleep', mins: 90, msg: 'Deep sleep mode!' }
+      ];
+      const breakTypesDiv = document.getElementById('breakTypes');
+      specialBreaks.forEach(b => {
+        let div = document.createElement('div');
+        div.className = 'break-item';
+        div.innerHTML = `<span>${b.name}</span><span class="time">${b.mins}m</span>`;
+        div.addEventListener('click', () => {
+          setBreakTime(b.mins*60);
+          alert(b.msg);
         });
-        breakTypesContainer.appendChild(item);
+        breakTypesDiv.appendChild(div);
       });
 
-      // Initialize all
-      loadTimerStats();
+      // Home page
+      document.getElementById('home').innerHTML = `
+        <div class="home-grid">
+          <div class="tool-card" data-section="todo"><div class="tool-icon">📋</div><h3>TO-DO LIST</h3><p>Track tasks with % progress</p></div>
+          <div class="tool-card" data-section="history"><div class="tool-icon">📅</div><h3>HISTORY</h3><p>View saved daily lists</p></div>
+          <div class="tool-card" data-section="timer"><div class="tool-icon">⏱️</div><h3>TIMER</h3><p>Study/Break + Stopwatch</p></div>
+          <div class="tool-card" data-section="about"><div class="tool-icon">ℹ️</div><h3>ABOUT</h3><p>App info & features</p></div>
+        </div>
+      `;
+      document.querySelectorAll('.tool-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const sec = card.dataset.section;
+          document.querySelector(`.nav-link[data-section="${sec}"]`).click();
+        });
+      });
+      
+      document.getElementById('youtube').innerHTML = `
+        <div class="youtube-card">
+          <h2>📺 @zlxlegendry</h2>
+          <p>Subscribe for more cool tools!</p>
+          <a href="https://www.youtube.com/@zlxlegendry" target="_blank" class="youtube-btn">▶️ VISIT CHANNEL</a>
+        </div>
+      `;
+      
+      // Initialize
+      loadTodayTasks();
+      loadStats();
       updateStudyDisplay();
       updateBreakDisplay();
-      updateStopwatchDisplay();
-      setStudyTime(25 * 60);
-      setBreakTime(5 * 60);
+      updateStopwatch();
+      setStudyTime(25*60);
+      setBreakTime(5*60);
     })();
   </script>
 </body>
