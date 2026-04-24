@@ -342,6 +342,7 @@
       transition: 0.1s;
       text-align: center;
       flex: 1;
+      cursor: pointer;
     }
     .theme-icon.active-light, .theme-icon.active-dark, .theme-icon.active-neon {
       background: #ffd966;
@@ -898,6 +899,16 @@
       text-align: center;
       color: var(--text-primary);
     }
+    .youtube-btn {
+      display: inline-block;
+      background: var(--youtube-btn-bg);
+      color: white;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
 
     @media (max-width: 800px) {
       .mode-row { flex-direction: column; text-align: center; }
@@ -1235,7 +1246,7 @@
         }
       });
 
-      // ========== TIMERS (Background-ready using requestAnimationFrame) ==========
+      // ========== FIXED TIMERS ==========
       let pomodoroCount = 0, totalStudyMinutes = 0;
       
       function loadStats() {
@@ -1254,36 +1265,53 @@
         document.getElementById('totalTimeSmall').innerText = totalStudyMinutes;
       }
 
-      function formatTime(sec) { return `${Math.floor(sec/60)}`.padStart(2,'0')+':'+`${sec%60}`.padStart(2,'0'); }
-      function formatMs(ms) {
-        let total = Math.floor(ms/1000);
-        let hrs = Math.floor(total/3600);
-        let mins = Math.floor((total%3600)/60);
-        let secs = total%60;
-        let millis = ms%1000;
-        return `${hrs}`.padStart(2,'0')+':'+`${mins}`.padStart(2,'0')+':'+`${secs}`.padStart(2,'0')+'.'+`${millis}`.padStart(3,'0');
+      // FIXED: Proper integer formatting without decimals
+      function formatTime(seconds) {
+        const mins = Math.floor(Math.max(0, seconds) / 60);
+        const secs = Math.floor(Math.max(0, seconds) % 60);
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
       }
 
-      // STUDY TIMER
-      let studySeconds = 25*60, studyRunning = false, studyAnim = null, studyLastTime = null;
+      // FIXED: Proper milliseconds formatting
+      function formatMs(ms) {
+        const totalSecs = Math.floor(Math.max(0, ms) / 1000);
+        const hrs = Math.floor(totalSecs / 3600);
+        const mins = Math.floor((totalSecs % 3600) / 60);
+        const secs = totalSecs % 60;
+        const millis = Math.floor(ms % 1000);
+        return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}.${millis.toString().padStart(3, '0')}`;
+      }
+
+      // ========== STUDY TIMER ==========
+      let studySeconds = 25 * 60;
+      let studyRunning = false;
+      let studyAnim = null;
+      let studyLastTime = null;
+      
       const studyDisplay = document.getElementById('studyTimerDisplay');
       const studyBtn = document.getElementById('studyStartPauseBtn');
       const studyReset = document.getElementById('studyResetBtn');
 
-      function updateStudyDisplay() { studyDisplay.innerText = formatTime(studySeconds); }
+      function updateStudyDisplay() { 
+        studyDisplay.innerText = formatTime(studySeconds); 
+      }
       
       function studyTick(now) {
-        if(!studyRunning) return;
-        if(studyLastTime === null) { studyLastTime = now; requestAnimationFrame(studyTick); return; }
-        let delta = (now - studyLastTime) / 1000;
+        if (!studyRunning) return;
+        if (studyLastTime === null) {
+          studyLastTime = now;
+          studyAnim = requestAnimationFrame(studyTick);
+          return;
+        }
+        const delta = Math.min((now - studyLastTime) / 1000, 0.1);
         studyLastTime = now;
-        if(delta > 0.1) delta = 0.1;
         studySeconds = Math.max(0, studySeconds - delta);
         updateStudyDisplay();
-        if(studySeconds <= 0) {
+        
+        if (studySeconds <= 0) {
           studyRunning = false;
           studyBtn.innerText = '▶ START';
-          if(studyAnim) cancelAnimationFrame(studyAnim);
+          if (studyAnim) cancelAnimationFrame(studyAnim);
           studyAnim = null;
           pomodoroCount++;
           totalStudyMinutes += 25;
@@ -1295,35 +1323,69 @@
         }
       }
       
-      function startStudy() { if(studyRunning) return; studyRunning = true; studyBtn.innerText = '⏸ PAUSE'; studyLastTime = null; studyAnim = requestAnimationFrame(studyTick); }
-      function pauseStudy() { if(!studyRunning) return; studyRunning = false; studyBtn.innerText = '▶ START'; if(studyAnim) cancelAnimationFrame(studyAnim); studyAnim = null; }
+      function startStudy() { 
+        if (studyRunning) return; 
+        studyRunning = true; 
+        studyBtn.innerText = '⏸ PAUSE'; 
+        studyLastTime = null; 
+        studyAnim = requestAnimationFrame(studyTick); 
+      }
+      
+      function pauseStudy() { 
+        if (!studyRunning) return; 
+        studyRunning = false; 
+        studyBtn.innerText = '▶ START'; 
+        if (studyAnim) cancelAnimationFrame(studyAnim); 
+        studyAnim = null; 
+      }
+      
       function toggleStudy() { studyRunning ? pauseStudy() : startStudy(); }
-      function resetStudy() { pauseStudy(); studySeconds = 25*60; updateStudyDisplay(); }
-      function setStudyTime(sec) { pauseStudy(); studySeconds = sec; updateStudyDisplay(); }
+      
+      function resetStudy() { 
+        pauseStudy(); 
+        studySeconds = 25 * 60; 
+        updateStudyDisplay(); 
+      }
+      
+      function setStudyTime(sec) { 
+        pauseStudy(); 
+        studySeconds = sec; 
+        updateStudyDisplay(); 
+      }
       
       studyBtn.addEventListener('click', toggleStudy);
       studyReset.addEventListener('click', resetStudy);
 
-      // BREAK TIMER
-      let breakSeconds = 5*60, breakRunning = false, breakAnim = null, breakLastTime = null;
+      // ========== BREAK TIMER ==========
+      let breakSeconds = 5 * 60;
+      let breakRunning = false;
+      let breakAnim = null;
+      let breakLastTime = null;
+      
       const breakDisplay = document.getElementById('breakTimerDisplay');
       const breakBtn = document.getElementById('breakStartPauseBtn');
       const breakResetBtn = document.getElementById('breakResetBtn');
       
-      function updateBreakDisplay() { breakDisplay.innerText = formatTime(breakSeconds); }
+      function updateBreakDisplay() { 
+        breakDisplay.innerText = formatTime(breakSeconds); 
+      }
       
       function breakTick(now) {
-        if(!breakRunning) return;
-        if(breakLastTime === null) { breakLastTime = now; requestAnimationFrame(breakTick); return; }
-        let delta = (now - breakLastTime) / 1000;
+        if (!breakRunning) return;
+        if (breakLastTime === null) {
+          breakLastTime = now;
+          breakAnim = requestAnimationFrame(breakTick);
+          return;
+        }
+        const delta = Math.min((now - breakLastTime) / 1000, 0.1);
         breakLastTime = now;
-        if(delta > 0.1) delta = 0.1;
         breakSeconds = Math.max(0, breakSeconds - delta);
         updateBreakDisplay();
-        if(breakSeconds <= 0) {
+        
+        if (breakSeconds <= 0) {
           breakRunning = false;
           breakBtn.innerText = '▶ START';
-          if(breakAnim) cancelAnimationFrame(breakAnim);
+          if (breakAnim) cancelAnimationFrame(breakAnim);
           breakAnim = null;
           alert('☕ Break over! Back to work!');
         } else {
@@ -1331,50 +1393,114 @@
         }
       }
       
-      function startBreak() { if(breakRunning) return; breakRunning = true; breakBtn.innerText = '⏸ PAUSE'; breakLastTime = null; breakAnim = requestAnimationFrame(breakTick); }
-      function pauseBreak() { if(!breakRunning) return; breakRunning = false; breakBtn.innerText = '▶ START'; if(breakAnim) cancelAnimationFrame(breakAnim); breakAnim = null; }
+      function startBreak() { 
+        if (breakRunning) return; 
+        breakRunning = true; 
+        breakBtn.innerText = '⏸ PAUSE'; 
+        breakLastTime = null; 
+        breakAnim = requestAnimationFrame(breakTick); 
+      }
+      
+      function pauseBreak() { 
+        if (!breakRunning) return; 
+        breakRunning = false; 
+        breakBtn.innerText = '▶ START'; 
+        if (breakAnim) cancelAnimationFrame(breakAnim); 
+        breakAnim = null; 
+      }
+      
       function toggleBreak() { breakRunning ? pauseBreak() : startBreak(); }
-      function resetBreak() { pauseBreak(); breakSeconds = 5*60; updateBreakDisplay(); }
-      function setBreakTime(sec) { pauseBreak(); breakSeconds = sec; updateBreakDisplay(); }
+      
+      function resetBreak() { 
+        pauseBreak(); 
+        breakSeconds = 5 * 60; 
+        updateBreakDisplay(); 
+      }
+      
+      function setBreakTime(sec) { 
+        pauseBreak(); 
+        breakSeconds = sec; 
+        updateBreakDisplay(); 
+      }
       
       breakBtn.addEventListener('click', toggleBreak);
       breakResetBtn.addEventListener('click', resetBreak);
 
-      // STOPWATCH
-      let stopwatchMs = 0, swRunning = false, swAnim = null, swLastTime = null, laps = [];
+      // ========== STOPWATCH ==========
+      let stopwatchMs = 0;
+      let swRunning = false;
+      let swAnim = null;
+      let swLastTime = null;
+      let laps = [];
+      
       const swDisplay = document.getElementById('stopwatchDisplay');
       const swStartPause = document.getElementById('stopwatchStartPause');
       const swLap = document.getElementById('stopwatchLap');
       const swReset = document.getElementById('stopwatchReset');
       const lapBody = document.getElementById('lapTableBody');
       
-      function updateStopwatch() { swDisplay.innerText = formatMs(stopwatchMs); }
+      function updateStopwatch() { 
+        swDisplay.innerText = formatMs(stopwatchMs); 
+      }
       
       function swTick(now) {
-        if(!swRunning) return;
-        if(swLastTime === null) { swLastTime = now; requestAnimationFrame(swTick); return; }
-        let delta = now - swLastTime;
+        if (!swRunning) return;
+        if (swLastTime === null) {
+          swLastTime = now;
+          swAnim = requestAnimationFrame(swTick);
+          return;
+        }
+        const delta = Math.min(now - swLastTime, 100);
         swLastTime = now;
-        if(delta > 100) delta = 100;
         stopwatchMs += delta;
         updateStopwatch();
         swAnim = requestAnimationFrame(swTick);
       }
       
-      function startSW() { if(swRunning) return; swRunning = true; swStartPause.innerText = '⏸ PAUSE'; swLastTime = null; swAnim = requestAnimationFrame(swTick); }
-      function pauseSW() { if(!swRunning) return; swRunning = false; swStartPause.innerText = '▶ START'; if(swAnim) cancelAnimationFrame(swAnim); swAnim = null; }
+      function startSW() { 
+        if (swRunning) return; 
+        swRunning = true; 
+        swStartPause.innerText = '⏸ PAUSE'; 
+        swLastTime = null; 
+        swAnim = requestAnimationFrame(swTick); 
+      }
+      
+      function pauseSW() { 
+        if (!swRunning) return; 
+        swRunning = false; 
+        swStartPause.innerText = '▶ START'; 
+        if (swAnim) cancelAnimationFrame(swAnim); 
+        swAnim = null; 
+      }
+      
       function toggleSW() { swRunning ? pauseSW() : startSW(); }
-      function resetSW() { pauseSW(); stopwatchMs = 0; laps = []; updateStopwatch(); renderLaps(); }
+      
+      function resetSW() { 
+        pauseSW(); 
+        stopwatchMs = 0; 
+        laps = []; 
+        updateStopwatch(); 
+        renderLaps(); 
+      }
       
       function renderLaps() {
-        if(!laps.length) { lapBody.innerHTML = '<tr><td colspan="3" style="text-align:center">No laps yet</td></tr>'; return; }
-        lapBody.innerHTML = laps.map(lap => `<tr><td>#${lap.num}</td><td>${formatMs(lap.lapTime)}</td><td>${formatMs(lap.total)}</td></tr>`).join('');
+        if (!laps.length) { 
+          lapBody.innerHTML = '<tr><td colspan="3" style="text-align:center">No laps yet</td></tr>'; 
+          return; 
+        }
+        lapBody.innerHTML = laps.map(lap => 
+          `<tr><td>#${lap.num}</td><td>${formatMs(lap.lapTime)}</td><td>${formatMs(lap.total)}</td></tr>`
+        ).join('');
       }
       
       function addLap() {
-        if(stopwatchMs === 0 && !swRunning) return;
-        let lastTotal = laps.length ? laps[laps.length-1].total : 0;
-        laps.push({ num: laps.length+1, lapTime: stopwatchMs - lastTotal, total: stopwatchMs });
+        if (stopwatchMs === 0 && !swRunning) return;
+        const lastTotal = laps.length ? laps[laps.length-1].total : 0;
+        laps.push({ 
+          num: laps.length + 1, 
+          lapTime: stopwatchMs - lastTotal, 
+          total: stopwatchMs 
+        });
         renderLaps();
       }
       
@@ -1384,49 +1510,52 @@
       
       // Keyboard shortcuts
       document.addEventListener('keydown', (e) => {
-        if(!document.getElementById('timer').classList.contains('active')) return;
-        if(e.code === 'Space') { e.preventDefault(); toggleSW(); }
-        else if(e.code === 'KeyL') { e.preventDefault(); addLap(); }
-        else if(e.code === 'KeyR') { e.preventDefault(); resetSW(); }
+        if (!document.getElementById('timer').classList.contains('active')) return;
+        if (e.code === 'Space') { e.preventDefault(); toggleSW(); }
+        else if (e.code === 'KeyL') { e.preventDefault(); addLap(); }
+        else if (e.code === 'KeyR') { e.preventDefault(); resetSW(); }
       });
 
-      // Time grids
-      const times = [5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90];
+      // ========== TIME GRIDS ==========
+      const times = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90];
       const studyGrid = document.getElementById('studyTimeGrid');
       const breakGrid = document.getElementById('breakTimeGrid');
       
+      studyGrid.innerHTML = '';
+      breakGrid.innerHTML = '';
+      
       times.forEach(t => {
-        let btn = document.createElement('div');
+        const btn = document.createElement('div');
         btn.className = 'time-grid-item';
-        btn.innerText = t+'min';
-        btn.addEventListener('click', () => setStudyTime(t*60));
+        btn.innerText = t + 'min';
+        btn.addEventListener('click', () => setStudyTime(t * 60));
         studyGrid.appendChild(btn);
       });
       times.forEach(t => {
-        let btn = document.createElement('div');
+        const btn = document.createElement('div');
         btn.className = 'time-grid-item';
-        btn.innerText = t+'min';
-        btn.addEventListener('click', () => setBreakTime(t*60));
+        btn.innerText = t + 'min';
+        btn.addEventListener('click', () => setBreakTime(t * 60));
         breakGrid.appendChild(btn);
       });
       
-      // Custom time
+      // ========== CUSTOM TIME ==========
       document.getElementById('setCustomTimeBtn').addEventListener('click', () => {
         let mins = parseInt(document.getElementById('customMinutes').value) || 0;
         let secs = parseInt(document.getElementById('customSeconds').value) || 0;
-        if(mins===0 && secs===0) return alert('Enter time > 0');
-        if(secs>59) return alert('Seconds max 59');
-        setStudyTime(mins*60 + secs);
+        if (mins === 0 && secs === 0) return alert('Enter time > 0');
+        if (secs > 59) return alert('Seconds max 59');
+        setStudyTime(mins * 60 + secs);
       });
       document.getElementById('setCustomBreakBtn').addEventListener('click', () => {
         let mins = parseInt(document.getElementById('customMinutes').value) || 0;
         let secs = parseInt(document.getElementById('customSeconds').value) || 0;
-        if(mins===0 && secs===0) return alert('Enter time > 0');
-        if(secs>59) return alert('Seconds max 59');
-        setBreakTime(mins*60 + secs);
+        if (mins === 0 && secs === 0) return alert('Enter time > 0');
+        if (secs > 59) return alert('Seconds max 59');
+        setBreakTime(mins * 60 + secs);
       });
       
-      // Special breaks
+      // ========== SPECIAL BREAKS ==========
       const specialBreaks = [
         { name: '☕ Short', mins: 5, msg: 'Short break!' },
         { name: '🥤 Medium', mins: 15, msg: 'Medium break - stretch!' },
@@ -1435,18 +1564,19 @@
         { name: '💤 Deep Sleep', mins: 90, msg: 'Deep sleep mode!' }
       ];
       const breakTypesDiv = document.getElementById('breakTypes');
+      breakTypesDiv.innerHTML = '';
       specialBreaks.forEach(b => {
-        let div = document.createElement('div');
+        const div = document.createElement('div');
         div.className = 'break-item';
-        div.innerHTML = `<span>${b.name}</span><span class="time">${b.mins}m</span>`;
+        div.innerHTML = `<span>${b.name}</span><span style="font-size:1.2rem;font-weight:bold">${b.mins}m</span>`;
         div.addEventListener('click', () => {
-          setBreakTime(b.mins*60);
+          setBreakTime(b.mins * 60);
           alert(b.msg);
         });
         breakTypesDiv.appendChild(div);
       });
 
-      // Home page
+      // ========== HOME PAGE ==========
       document.getElementById('home').innerHTML = `
         <div class="home-grid">
           <div class="tool-card" data-section="todo"><div class="tool-icon">📋</div><h3>TO-DO LIST</h3><p>Track tasks with % progress</p></div>
@@ -1470,14 +1600,14 @@
         </div>
       `;
       
-      // Initialize
+      // ========== INITIALIZE ==========
       loadTodayTasks();
       loadStats();
       updateStudyDisplay();
       updateBreakDisplay();
       updateStopwatch();
-      setStudyTime(25*60);
-      setBreakTime(5*60);
+      setStudyTime(25 * 60);
+      setBreakTime(5 * 60);
     })();
   </script>
 </body>
